@@ -1,0 +1,45 @@
+%%\listfiles
+\documentclass[10pt]{article}
+\usepackage{array}
+\pagestyle{empty}
+\parindent=0pt
+\baselineskip=6.35mm
+\parskip=0pt
+\makeatletter
+\newcommand*{\InitToks}{\toks@={}}
+\newcommand{\AddToks}[1]{\toks@=\expandafter{\the\toks@ #1}}
+\newcommand*{\PrintToks}{\the\toks@}
+\unitlength=1mm
+\def\BOX{\framebox(3.55,2){}}
+\newcount\rowNo
+\newcommand*{\dynTable}[1]{%
+  \begingroup
+    \InitToks
+    \AddToks{\tabcolsep=0pt\begin{tabular}{c*{11}{>{\centering}p{6.35mm}}}}%
+    \AddToks{&&\strobe&\strobe&\strobe&\strobe&\strobe\tabularnewline}
+		\AddToks{&&A&B&C&D&E&\tabularnewline}
+    \rowNo=0 %
+    \loop\ifnum\rowNo<#1\relax
+      \advance\rowNo by 1
+      \AddToks{\strobe & }
+      \expandafter\AddToks\expandafter{%
+         \the\rowNo & 
+         \BOX & \BOX & \BOX & \BOX & \BOX%
+        \tabularnewline}%
+    \repeat
+   \AddToks{\end{tabular}}%
+    \PrintToks
+  \endgroup}
+\makeatother
+
+\def\strobe{\rule{0pt}{4mm}\rule{3mm}{2.54mm}}
+
+\begin{document}
+\sffamily\small
+
+Answer Sheet\par
+\bigskip
+
+\dynTable{20}
+
+\end{document}
