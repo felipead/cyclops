@@ -16,7 +16,7 @@
   \begingroup
     \InitToks
     \AddToks{\tabcolsep=0pt\begin{tabular}{c*{11}{>{\centering}p{6.35mm}}}}%
-    \AddToks{&&\strobe$&\strobe&\strobe&\strobe&\strobe\tabularnewline}
+    \AddToks{&&\strobe&\strobe&\strobe&\strobe&\strobe\tabularnewline}
 		\AddToks{&&A&B&C&D&E&\tabularnewline}
     \rowNo=0 %
     \loop\ifnum\rowNo<#1\relax
@@ -24,7 +24,7 @@
       \AddToks{\strobe & }
       \expandafter\AddToks\expandafter{%
          \the\rowNo & 
-         $\bigcirc & \bigcirc & \bigcirc & \bigcirc & \bigcirc$%
+         $\bigcirc$ & $\bigcirc$ & $\bigcirc$ & $\bigcirc$ &$ \bigcirc$%
         \tabularnewline}%
     \repeat
    \AddToks{\end{tabular}}%
@@ -40,6 +40,6 @@
 Answer Sheet\par
 \bigskip
 
-\dynTable{10}
+\dynTable{15}
 
 \end{document}
