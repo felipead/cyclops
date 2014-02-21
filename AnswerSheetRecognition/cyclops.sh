@@ -1,0 +1,1 @@
+python -m cyclops.Main $@

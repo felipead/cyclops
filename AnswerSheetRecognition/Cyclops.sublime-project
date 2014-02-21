@@ -2,7 +2,7 @@
 	"folders":
 	[
 		{
-			"path": ".",
+			"path": "cyclops",
 			"folder_exclude_patterns": ["answer-sheet-recognizer.dSYM", "Samples", "Templates"],
 			"file_exclude_patterns": ["answer-sheet-recognizer", ".gitignore", "*.sublime-workspace"]
 		}
