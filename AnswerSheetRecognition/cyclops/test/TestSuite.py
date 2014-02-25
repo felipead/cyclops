@@ -1,17 +1,13 @@
 import unittest
 from unittest import *
 
-from DigraphTest import *
-from DigraphBuilderTest import *
-from SolutionTest import *
-from TreeTest import *
+from FrameExtractorTest import *
+from PatternFactoryTest import *
 
 
 ALL_TESTS = (
-    makeSuite(DigraphTest),
-    makeSuite(DigraphBuilderTest),
-    makeSuite(TreeTest),
-    makeSuite(SolutionTest)
+    makeSuite(FrameExtractorTest),
+    makeSuite(PatternFactoryTest)
 )
 
 
