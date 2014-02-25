@@ -3,11 +3,12 @@ from unittest import *
 
 from FrameExtractorTest import *
 from PatternFactoryTest import *
-
+from MathUtilTest import *
 
 ALL_TESTS = (
     makeSuite(FrameExtractorTest),
-    makeSuite(PatternFactoryTest)
+    makeSuite(PatternFactoryTest),
+    makeSuite(MathUtilTest)
 )
 
 

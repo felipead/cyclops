@@ -6,4 +6,4 @@ class AnswerSheetRecognizer:
         self._frameExtractor = FrameExtractor()
 
     def recognize(self, picture):
-        self._frameExtractor.extract(picture)
+        self._frameExtractor.extractFrame(picture)
