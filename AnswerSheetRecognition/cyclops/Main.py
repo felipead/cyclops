@@ -10,7 +10,7 @@ class Main:
     @staticmethod
     def execute():
         if len(sys.argv) != 2:
-            print "Missing picture as an argument"
+            print "Missing picture as argument"
             return
         
         picture = imread(sys.argv[1])
@@ -18,8 +18,8 @@ class Main:
         recognizer = AnswerSheetRecognizer()
         recognizer.recognize(picture)
 
-        imshow("picture", picture)
-        input("Press Enter to continue...")
+        imshow("cyclops", picture)
+        raw_input("Press Enter to exit...")
 
 
 if __name__ == "__main__":

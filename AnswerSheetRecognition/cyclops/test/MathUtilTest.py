@@ -7,12 +7,16 @@ from ..MathUtil import *
 
 class MathUtilTest(TestCase):
 
-    def testGetDistanceBetweenPoints(self):
-        assert MathUtil.getDistanceBetween2dPoints((3,3), (1,3)) == 2
-        assert MathUtil.getDistanceBetween2dPoints((3,1), (3,3)) == 2
-        assert MathUtil.getDistanceBetween2dPoints((5,5), (5,5)) == 0
+    def testDistanceBetween2dPoints(self):
+        assert MathUtil.distanceBetweenPoints((3,3), (1,3)) == 2
+        assert MathUtil.distanceBetweenPoints((3,1), (3,3)) == 2
 
-        assert MathUtil.isEqualsWithinError(MathUtil.getDistanceBetween2dPoints((7,1), (3,15)), 6 * sqrt(5), 1.5)
+        assert MathUtil.distanceBetweenPoints((-4,1), (3,1)) == 7
+        
+        assert MathUtil.distanceBetweenPoints((5,5), (5,5)) == 0
+
+        assert MathUtil.distanceBetweenPoints((-2,3), (1,-1)) == 5
+
 
     def testEqualsWithinError(self):
         assert MathUtil.isEqualsWithinError(5.32, 5.34, 0.1) == True

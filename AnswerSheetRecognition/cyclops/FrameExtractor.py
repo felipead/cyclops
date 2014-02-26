@@ -1,6 +1,3 @@
-from cv2 import rectangle
-from cv import RGB
-
 import numpy as np
 import math
 
@@ -8,45 +5,44 @@ from FrameAlignmentPatternMatcher import *
 from FrameOrientationPatternMatcher import *
 
 from MathUtil import *
+from DrawingUtil import *
 
 class FrameExtractor:
 
-    def __init__(self):
+    def __init__(self, debugEnabled=True):
         self._frameAlignmentMatcher = FrameAlignmentPatternMatcher()
         self._frameOrientationMatcher = FrameOrientationPatternMatcher()
+        self.debugEnabled = debugEnabled
 
     def extractFrame(self, picture):
         frameOrientationMatches = self._frameOrientationMatcher.match(picture, 1)
-        # TODO: debug info only
-        for match in frameOrientationMatches:
-            print "Frame Orientation: " + str(match.location)
-            self._drawRectangleInPicture(picture, match.location, match.size, RGB(0,0,255)) # Blue
+        if self.debugEnabled:
+            for match in frameOrientationMatches:
+                print "Frame Orientation: " + str(match.getCenter())
+                DrawingUtil.drawRectangle(picture, match.location, match.size, (0,0,255)) # Blue
 
         frameAlignmentMatches = self._frameAlignmentMatcher.match(picture, 3)
-        # TODO: debug info only
-        for match in frameAlignmentMatches:
-            print "Frame Alignment: " + str(match.location)
-            self._drawRectangleInPicture(picture, match.location, match.size, RGB(0,255,0)) # Green
+        if self.debugEnabled:
+            for match in frameAlignmentMatches:
+                print "Frame Alignment: " + str(match.getCenter())
+                DrawingUtil.drawRectangle(picture, match.location, match.size, (0,255,0)) # Green
 
         frame = self._findFrame(frameOrientationMatches, frameAlignmentMatches)
-        # TODO: debug info only
-        if frame != None:
-            print "Square: " + str(frame)
-            for point in frame:
-                self._drawRectangleInPicture(picture, point, (5,5), RGB(255,0,0)) # Red
+        if self.debugEnabled:
+            if frame != None:
+                print "Square: " + str(frame)
+                for point in frame:
+                    DrawingUtil.drawFilledCircle(picture, point, 3, (255,0,0)) # Red
 
         return frame
 
 
-    def _drawRectangleInPicture(self, picture, location, size, color):
-        rectangle(picture, location, (location[0] + size[0], location[1] + size[1]), color, 2)
-
     def _findFrame(self, frameOrientationMatches, frameAlignmentMatches):
         for frameOrientationMatch in frameOrientationMatches:
-            basePoint = frameOrientationMatch.location
+            basePoint = frameOrientationMatch.getCenter()
             otherPoints = []
             for frameAlignmentMatch in frameAlignmentMatches:
-                otherPoints.append(frameAlignmentMatch.location)
+                otherPoints.append(frameAlignmentMatch.getCenter())
 
             square = self._findSquareInListOfPoints(basePoint, otherPoints, error=20)
             if square != None:
@@ -56,19 +52,19 @@ class FrameExtractor:
 
     def _findSquareInListOfPoints(self, basePoint, otherPoints, error):
         for firstPoint in otherPoints:
-            firstDistance = MathUtil.getDistanceBetween2dPoints(firstPoint, basePoint)
+            firstDistance = MathUtil.distanceBetweenPoints(firstPoint, basePoint)
 
             for secondPoint in otherPoints:
                 if secondPoint != firstPoint:
-                    secondDistance = MathUtil.getDistanceBetween2dPoints(firstPoint, secondPoint)
+                    secondDistance = MathUtil.distanceBetweenPoints(firstPoint, secondPoint)
                     if MathUtil.isEqualsWithinError(secondDistance, firstDistance, error):
 
                         for thirdPoint in otherPoints:
                             if thirdPoint != firstPoint and thirdPoint != secondPoint:
-                                thirdDistance = MathUtil.getDistanceBetween2dPoints(secondPoint, thirdPoint)
+                                thirdDistance = MathUtil.distanceBetweenPoints(secondPoint, thirdPoint)
                                 if MathUtil.isEqualsWithinError(thirdDistance, secondDistance, error):
 
-                                    fourthDistance = MathUtil.getDistanceBetween2dPoints(thirdPoint, basePoint)
+                                    fourthDistance = MathUtil.distanceBetweenPoints(thirdPoint, basePoint)
                                     if MathUtil.isEqualsWithinError(fourthDistance, thirdDistance, error):
                                         return [basePoint, firstPoint, secondPoint, thirdPoint]
             
