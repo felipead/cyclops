@@ -44,11 +44,12 @@ class FrameExtractor:
             for frameAlignmentMatch in frameAlignmentMatches:
                 otherPoints.append(frameAlignmentMatch.getCenter())
 
-            square = self._findSquareInListOfPoints(basePoint, otherPoints, error=20)
+            square = self._findSquareInListOfPoints(basePoint, otherPoints, error=15)
             if square != None:
                 return square
 
         return None
+
 
     def _findSquareInListOfPoints(self, basePoint, otherPoints, error):
         for firstPoint in otherPoints:
@@ -62,10 +63,10 @@ class FrameExtractor:
                         for thirdPoint in otherPoints:
                             if thirdPoint != firstPoint and thirdPoint != secondPoint:
                                 thirdDistance = MathUtil.distanceBetweenPoints(secondPoint, thirdPoint)
-                                if MathUtil.isEqualsWithinError(thirdDistance, secondDistance, error):
+                                if MathUtil.isEqualsWithinError(thirdDistance, firstDistance, error):
 
                                     fourthDistance = MathUtil.distanceBetweenPoints(thirdPoint, basePoint)
-                                    if MathUtil.isEqualsWithinError(fourthDistance, thirdDistance, error):
+                                    if MathUtil.isEqualsWithinError(fourthDistance, firstDistance, error):
                                         return [basePoint, firstPoint, secondPoint, thirdPoint]
             
         return None
