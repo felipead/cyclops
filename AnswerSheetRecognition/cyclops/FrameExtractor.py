@@ -38,12 +38,12 @@ class FrameExtractor:
 
 
     def _findFrame(self, frameOrientationMatches, frameAlignmentMatches):
+        otherPoints = []
+        for frameAlignmentMatch in frameAlignmentMatches:
+            otherPoints.append(frameAlignmentMatch.getCenter())
+
         for frameOrientationMatch in frameOrientationMatches:
             basePoint = frameOrientationMatch.getCenter()
-            otherPoints = []
-            for frameAlignmentMatch in frameAlignmentMatches:
-                otherPoints.append(frameAlignmentMatch.getCenter())
-
             square = self._findSquareInListOfPoints(basePoint, otherPoints, error=15)
             if square != None:
                 return square
