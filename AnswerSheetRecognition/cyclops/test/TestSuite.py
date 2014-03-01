@@ -5,12 +5,14 @@ from FrameExtractorTest import *
 from PatternFactoryTest import *
 from PatternMatchTest import *
 from MathUtilTest import *
+from VectorTest import *
 
 ALL_TESTS = (
     makeSuite(FrameExtractorTest),
     makeSuite(PatternFactoryTest),
     makeSuite(MathUtilTest),
-    makeSuite(PatternMatchTest)
+    makeSuite(PatternMatchTest),
+    makeSuite(VectorTest)
 )
 
 
