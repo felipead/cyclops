@@ -9,5 +9,5 @@ class MathUtil:
         return sqrt( dx**2 + dy**2 )
 
     @staticmethod
-    def isEqualsWithinError(a, b, error):
+    def equalWithinError(a, b, error):
         return abs(a - b) <= abs(error)

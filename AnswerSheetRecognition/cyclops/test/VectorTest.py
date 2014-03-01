@@ -46,7 +46,7 @@ class VectorTest(TestCase):
         assert v.innerProduct(w) > 0
 
         angle = v.angleBetween(w)
-        assert MathUtil.isEqualsWithinError(angle, 0, error)
+        assert MathUtil.equalWithinError(angle, 0, error)
 
     def testCalculateAngleBetween2DimensionVectorsWith45Degrees(self):
         error=0.00000000001
@@ -56,17 +56,17 @@ class VectorTest(TestCase):
         assert v.innerProduct(w) > 0
 
         angle = v.angleBetween(w)
-        assert MathUtil.isEqualsWithinError(angle, (math.pi/4), error)
+        assert MathUtil.equalWithinError(angle, (math.pi/4), error)
 
     def testCalculateAngleBetween2DimensionVectorsWith90Degrees(self):
         error=0.00000000001
         v = Vector((0,5))
         w = Vector((14.293,0))
 
-        assert MathUtil.isEqualsWithinError(v.innerProduct(w), 0, error)
+        assert MathUtil.equalWithinError(v.innerProduct(w), 0, error)
 
         angle = v.angleBetween(w)
-        assert MathUtil.isEqualsWithinError(angle, math.pi/2, error)
+        assert MathUtil.equalWithinError(angle, math.pi/2, error)
 
 
     def testCalculateAngleBetween2DimensionVectorsWithLessThan90Degrees(self):
@@ -95,4 +95,4 @@ class VectorTest(TestCase):
         assert v.innerProduct(w) < 0
 
         angle = v.angleBetween(w)
-        assert MathUtil.isEqualsWithinError(angle, math.pi, error)
+        assert MathUtil.equalWithinError(angle, math.pi, error)

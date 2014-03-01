@@ -58,15 +58,15 @@ class FrameExtractor:
             for secondPoint in otherPoints:
                 if secondPoint != firstPoint:
                     secondDistance = MathUtil.distanceBetweenPoints(firstPoint, secondPoint)
-                    if MathUtil.isEqualsWithinError(secondDistance, firstDistance, error):
+                    if MathUtil.equalWithinError(secondDistance, firstDistance, error):
 
                         for thirdPoint in otherPoints:
                             if thirdPoint != firstPoint and thirdPoint != secondPoint:
                                 thirdDistance = MathUtil.distanceBetweenPoints(secondPoint, thirdPoint)
-                                if MathUtil.isEqualsWithinError(thirdDistance, firstDistance, error):
+                                if MathUtil.equalWithinError(thirdDistance, firstDistance, error):
 
                                     fourthDistance = MathUtil.distanceBetweenPoints(thirdPoint, basePoint)
-                                    if MathUtil.isEqualsWithinError(fourthDistance, firstDistance, error):
+                                    if MathUtil.equalWithinError(fourthDistance, firstDistance, error):
                                         return [basePoint, firstPoint, secondPoint, thirdPoint]
             
         return None

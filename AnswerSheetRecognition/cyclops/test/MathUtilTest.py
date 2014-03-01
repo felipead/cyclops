@@ -18,11 +18,11 @@ class MathUtilTest(TestCase):
         assert MathUtil.distanceBetweenPoints((-2,3), (1,-1)) == 5
 
 
-    def testEqualsWithinError(self):
-        assert MathUtil.isEqualsWithinError(5.32, 5.34, 0.1) == True
-        assert MathUtil.isEqualsWithinError(5.32, 5.34, 0.02) == True
-        assert MathUtil.isEqualsWithinError(5.32, 5.34, 0.01) == False
+    def testEqualWithinError(self):
+        assert MathUtil.equalWithinError(5.32, 5.34, 0.1) == True
+        assert MathUtil.equalWithinError(5.32, 5.34, 0.02) == True
+        assert MathUtil.equalWithinError(5.32, 5.34, 0.01) == False
 
-        assert MathUtil.isEqualsWithinError(690, 695, 9) == True
-        assert MathUtil.isEqualsWithinError(690, 695, 5) == True
-        assert MathUtil.isEqualsWithinError(690, 695, 4) == False
+        assert MathUtil.equalWithinError(690, 695, 9) == True
+        assert MathUtil.equalWithinError(690, 695, 5) == True
+        assert MathUtil.equalWithinError(690, 695, 4) == False
