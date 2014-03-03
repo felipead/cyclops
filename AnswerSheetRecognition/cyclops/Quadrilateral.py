@@ -3,14 +3,14 @@ from MathUtil import *
 
 import math
 
-class QuadrilateralPolygon:
+class Quadrilateral:
 
     def __init__(self, vertexes, angleRelaxationInRadians):
         if len(vertexes) != 4:
             raise Exception("Quadrilateral polygon must have exactly 4 vertexes.")
         self._vertexes = vertexes
         self._angleRelaxationInRadians = angleRelaxationInRadians
-        self._vertexAngles = QuadrilateralPolygon._calculateVertexAngles(self._vertexes)
+        self._vertexAngles = Quadrilateral._calculateVertexAngles(self._vertexes)
 
     @property
     def vertexes(self):
@@ -25,17 +25,17 @@ class QuadrilateralPolygon:
 
     def isConvexWithRoughlyRightAngles(self):
         if self.isConvex():
-            return QuadrilateralPolygon._areAnglesRoughlyRight(self._vertexAngles, self._angleRelaxationInRadians)
+            return Quadrilateral._areAnglesRoughlyRight(self._vertexAngles, self._angleRelaxationInRadians)
         else:
             return False
 
     @staticmethod
     def _calculateVertexAngles(vertexes):
         vertex1, vertex2, vertex3, vertex4 = vertexes
-        angle1 = QuadrilateralPolygon._getAngleBetweenVertexes(vertex1, vertex4, vertex2)
-        angle2 = QuadrilateralPolygon._getAngleBetweenVertexes(vertex2, vertex1, vertex3)
-        angle3 = QuadrilateralPolygon._getAngleBetweenVertexes(vertex3, vertex2, vertex4)
-        angle4 = QuadrilateralPolygon._getAngleBetweenVertexes(vertex4, vertex3, vertex1)
+        angle1 = Quadrilateral._getAngleBetweenVertexes(vertex1, vertex4, vertex2)
+        angle2 = Quadrilateral._getAngleBetweenVertexes(vertex2, vertex1, vertex3)
+        angle3 = Quadrilateral._getAngleBetweenVertexes(vertex3, vertex2, vertex4)
+        angle4 = Quadrilateral._getAngleBetweenVertexes(vertex4, vertex3, vertex1)
         return [angle1, angle2, angle3, angle4]
 
     @staticmethod
