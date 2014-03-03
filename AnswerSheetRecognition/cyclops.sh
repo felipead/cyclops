@@ -1,1 +1,1 @@
-python -m cyclops.Main $@
+python -m cyclops.CommandLineApp $@

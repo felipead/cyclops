@@ -10,7 +10,7 @@ def readCamera(camera):
     return picture
 
 
-def main():
+def execute():
     namedWindow(WINDOW_NAME)
     camera = VideoCapture(0)
 
@@ -30,4 +30,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    execute()
