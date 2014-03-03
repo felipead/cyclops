@@ -49,11 +49,11 @@ class FrameExtractor:
     def _findPossibleFrames(self, frameOrientationMatches, frameAlignmentMatches):
         otherPoints = []
         for frameAlignmentMatch in frameAlignmentMatches:
-            otherPoints.append(frameAlignmentMatch.getCenter())
+            otherPoints.append(frameAlignmentMatch.center)
 
         quadrilaterals = set()
         for frameOrientationMatch in frameOrientationMatches:
-            basePoint = frameOrientationMatch.getCenter()
+            basePoint = frameOrientationMatch.center
             quadrilaterals.update(self._findConvexQuadrilateralsWithRoughlyEqualSizesAndAngles(basePoint, otherPoints))
 
         return list(quadrilaterals)

@@ -4,7 +4,8 @@ class PatternMatch:
         self.location = location
         self.size = size
 
-    def getCenter(self):
+    @property
+    def center(self):
         x = self.location[0] + (self.size[0]/2)
         y = self.location[1] + (self.size[1]/2)
         return (x, y)
