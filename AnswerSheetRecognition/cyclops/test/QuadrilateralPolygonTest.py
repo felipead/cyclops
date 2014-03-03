@@ -7,7 +7,7 @@ import math
 
 class QuadrilateralPolygonTest(TestCase):
 
-    def testShapeWithMoreThanFourVertexesIsNotConvexQuadrilateral(self):
+    def testShapeWithMoreThanFourVertexesIsNotQuadrilateralPolygon(self):
         vertexes = [(0,0), (1,1), (2,2), (3,3), (4,4)]
         relaxation = 1
 
@@ -19,7 +19,7 @@ class QuadrilateralPolygonTest(TestCase):
 
         assert exceptionThrown
 
-    def testShapeWithLessThanFourVertexesIsNotConvexQuadrilateral(self):
+    def testShapeWithLessThanFourVertexesIsNotQuadrilateralPolygon(self):
         vertexes = [(0,0), (3,3), (5,5)]
         relaxation = 1
         
@@ -31,32 +31,31 @@ class QuadrilateralPolygonTest(TestCase):
 
         assert exceptionThrown
 
-    def testConcaveShapeWithFourLinesIsNotConvexQuadrilateral(self):
-        vertexes = [(0,0), (3,3), (5,5), (6, 3)]
-        relaxation = 0.2
-        assert not QuadrilateralPolygon(vertexes).isConvexWithRoughlyRightAngles(relaxation)
+    def testConcaveShapeWithFourVertexesIsNotConvexQuadrilateral(self):
+        shape = QuadrilateralPolygon([(0,0), (4,2), (1,4), (3, 0)], 0.2)
+        assert not shape.isConvex()
 
-    def testExactSquareIsConvexQuadrilateralWithRoughlyEqualAngles(self):
-        vertexes = [(0,0), (5,0), (5,5), (0,5)]
-        relaxation = 0
-        assert QuadrilateralPolygon(vertexes).isConvexWithRoughlyRightAngles(relaxation)
+    def testExactSquareIsConvexQuadrilateralWithRoughlyRightAngles(self):
+        square = QuadrilateralPolygon([(0,0), (5,0), (5,5), (0,5)], 0)
+        assert square.isConvex()
+        assert square.isConvexWithRoughlyRightAngles()
 
-    def testRoughSquareIsConvexQuadrilateralWithRoughlyEqualAngles(self):
+    def testRoughSquareIsConvexQuadrilateralWithRoughlyRightAngles(self):
         d = 0.3
-        vertexes = [(0,d), (5+d,0), (5+d,5-d), (0-d,5+d)]
-        relaxation = 0.2
-        assert QuadrilateralPolygon(vertexes).isConvexWithRoughlyRightAngles(relaxation)
+        roughSquare = QuadrilateralPolygon([(0,d), (5+d,0), (5+d,5-d), (0-d,5+d)], 0.2)
+        assert roughSquare.isConvex()
+        assert roughSquare.isConvexWithRoughlyRightAngles()
 
-    def testTooRoughSquareIsNotConvexQuadrilateralWithRoughlyEqualAngles(self):
+    def testTooRoughSquareIsConvexQuadrilateralWithoutRightAngles(self):
         d = 0.7
-        vertexes = [(0,d), (5+d,0), (5+d,5-d), (0-d,5+d)]
-        relaxation = 0.2
-        assert not QuadrilateralPolygon(vertexes).isConvexWithRoughlyRightAngles(relaxation)
+        shape = QuadrilateralPolygon([(0,d), (5+d,0), (5+d,5-d), (0-d,5+d)], 0.2)
+        assert shape.isConvex()
+        assert not shape.isConvexWithRoughlyRightAngles()
 
-    def testTrapezoidIsNotConvexQuadrilateralWithRoughlyEqualAngles(self):
-        vertexes = [(1,-2), (13,4), (6,8), (-2,4)]
-        relaxation = 0.5
-        assert not QuadrilateralPolygon(vertexes).isConvexWithRoughlyRightAngles(relaxation)
+    def testTrapezoidIsConvexQuadrilateralWithoutRightAngles(self):
+        shape = QuadrilateralPolygon([(1,-2), (13,4), (6,8), (-2,4)], 0.5)
+        assert shape.isConvex()
+        assert not shape.isConvexWithRoughlyRightAngles()
 
 
     def testOneExactRightAngleIsRoughlyRight(self):
@@ -93,6 +92,60 @@ class QuadrilateralPolygonTest(TestCase):
         relaxation = 0.2
         angles = [rightAngle - relaxation*1.2, rightAngle, rightAngle - relaxation*1.2, rightAngle]
         assert not QuadrilateralPolygon._areAnglesRoughlyRight(angles, relaxation)
+
+
+    def testQuadrilateralsWithSameVertexesInTheSameOrderAreEqual(self):
+        v1 = (1,2)
+        v2 = (3,4)
+        v3 = (5,6)
+        v4 = (7,8)
+        angleRelaxation = 0.1
+        quadrilateral1 = QuadrilateralPolygon([v1, v2, v3, v4], angleRelaxation)
+        quadrilateral2 = QuadrilateralPolygon([v1, v2, v3, v4], angleRelaxation)
+
+        assert quadrilateral1 == quadrilateral2
+
+    def testQuadrilateralsWithSlightlyDifferentVertexesAreNotEqualDespiteAngleRelaxation(self):
+        angleRelaxation = 0.1
+        quadrilateral1 = QuadrilateralPolygon([(1,2), (3,4.5), (5,6), (7,8)], angleRelaxation)
+        quadrilateral2 = QuadrilateralPolygon([(1,2), (3,4.4), (5,6), (7,8)], angleRelaxation)
+
+        assert quadrilateral1 != quadrilateral2
+
+    def testQuadrilateralsWithVeryDifferentVertexesAreNotEqual(self):
+        angleRelaxation = 0.1
+        quadrilateral1 = QuadrilateralPolygon([(1,2), (3,4), (5,6), (7,8)], angleRelaxation)
+        quadrilateral2 = QuadrilateralPolygon([(9,10), (10,11), (11,12), (13,14)], angleRelaxation)
+
+        assert quadrilateral1 != quadrilateral2
+
+    def testMirroredConvexQuadrilateralsAreEqual(self):
+        v1 = (1,2)
+        v2 = (3,4)
+        v3 = (5,6)
+        v4 = (7,8)
+        angleRelaxation = 0.1
+        quadrilateral1 = QuadrilateralPolygon([v1, v4, v3, v2], angleRelaxation)
+        quadrilateral2 = QuadrilateralPolygon([v1, v2, v3, v4], angleRelaxation)
+        
+        assert quadrilateral1 == quadrilateral2
+
+    def testHashCodeShouldBeDependentOnlyOnVertexesRegardlessOfTheOrder(self):
+        v1 = (1,2)
+        v2 = (3,4)
+        v3 = (5,6)
+        v4 = (7,8)
+        angleRelaxation = 0.1
+        quadrilateral1 = QuadrilateralPolygon([v1, v4, v3, v2], 0.1)
+        quadrilateral2 = QuadrilateralPolygon([v1, v2, v3, v4], 0.5)
+        quadrilateral3 = QuadrilateralPolygon([v4, v3, v2, v1], 0.2)
+        assert hash(quadrilateral1) == hash(quadrilateral2) == hash(quadrilateral3)
+
+        quadrilateral4 = QuadrilateralPolygon([v1, v2, v3, (5, 10)], 0.1)
+        quadrilateral5 = QuadrilateralPolygon([v1, (0,0), v3, (5, 10)], 0.1)
+        quadrilateral6 = QuadrilateralPolygon([(999,256), (0,0), v3, (5, 10)], 0.1)
+        assert hash(quadrilateral1) != hash(quadrilateral4) != hash(quadrilateral5) != hash(quadrilateral6)
+
 
 if __name__ == "__main__":
     unittest.main()
