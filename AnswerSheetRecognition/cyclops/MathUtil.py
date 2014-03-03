@@ -10,4 +10,26 @@ class MathUtil:
 
     @staticmethod
     def equalWithinError(a, b, error):
-        return abs(a - b) <= abs(error)
+        return abs(a - b) <= error
+
+    @staticmethod
+    def equalWithinRatio(a, b, cutRatio):
+        biggest = None
+        smallest = None
+        if a > b:
+            biggest = a
+            smallest = b
+        else:
+            biggest = b
+            smallest = a
+
+        # avoids division by zero
+        if smallest == 0:
+            if biggest == 0:
+                return True
+            else:
+                return False
+
+        ratio = float(biggest)/float(smallest)
+        
+        return (ratio <= cutRatio)

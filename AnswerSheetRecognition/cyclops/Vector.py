@@ -1,6 +1,7 @@
 import math
 
 class Vector(tuple):
+
     def __init__(self, point):
         tuple.__init__(self,point)
 
@@ -27,4 +28,16 @@ class Vector(tuple):
         v = self
         w = anotherVector
 
-        return math.acos( v.innerProduct(w) / (v.norm() * w.norm()) )
+        normsProduct = v.norm() * w.norm()
+        if normsProduct == 0:
+            return 0
+
+        cos = v.innerProduct(w) / normsProduct
+
+        # prevent errors caused by floating point rounding
+        if cos >= 1.0:
+            return 0
+        if cos <= -1.0:
+            return math.pi
+
+        return math.acos(cos)

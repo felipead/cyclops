@@ -4,6 +4,8 @@ import math
 from FrameAlignmentPatternMatcher import *
 from FrameOrientationPatternMatcher import *
 
+from Vector import *
+from QuadrilateralPolygon import *
 from MathUtil import *
 from DrawingUtil import *
 
@@ -14,59 +16,62 @@ class FrameExtractor:
         self._frameOrientationMatcher = FrameOrientationPatternMatcher()
         self.debugEnabled = debugEnabled
 
+
     def extractFrame(self, picture):
         frameOrientationMatches = self._frameOrientationMatcher.match(picture, 1)
         if self.debugEnabled:
             for match in frameOrientationMatches:
-                print "Frame Orientation: " + str(match.getCenter())
-                DrawingUtil.drawRectangle(picture, match.location, match.size, (0,0,255)) # Blue
+                DrawingUtil.drawRectangle(picture, match.location, match.size, DrawingUtil.COLOR_BLUE)
 
         frameAlignmentMatches = self._frameAlignmentMatcher.match(picture, 3)
         if self.debugEnabled:
             for match in frameAlignmentMatches:
-                print "Frame Alignment: " + str(match.getCenter())
-                DrawingUtil.drawRectangle(picture, match.location, match.size, (0,255,0)) # Green
+                DrawingUtil.drawRectangle(picture, match.location, match.size, DrawingUtil.COLOR_GREEN)
 
-        frame = self._findFrame(frameOrientationMatches, frameAlignmentMatches)
+        possibleFrames = self._findPossibleFrames(frameOrientationMatches, frameAlignmentMatches)
         if self.debugEnabled:
-            if frame != None:
-                print "Square: " + str(frame)
-                for point in frame:
-                    DrawingUtil.drawFilledCircle(picture, point, 3, (255,0,0)) # Red
+            if len(possibleFrames) != 0:
+                print "-----"
+                for frame in possibleFrames:
+                    print "Frame: " + str(frame)
+                    DrawingUtil.drawQuadrilateralLines(picture, frame.vertexes, DrawingUtil.COLOR_RED, 1)
+                    for vertex in frame.vertexes:
+                        DrawingUtil.drawFilledCircle(picture, vertex, 3, DrawingUtil.COLOR_YELLOW)
 
-        return frame
+        if len(possibleFrames) != 0:
+            return possibleFrames[0]
+        else:
+            return None
 
-
-    def _findFrame(self, frameOrientationMatches, frameAlignmentMatches):
+    def _findPossibleFrames(self, frameOrientationMatches, frameAlignmentMatches):
         otherPoints = []
         for frameAlignmentMatch in frameAlignmentMatches:
             otherPoints.append(frameAlignmentMatch.getCenter())
 
+        quadrilaterals = []
         for frameOrientationMatch in frameOrientationMatches:
             basePoint = frameOrientationMatch.getCenter()
-            square = self._findSquareInListOfPoints(basePoint, otherPoints, error=15)
-            if square != None:
-                return square
+            quadrilaterals.extend(self._findConvexQuadrilateralsWithRoughlyEqualSizesAndAngles(basePoint, otherPoints))
 
-        return None
+        return quadrilaterals
 
 
-    def _findSquareInListOfPoints(self, basePoint, otherPoints, error):
+    def _findConvexQuadrilateralsWithRoughlyEqualSizesAndAngles(self, basePoint, otherPoints, sizeRelaxationRatio=1.1, angleRelaxationInRadians=0.2):
+        convexQuadrilaterals = []
+
         for firstPoint in otherPoints:
-            firstDistance = MathUtil.distanceBetweenPoints(firstPoint, basePoint)
-
+            baseDistance = MathUtil.distanceBetweenPoints(firstPoint, basePoint)
             for secondPoint in otherPoints:
-                if secondPoint != firstPoint:
-                    secondDistance = MathUtil.distanceBetweenPoints(firstPoint, secondPoint)
-                    if MathUtil.equalWithinError(secondDistance, firstDistance, error):
-
-                        for thirdPoint in otherPoints:
-                            if thirdPoint != firstPoint and thirdPoint != secondPoint:
-                                thirdDistance = MathUtil.distanceBetweenPoints(secondPoint, thirdPoint)
-                                if MathUtil.equalWithinError(thirdDistance, firstDistance, error):
-
-                                    fourthDistance = MathUtil.distanceBetweenPoints(thirdPoint, basePoint)
-                                    if MathUtil.equalWithinError(fourthDistance, firstDistance, error):
-                                        return [basePoint, firstPoint, secondPoint, thirdPoint]
+                if secondPoint == firstPoint:
+                    continue                    
+                if MathUtil.equalWithinRatio(MathUtil.distanceBetweenPoints(firstPoint, secondPoint), baseDistance, sizeRelaxationRatio):
+                    for thirdPoint in otherPoints:
+                        if thirdPoint == firstPoint or thirdPoint == secondPoint:
+                            continue    
+                        if MathUtil.equalWithinRatio(MathUtil.distanceBetweenPoints(secondPoint, thirdPoint), baseDistance, sizeRelaxationRatio):
+                            if MathUtil.equalWithinRatio(MathUtil.distanceBetweenPoints(thirdPoint, basePoint), baseDistance, sizeRelaxationRatio):
+                                quadrilateral = QuadrilateralPolygon([basePoint, firstPoint, secondPoint, thirdPoint])
+                                if quadrilateral.isConvexWithRoughlyRightAngles(angleRelaxationInRadians):
+                                    convexQuadrilaterals.append(quadrilateral)
             
-        return None
+        return convexQuadrilaterals
