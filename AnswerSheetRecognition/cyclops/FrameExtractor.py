@@ -3,6 +3,7 @@ import math
 
 from FrameAlignmentPatternMatcher import *
 from FrameOrientationPatternMatcher import *
+from QrCodeEdgePatternMatcher import *
 
 from Vector import *
 from Quadrilateral import *
@@ -11,7 +12,7 @@ from DrawingUtil import *
 
 class FrameExtractor:
 
-    def __init__(self, sizeRelaxationRatio=1.1, angleRelaxationInRadians=0.2, debugEnabled=True):
+    def __init__(self, sizeRelaxationRatio=1.10, angleRelaxationInRadians=0.2, debugEnabled=True):
         self._sizeRelaxationRatio = sizeRelaxationRatio
         self._angleRelaxationInRadians = angleRelaxationInRadians
         self._debugEnabled = debugEnabled
@@ -30,15 +31,24 @@ class FrameExtractor:
             for match in frameAlignmentMatches:
                 DrawingUtil.drawRectangle(picture, match.location, match.size, DrawingUtil.COLOR_GREEN)
 
-        possibleFrames = self._findPossibleFrames(frameOrientationMatches, frameAlignmentMatches)
+        possibleFrames = self._findFrames(frameOrientationMatches, frameAlignmentMatches)
         if self._debugEnabled:
+            frameOrientationMatchPoints = []
+            for match in frameOrientationMatches:
+                frameOrientationMatchPoints.append(match.center)
+            print "Frame Orientation Matches: " + str(frameOrientationMatchPoints)
+            frameAlignmentMatchPoints = []
+            for match in frameAlignmentMatches:
+                frameAlignmentMatchPoints.append(match.center)
+            print "Frame Alignment Matches: " + str(frameAlignmentMatchPoints)
+
             if len(possibleFrames) != 0:
-                print "-----"
                 for frame in possibleFrames:
-                    print "Frame: " + str(frame)
+                    print "Extracted Frame: " + str(frame)
                     DrawingUtil.drawQuadrilateralLines(picture, frame.vertexes, DrawingUtil.COLOR_RED, 1)
                     for vertex in frame.vertexes:
                         DrawingUtil.drawFilledCircle(picture, vertex, 1, DrawingUtil.COLOR_YELLOW)
+            print "---------"
 
         if len(possibleFrames) != 0:
             return possibleFrames[0]
@@ -46,7 +56,7 @@ class FrameExtractor:
             return None
 
 
-    def _findPossibleFrames(self, frameOrientationMatches, frameAlignmentMatches):
+    def _findFrames(self, frameOrientationMatches, frameAlignmentMatches):
         otherPoints = []
         for frameAlignmentMatch in frameAlignmentMatches:
             otherPoints.append(frameAlignmentMatch.center)

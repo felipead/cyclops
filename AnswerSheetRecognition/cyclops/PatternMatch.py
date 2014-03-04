@@ -9,3 +9,12 @@ class PatternMatch:
         x = self.location[0] + (self.size[0]/2)
         y = self.location[1] + (self.size[1]/2)
         return (x, y)
+
+    @classmethod
+    def fromCenter(_class, center, size):
+        x = center[0] - size[0]/2
+        y = center[1] - size[1]/2
+        return PatternMatch((x,y), size)
+
+    def __str__(self):
+        return str(self.center)
