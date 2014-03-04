@@ -3,8 +3,8 @@
 	[
 		{
 			"path": "cyclops",
-			"folder_exclude_patterns": ["answer-sheet-recognizer.dSYM", "Samples", "Templates"],
-			"file_exclude_patterns": ["answer-sheet-recognizer", ".gitignore", "*.sublime-workspace"]
+			"folder_exclude_patterns": ["Samples", "Patterns"],
+			"file_exclude_patterns": [".gitignore", "*.sublime-workspace", "__init__.py", "*.pyc"]
 		}
 	]
 }
