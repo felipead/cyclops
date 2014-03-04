@@ -1,5 +1,5 @@
 from Vector import *
-from MathUtil import *
+from ..util.MathUtil import *
 
 import math
 
@@ -7,7 +7,7 @@ class Quadrilateral:
 
     def __init__(self, vertexes, angleRelaxationInRadians):
         if len(vertexes) != 4:
-            raise Exception("Quadrilateral polygon must have exactly 4 vertexes.")
+            raise Exception("Quadrilateral must have exactly 4 vertexes.")
         self._vertexes = vertexes
         self._angleRelaxationInRadians = angleRelaxationInRadians
         self._vertexAngles = Quadrilateral._calculateVertexAngles(self._vertexes)

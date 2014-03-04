@@ -1,7 +1,7 @@
 import unittest
 from unittest import TestCase
 
-from ..PatternFactory import *
+from ..pattern.PatternFactory import *
 
 class PatternFactoryTest(TestCase):
 

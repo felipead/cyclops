@@ -3,7 +3,7 @@ from unittest import TestCase
 
 from math import sqrt
 
-from ..MathUtil import *
+from ..util.MathUtil import *
 
 class MathUtilTest(TestCase):
 

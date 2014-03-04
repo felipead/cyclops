@@ -1,6 +1,6 @@
 from cv2 import *
 
-from AnswerSheetRecognizer import *
+from ..recognition.AnswerSheetRecognizer import *
 
 WINDOW_NAME = "preview"
 

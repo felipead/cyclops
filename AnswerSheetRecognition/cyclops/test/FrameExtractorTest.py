@@ -1,9 +1,9 @@
 from unittest import *
 
-from ..FrameExtractor import *
-from ..MathUtil import *
-from ..Quadrilateral import *
-from ..PatternMatch import *
+from ..recognition.FrameExtractor import *
+from ..util.MathUtil import *
+from ..geometry.Quadrilateral import *
+from ..pattern.PatternMatch import *
 
 import math
 

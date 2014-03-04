@@ -3,7 +3,7 @@ from sys import stdin
 
 from cv2 import *
 
-from AnswerSheetRecognizer import *
+from ..recognition.AnswerSheetRecognizer import *
 
 
 def execute():

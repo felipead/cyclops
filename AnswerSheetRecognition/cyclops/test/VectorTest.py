@@ -3,8 +3,8 @@ from unittest import TestCase
 
 import math
 
-from ..MathUtil import *
-from ..Vector import *
+from ..util.MathUtil import *
+from ..geometry.Vector import *
 
 class VectorTest(TestCase):
 

@@ -1,6 +1,6 @@
-from ..Quadrilateral import *
-from ..MathUtil import *
-from ..Vector import *
+from ..geometry.Quadrilateral import *
+from ..geometry.Vector import *
+from ..util.MathUtil import *
 
 from unittest import *
 import math

@@ -1,1 +1,1 @@
-python -m cyclops.CameraApp $@
+python -m cyclops.app.CameraApp $@

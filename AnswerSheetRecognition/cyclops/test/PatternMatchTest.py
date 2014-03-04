@@ -1,7 +1,7 @@
 import unittest
 from unittest import TestCase
 
-from ..PatternMatch import *
+from ..pattern.PatternMatch import *
 
 class PatternMatchTest(TestCase):
 

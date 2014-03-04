@@ -1,14 +1,13 @@
 import numpy as np
 import math
 
-from FrameAlignmentPatternMatcher import *
-from FrameOrientationPatternMatcher import *
-from QrCodeEdgePatternMatcher import *
+from ..pattern.FrameAlignmentPatternMatcher import *
+from ..pattern.FrameOrientationPatternMatcher import *
 
-from Vector import *
-from Quadrilateral import *
-from MathUtil import *
-from DrawingUtil import *
+from ..geometry.Vector import *
+from ..geometry.Quadrilateral import *
+from ..util.MathUtil import *
+from ..util.DrawingUtil import *
 
 class FrameExtractor:
 
@@ -88,3 +87,4 @@ class FrameExtractor:
                                     convexQuadrilaterals.add(quadrilateral)
             
         return convexQuadrilaterals
+
