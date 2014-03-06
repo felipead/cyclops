@@ -46,6 +46,9 @@ class VectorTest(TestCase):
     def testHashCodeShouldDependOnlyOnCoordinates(self):
         assert hash(Vector((5,5))) != hash(Vector((5,5.1)))
 
+    def testToString(self):
+        p = (3,2)
+        assert str(Vector(p)) == str(p)
 
     def testInnerProductBetweenVectors(self):
         (v1,v2) = (3,4.23)

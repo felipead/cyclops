@@ -75,3 +75,6 @@ class Vector:
 
     def __hash__(self):
         return hash(self._coordinates)
+
+    def __str__(self):
+        return str(self._coordinates)
