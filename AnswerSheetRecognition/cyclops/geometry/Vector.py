@@ -1,28 +1,39 @@
 import math
 
-class Vector(tuple):
+class Vector:
 
-    def __init__(self, point):
-        tuple.__init__(self,point)
+    def __init__(self, terminalPoint, initialPoint=(0,0)):
+        if len(terminalPoint) != 2 or len(initialPoint) != 2:
+            raise Exception("Only 2D vectors are supported.")
+        self._terminalPoint = terminalPoint
+        self._initialPoint = initialPoint
+        self._coordinates = (terminalPoint[0] - initialPoint[0], terminalPoint[1] - initialPoint[1])
 
-    @classmethod
-    def create(_class, point, origin):
-        value = []
-        for i in xrange(len(point)):
-            value.append(point[i] - origin[i])
-        return Vector(value)
+    @property
+    def x(self):
+        return self._coordinates[0]
+
+    @property
+    def y(self):
+        return self._coordinates[1]
+
+    @property
+    def coordinates(self):
+        return self._coordinates
+
+    @property
+    def initialPoint(self):
+        return self._initialPoint
+
+    @property
+    def terminalPoint(self):
+        return self._terminalPoint
 
     def innerProduct(self, anotherVector):
-        sum = 0
-        for i, j in zip(self, anotherVector):
-            sum += i * j
-        return sum
+        return self.x * anotherVector.x + self.y * anotherVector.y
 
     def norm(self):
-        sum = 0
-        for i in self:
-            sum += i*i
-        return math.sqrt(sum)
+        return math.sqrt((self.x**2) + (self.y**2))
 
     def angleBetween(self, anotherVector):
         v = self
@@ -32,7 +43,7 @@ class Vector(tuple):
         if normsProduct == 0:
             return 0
 
-        cos = v.innerProduct(w) / normsProduct
+        cos = v.innerProduct(w) / float(normsProduct)
 
         # prevent errors caused by floating point rounding
         if cos >= 1.0:
@@ -41,3 +52,26 @@ class Vector(tuple):
             return math.pi
 
         return math.acos(cos)
+
+    def __len__(self):
+        return 2
+
+    def __iter__(self):
+        pass
+
+    def __getitem__(self, index):
+        if index == 0:
+            return self.x
+        elif index == 1:
+            return self.y
+        else:
+            raise IndexError()
+
+    def __eq__(self, other):
+        if not isinstance(other, Vector):
+            return False
+
+        return self._coordinates == other._coordinates
+
+    def __hash__(self):
+        return hash(self._coordinates)

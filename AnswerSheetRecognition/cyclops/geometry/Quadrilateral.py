@@ -5,7 +5,7 @@ import math
 
 class Quadrilateral:
 
-    def __init__(self, vertexes, angleRelaxationInRadians):
+    def __init__(self, vertexes, angleRelaxationInRadians=0):
         if len(vertexes) != 4:
             raise Exception("Quadrilateral must have exactly 4 vertexes.")
         self._vertexes = vertexes
@@ -19,6 +19,16 @@ class Quadrilateral:
     @property
     def vertexAngles(self):
         return list(self._vertexAngles)
+
+    @property
+    def clockwiseContour(self):
+        [v1, v2, v3, v4] = self._vertexes
+        return list([(v1,v2), (v2,v3), (v3,v4), (v4,v1)])
+
+    #TODO
+    @property
+    def clockwiseContour(self):
+        pass
 
     def isConvex(self):
         return MathUtil.equalWithinError(sum(self._vertexAngles), 2*math.pi, self._angleRelaxationInRadians*4)
@@ -47,12 +57,15 @@ class Quadrilateral:
         return True
 
     @staticmethod
-    def _getAngleBetweenVertexes(angleVertex, vertex1, vertex2):
-        v1 = Vector.create(angleVertex, vertex1)
-        v2 = Vector.create(angleVertex, vertex2)
+    def _getAngleBetweenVertexes(cornerVertex, vertex1, vertex2):
+        v1 = Vector(cornerVertex, vertex1)
+        v2 = Vector(cornerVertex, vertex2)
         return v1.angleBetween(v2)
 
     def __eq__(self, other):
+        if not isinstance(other, Quadrilateral):
+            return False
+            
         if self._vertexes == other._vertexes:
             return True
 
@@ -63,11 +76,11 @@ class Quadrilateral:
 
         return False
 
-    def __str__(self):
-        return str(self._vertexes)
-
     def __hash__(self):
         hashValue = 0
         for v in self._vertexes:
              hashValue ^= hash(v)
         return hashValue
+
+    def __str__(self):
+        return str(self._vertexes)

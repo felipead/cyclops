@@ -8,20 +8,44 @@ from ..geometry.Vector import *
 
 class VectorTest(TestCase):
 
-    def testCreateVectorInstanceWithoutOrigin(self):
+    def testCreateVectorInstanceWithTerminalPoint(self):
         (x, y) = (1, 2)
         v = Vector((x,y))
         assert len(v) == 2
-        assert v[0] == x
-        assert v[1] == y
+        assert v.x == x
+        assert v.y == y
 
-    def testCreateVectorInstanceWithOrigin(self):
+    def testCreateVectorInstanceWithTerminalAndInitialPoints(self):
         (x0, y0) = (1, 2)
         (x1, y1) = (5, -6)
-        v = Vector.create((x1,y1), (x0,y0))
+        v = Vector((x1,y1), (x0,y0))
         assert len(v) == 2
-        assert v[0] == x1 - x0
-        assert v[1] == y1 - y0
+        assert v.x == x1 - x0
+        assert v.y == y1 - y0
+
+    def testAccessVectorCoordinates(self):
+        (x, y) = (9, 5)
+        v = Vector((x,y))
+        assert v[0] == v.x == v.coordinates[0] == x
+        assert v[1] == v.y == v.coordinates[1] == y
+
+    def testLengthOfVectorIsAlwaysTwoBecauseOnly2DimensionVectorsAreSupported(self):
+        v = Vector((5,3))
+        assert len(v) == 2
+
+    def testVectorIsNotEqualToObjectWithOtherType(self):
+        assert Vector((5,5)) != (5,5)
+
+    def testVectorsWithSameCoordinatesAreEqual(self):
+        p = (3,2)
+        assert Vector(p) == Vector(p)
+
+    def testVectorsWithDifferentCoordinatesAreDifferent(self):
+        assert Vector((5,3)) != Vector((3,5))
+
+    def testHashCodeShouldDependOnlyOnCoordinates(self):
+        assert hash(Vector((5,5))) != hash(Vector((5,5.1)))
+
 
     def testInnerProductBetweenVectors(self):
         (v1,v2) = (3,4.23)
@@ -38,11 +62,13 @@ class VectorTest(TestCase):
         assert vector.angleBetween(zero) == 0
         assert zero.angleBetween(vector) == 0
 
-    def testNormOfVector(self):
+
+    def testNorm(self):
         (v1,v2) = (3,4)
         v = Vector((v1,v2))
 
         assert v.norm() == math.sqrt(v1*v1 + v2*v2)
+
 
     def testAngleBetweenVectorAndZeroIsZero(self):
         zero = Vector((0,0))
@@ -57,7 +83,7 @@ class VectorTest(TestCase):
 
     def testAngleBetweenEqualVectorsIsZero(self):
         v = Vector((-63, 326))
-        w = Vector(v)
+        w = Vector(v.coordinates)
 
         assert v.angleBetween(w) == 0
         assert w.angleBetween(v) == 0

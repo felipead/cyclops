@@ -93,6 +93,14 @@ class QuadrilateralTest(TestCase):
         angles = [rightAngle - relaxation*1.2, rightAngle, rightAngle - relaxation*1.2, rightAngle]
         assert not Quadrilateral._areAnglesRoughlyRight(angles, relaxation)
 
+    def testQuadrilateralIsNotEqualToObjectWithOtherType(self):
+        v1 = (1,2)
+        v2 = (3,4)
+        v3 = (5,6)
+        v4 = (7,8)
+        angleRelaxation = 0.1
+        quadrilateral = Quadrilateral([v1, v2, v3, v4], angleRelaxation)
+        assert quadrilateral != 5
 
     def testQuadrilateralsWithSameVertexesInTheSameOrderAreEqual(self):
         v1 = (1,2)
@@ -146,6 +154,14 @@ class QuadrilateralTest(TestCase):
         quadrilateral6 = Quadrilateral([(999,256), (0,0), v3, (5, 10)], 0.1)
         assert hash(quadrilateral1) != hash(quadrilateral4) != hash(quadrilateral5) != hash(quadrilateral6)
 
+
+    def testGetSides(self):
+        v1 = (1,2)
+        v2 = (3,4)
+        v3 = (5,6)
+        v4 = (7,8)
+
+        quadrilateral = Quadrilateral([v1, v2, v3, v4], 0.3)
 
 if __name__ == "__main__":
     unittest.main()
