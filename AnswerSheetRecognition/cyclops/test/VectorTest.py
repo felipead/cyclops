@@ -8,20 +8,28 @@ from ..geometry.Vector import *
 
 class VectorTest(TestCase):
 
-    def testCreateVectorInstanceWithTerminalPoint(self):
+    def testCreateVectorInstanceWithOnlyTerminalPointAsTuple(self):
         (x, y) = (1, 2)
         v = Vector((x,y))
         assert len(v) == 2
         assert v.x == x
         assert v.y == y
 
-    def testCreateVectorInstanceWithTerminalAndInitialPoints(self):
+    def testCreateVectorInstanceWithTerminalAndInitialPointsAsTuples(self):
         (x0, y0) = (1, 2)
         (x1, y1) = (5, -6)
         v = Vector((x1,y1), (x0,y0))
         assert len(v) == 2
         assert v.x == x1 - x0
         assert v.y == y1 - y0
+
+    def testCreateVectorInstanceWithTerminalAndInitialPointsAsVectors(self):
+        (x0, y0) = (1, 2)
+        (x1, y1) = (5, -6)
+        v = Vector(Vector((x1,y1)), Vector((x0,y0)))
+        assert len(v) == 2
+        assert v.x == x1 - x0
+        assert v.y == y1 - y0        
 
     def testAccessVectorCoordinates(self):
         (x, y) = (9, 5)
@@ -49,6 +57,13 @@ class VectorTest(TestCase):
     def testToString(self):
         p = (3,2)
         assert str(Vector(p)) == str(p)
+
+    def testGetIterable(self):
+        sum = 0
+        for i in Vector((3,5)):
+            sum += i
+        assert sum == 8
+
 
     def testInnerProductBetweenVectors(self):
         (v1,v2) = (3,4.23)
@@ -165,3 +180,42 @@ class VectorTest(TestCase):
         expectedAngle = math.pi
         assert MathUtil.equalWithinError(v.angleBetween(w), expectedAngle, error)
         assert MathUtil.equalWithinError(w.angleBetween(v), expectedAngle, error)
+
+
+    def testGetMirror(self):
+        v = Vector((3,2), (4,5))
+        mirror = v.getMirror()
+        assert mirror.initialPoint == v.terminalPoint
+        assert mirror.terminalPoint == v.initialPoint
+        assert v.norm() == mirror.norm()
+        assert MathUtil.equalWithinError(v.angleBetween(mirror), math.pi, 0.0000001)
+
+    def testMirrorFromMirrorIsTheOriginalVector(self):
+        v = Vector((436, -13), (-950,30))
+        mirror = v.getMirror()
+        assert mirror.getMirror() == v
+
+
+    def testGet90DegreeClockwiseRotation(self):
+        v = Vector((3,2), (-1,-50))
+        clockwise = v.get90DegreeClockwiseRotation()
+        assert clockwise.innerProduct(v) == 0
+        assert clockwise.angleBetween(v) == math.pi/2
+        assert clockwise.norm() == v.norm()
+
+    def testGet90DegreeCounterClockwiseRotation(self):
+        v = Vector((3,2), (-1,-50))
+        counterclockwise = v.get90DegreeCounterClockwiseRotation()
+        assert counterclockwise.innerProduct(v) == 0
+        assert counterclockwise.angleBetween(v) == math.pi/2
+        assert counterclockwise.norm() == v.norm()
+
+    def testCounterClockwiseRotationOverClockwiseRotationIsTheOriginalVector(self):
+        v = Vector((312,460), (-93,517))
+        clockwise = v.get90DegreeClockwiseRotation()
+        assert clockwise.get90DegreeCounterClockwiseRotation() == v
+
+    def testClockwiseRotationOverCounterClockwiseRotationIsTheOriginalVector(self):
+        v = Vector((312,460), (-93,517))
+        counterclockwise = v.get90DegreeCounterClockwiseRotation()
+        assert counterclockwise.get90DegreeClockwiseRotation() == v        

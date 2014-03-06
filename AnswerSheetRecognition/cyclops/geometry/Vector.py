@@ -5,8 +5,8 @@ class Vector:
     def __init__(self, terminalPoint, initialPoint=(0,0)):
         if len(terminalPoint) != 2 or len(initialPoint) != 2:
             raise Exception("Only 2D vectors are supported.")
-        self._terminalPoint = terminalPoint
-        self._initialPoint = initialPoint
+        self._terminalPoint = tuple(terminalPoint)
+        self._initialPoint = tuple(initialPoint)
         self._coordinates = (terminalPoint[0] - initialPoint[0], terminalPoint[1] - initialPoint[1])
 
     @property
@@ -53,6 +53,20 @@ class Vector:
 
         return math.acos(cos)
 
+
+    def get90DegreeClockwiseRotation(self):
+        coordinates = (-self.y, self.x)
+        terminalPoint = (coordinates[0] + self.initialPoint[0], coordinates[1] + self.initialPoint[1])
+        return Vector(terminalPoint, self.initialPoint)
+
+    def get90DegreeCounterClockwiseRotation(self):
+        coordinates = (self.y, -self.x)
+        terminalPoint = (coordinates[0] + self.initialPoint[0], coordinates[1] + self.initialPoint[1])
+        return Vector(terminalPoint, self.initialPoint)
+
+    def getMirror(self):
+        return Vector(self.initialPoint, self.terminalPoint)
+
     def __len__(self):
         return 2
 
@@ -78,3 +92,6 @@ class Vector:
 
     def __str__(self):
         return str(self._coordinates)
+
+    def __iter__(self):
+        return iter(self.coordinates)
