@@ -64,7 +64,7 @@ class Vector:
         terminalPoint = (coordinates[0] + self.initialPoint[0], coordinates[1] + self.initialPoint[1])
         return Vector(terminalPoint, self.initialPoint)
 
-    def getMirror(self):
+    def getReflection(self):
         return Vector(self.initialPoint, self.terminalPoint)
 
     def __len__(self):

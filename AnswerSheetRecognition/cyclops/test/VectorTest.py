@@ -58,7 +58,7 @@ class VectorTest(TestCase):
         p = (3,2)
         assert str(Vector(p)) == str(p)
 
-    def testGetIterable(self):
+    def testIterable(self):
         sum = 0
         for i in Vector((3,5)):
             sum += i
@@ -182,40 +182,58 @@ class VectorTest(TestCase):
         assert MathUtil.equalWithinError(w.angleBetween(v), expectedAngle, error)
 
 
-    def testGetMirror(self):
+    def testReflection(self):
         v = Vector((3,2), (4,5))
-        mirror = v.getMirror()
+        mirror = v.getReflection()
         assert mirror.initialPoint == v.terminalPoint
         assert mirror.terminalPoint == v.initialPoint
         assert v.norm() == mirror.norm()
         assert MathUtil.equalWithinError(v.angleBetween(mirror), math.pi, 0.0000001)
 
-    def testMirrorFromMirrorIsTheOriginalVector(self):
+    def testReflectionFromReflectionIsTheOriginalVector(self):
         v = Vector((436, -13), (-950,30))
-        mirror = v.getMirror()
-        assert mirror.getMirror() == v
+        mirror = v.getReflection()
+        assert mirror.getReflection() == v
 
 
-    def testGet90DegreeClockwiseRotation(self):
+    def test90DegreeClockwiseRotation(self):
         v = Vector((3,2), (-1,-50))
         clockwise = v.get90DegreeClockwiseRotation()
         assert clockwise.innerProduct(v) == 0
         assert clockwise.angleBetween(v) == math.pi/2
         assert clockwise.norm() == v.norm()
 
-    def testGet90DegreeCounterClockwiseRotation(self):
+    def test90DegreeClockwiseRotationIsClockwiseInComputerGraphicsCoordinates(self):
+        a = 4
+        v = Vector((a, 0))
+        assert v.get90DegreeClockwiseRotation() == Vector((0,a))
+        assert v.get90DegreeClockwiseRotation().get90DegreeClockwiseRotation() == Vector((-a,0))
+        assert v.get90DegreeClockwiseRotation().get90DegreeClockwiseRotation().get90DegreeClockwiseRotation() == Vector((0,-a))
+        assert v.get90DegreeClockwiseRotation().get90DegreeClockwiseRotation().get90DegreeClockwiseRotation().get90DegreeClockwiseRotation() == v
+
+    def testClockwiseRotationOverCounterClockwiseRotationIsTheOriginalVector(self):
+        v = Vector((312,460), (-93,517))
+        counterclockwise = v.get90DegreeCounterClockwiseRotation()
+        assert counterclockwise.get90DegreeClockwiseRotation() == v
+
+
+    def test90DegreeCounterClockwiseRotation(self):
         v = Vector((3,2), (-1,-50))
         counterclockwise = v.get90DegreeCounterClockwiseRotation()
         assert counterclockwise.innerProduct(v) == 0
         assert counterclockwise.angleBetween(v) == math.pi/2
         assert counterclockwise.norm() == v.norm()
 
+    def test90DegreeCounterClockwiseRotationIsCounterClockwiseInComputerGraphicsCoordinates(self):
+        a = 4
+        v = Vector((a, 0))
+        assert v.get90DegreeCounterClockwiseRotation() == Vector((0,-a))
+        assert v.get90DegreeCounterClockwiseRotation().get90DegreeCounterClockwiseRotation() == Vector((-a,0))
+        assert v.get90DegreeCounterClockwiseRotation().get90DegreeCounterClockwiseRotation().get90DegreeCounterClockwiseRotation() == Vector((0,a))
+        assert v.get90DegreeCounterClockwiseRotation().get90DegreeCounterClockwiseRotation().get90DegreeCounterClockwiseRotation().get90DegreeCounterClockwiseRotation() == v
+
     def testCounterClockwiseRotationOverClockwiseRotationIsTheOriginalVector(self):
         v = Vector((312,460), (-93,517))
         clockwise = v.get90DegreeClockwiseRotation()
         assert clockwise.get90DegreeCounterClockwiseRotation() == v
-
-    def testClockwiseRotationOverCounterClockwiseRotationIsTheOriginalVector(self):
-        v = Vector((312,460), (-93,517))
-        counterclockwise = v.get90DegreeCounterClockwiseRotation()
-        assert counterclockwise.get90DegreeClockwiseRotation() == v        
+        
