@@ -42,11 +42,18 @@ class Vector:
     def terminalPoint(self):
         return self._terminalPoint
 
-    def innerProduct(self, anotherVector):
-        innerProduct = 0
+    def dotProduct(self, anotherVector):
+        dotProduct = 0
         for (i,j) in zip(self,anotherVector):
-            innerProduct += i*j
-        return innerProduct
+            dotProduct += i*j
+        return dotProduct
+
+    def crossProduct(self, anotherVector):
+        u = self
+        v = anotherVector
+        return Vector((u[1]*v[2] - u[2]*v[1],\
+                       u[2]*v[0] - u[0]*v[2],\
+                       u[0]*v[1] - u[1]*v[0]))
 
     def norm(self):
         sumOfSquares = 0
@@ -62,7 +69,7 @@ class Vector:
         if normsProduct == 0:
             return 0
 
-        cos = v.innerProduct(w) / float(normsProduct)
+        cos = v.dotProduct(w) / float(normsProduct)
 
         # prevent errors caused by floating point rounding
         if cos >= 1.0:
@@ -73,22 +80,23 @@ class Vector:
         return math.acos(cos)
 
 
-    def get90DegreeClockwiseRotation(self):
+    def reflection(self):
+        return Vector(self.initialPoint, self.terminalPoint)
+    
+    def clockwiseRotationBy90Degrees(self):
         if self.z != 0:
-            raise NotImplementedError()
+            raise NotImplementedError("Rotation over 3D vectors are not implemented.")
         coordinates = (-self.y, self.x)
         terminalPoint = (coordinates[0] + self.initialPoint[0], coordinates[1] + self.initialPoint[1])
         return Vector(terminalPoint, self.initialPoint)
 
-    def get90DegreeCounterClockwiseRotation(self):
+    def counterClockwiseRotationBy90Degrees(self):
         if self.z != 0:
-            raise NotImplementedError()
+            raise NotImplementedError("Rotation over 3D vectors are not implemented.")
         coordinates = (self.y, -self.x)
         terminalPoint = (coordinates[0] + self.initialPoint[0], coordinates[1] + self.initialPoint[1])
         return Vector(terminalPoint, self.initialPoint)
 
-    def getReflection(self):
-        return Vector(self.initialPoint, self.terminalPoint)
 
     def __len__(self):
         return len(self._coordinates)

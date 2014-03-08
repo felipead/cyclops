@@ -155,13 +155,14 @@ class QuadrilateralTest(TestCase):
         assert hash(quadrilateral1) != hash(quadrilateral4) != hash(quadrilateral5) != hash(quadrilateral6)
 
 
-    def testGetSides(self):
+    def testEdges(self):
         v1 = (1,2)
         v2 = (3,4)
         v3 = (5,6)
         v4 = (7,8)
 
-        quadrilateral = Quadrilateral([v1, v2, v3, v4], 0.3)
+        quadrilateral = Quadrilateral([v1, v2, v3, v4])
+        assert quadrilateral.edges == [(v1,v2), (v2,v3), (v3,v4), (v4,v1)]
 
 if __name__ == "__main__":
     unittest.main()

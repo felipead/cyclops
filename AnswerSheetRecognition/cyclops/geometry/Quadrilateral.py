@@ -21,14 +21,9 @@ class Quadrilateral:
         return list(self._vertexAngles)
 
     @property
-    def clockwiseContour(self):
+    def edges(self):
         [v1, v2, v3, v4] = self._vertexes
-        return list([(v1,v2), (v2,v3), (v3,v4), (v4,v1)])
-
-    #TODO
-    @property
-    def clockwiseContour(self):
-        pass
+        return [(v1,v2), (v2,v3), (v3,v4), (v4,v1)]
 
     def isConvex(self):
         return MathUtil.equalWithinError(sum(self._vertexAngles), 2*math.pi, self._angleRelaxationInRadians*4)
@@ -65,7 +60,7 @@ class Quadrilateral:
     def __eq__(self, other):
         if not isinstance(other, Quadrilateral):
             return False
-            
+
         if self._vertexes == other._vertexes:
             return True
 
