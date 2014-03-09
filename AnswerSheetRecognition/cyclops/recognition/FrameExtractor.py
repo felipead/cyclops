@@ -5,7 +5,7 @@ from ..pattern.FrameAlignmentPatternMatcher import *
 from ..pattern.FrameOrientationPatternMatcher import *
 
 from ..geometry.Vector import *
-from ..geometry.Quadrilateral import *
+from ..geometry.ConvexQuadrilateral import *
 from ..util.MathUtil import *
 from ..util.DrawingUtil import *
 
@@ -82,9 +82,10 @@ class FrameExtractor:
                             continue    
                         if MathUtil.equalWithinRatio(MathUtil.distanceBetweenPoints(secondPoint, thirdPoint), baseDistance, self._sizeRelaxationRatio):
                             if MathUtil.equalWithinRatio(MathUtil.distanceBetweenPoints(thirdPoint, basePoint), baseDistance, self._sizeRelaxationRatio):
-                                quadrilateral = Quadrilateral([basePoint, firstPoint, secondPoint, thirdPoint], self._angleRelaxationInRadians)
-                                if quadrilateral.isConvexWithRoughlyRightAngles():
-                                    convexQuadrilaterals.add(quadrilateral)
+                                quadrilateral = Polygon([basePoint, firstPoint, secondPoint, thirdPoint])
+                                if quadrilateral.isConvex():
+                                    convexQuadrilateral = ConvexQuadrilateral(quadrilateral.vertexes)
+                                    if convexQuadrilateral.hasRightInteriorAnglesWithRelaxation(self._angleRelaxationInRadians):
+                                        convexQuadrilaterals.add(convexQuadrilateral)
             
         return convexQuadrilaterals
-

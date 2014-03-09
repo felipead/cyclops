@@ -40,3 +40,10 @@ class MathUtilTest(TestCase):
 
         assert MathUtil.equalWithinRatio(-30, -40, 1.333334) == True
         assert MathUtil.equalWithinRatio(6.90, 3.45, 2) == True
+
+    def testSign(self):
+        assert MathUtil.sign(-1) == -1
+        assert MathUtil.sign(-50.15) == -1
+        assert MathUtil.sign(+30.99) == +1
+        assert MathUtil.sign(+1) == +1
+        assert MathUtil.sign(0) == 0

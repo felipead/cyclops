@@ -156,6 +156,33 @@ class VectorTest(TestCase):
         assert vector.angleBetween(zero) == 0
         assert zero.angleBetween(vector) == 0
 
+    def testDotProductBetweenTwoVectors90DegreesAwayIsZero(self):
+        v1 = Vector((0,50))
+        v2 = Vector((100,0))
+        assert v1.dotProduct(v2) == 0
+        assert v2.dotProduct(v1) == 0
+
+
+    def testPerpendicularDotProductBetween2dVectors(self):
+        (v1,v2) = (3,4.23)
+        v = Vector((v1,v2))
+        (w1,w2) = (8.65,3.5)
+        w = Vector((w1,w2))
+
+        assert v.perpendicularDotProduct(w) == v.clockwiseRotationBy90Degrees().dotProduct(w)
+
+    def testPerpendicularDotProductBetween3dVectorsIsNotImplemented(self):
+        v = Vector((3,4.23,50))
+        w = Vector((8.65,3.5,40))
+
+        exceptionThrown = False
+        try:
+            v.perpendicularDotProduct(w)
+        except NotImplementedError:
+            exceptionThrown = True
+        assert exceptionThrown
+
+
     def testClockwiseCrossProductBetweenTwo2dVectors90DegreesAwayHasNegativeZ(self):
         v1 = Vector((0,50))
         v2 = Vector((100,0))
@@ -164,7 +191,7 @@ class VectorTest(TestCase):
         assert clockwise[1] == 0
         assert clockwise[2] == -clockwise.norm() == - (v1.norm() * v2.norm()) < 0
 
-    def testCounterClockwiseCrossProductBetweenTwo2dVectors90DegreesAwayHasPositiveZ(self):
+    def testCounterclockwiseCrossProductBetweenTwo2dVectors90DegreesAwayHasPositiveZ(self):
         v1 = Vector((0,50))
         v2 = Vector((100,0))
         counterclockwise = v2.crossProduct(v1)
@@ -172,7 +199,7 @@ class VectorTest(TestCase):
         assert counterclockwise[1] == 0
         assert counterclockwise[2] == counterclockwise.norm() == (v1.norm() * v2.norm()) > 0
 
-    def testProductBetweenCanonicalBasis(self):
+    def testCrossProductBetweenCanonicalBasis(self):
         i = Vector((1,0,0))
         j = Vector((0,1,0))
         k = Vector((0,0,1))
@@ -198,6 +225,7 @@ class VectorTest(TestCase):
         reflection = v.reflection()
         assert v.crossProduct(reflection) == Vector((0,0,0))
         assert reflection.crossProduct(v) == Vector((0,0,0))
+
 
     def testNormOf2dVector(self):
         (v1,v2) = (3,4)
@@ -375,31 +403,31 @@ class VectorTest(TestCase):
         assert v.clockwiseRotationBy90Degrees().clockwiseRotationBy90Degrees().clockwiseRotationBy90Degrees() == Vector((0,-a))
         assert v.clockwiseRotationBy90Degrees().clockwiseRotationBy90Degrees().clockwiseRotationBy90Degrees().clockwiseRotationBy90Degrees() == v
 
-    def test90DegreeClockwiseRotationOverCounterClockwiseRotationIsTheOriginal2dVector(self):
+    def test90DegreeClockwiseRotationOverCounterclockwiseRotationIsTheOriginal2dVector(self):
         v = Vector((312,460), (-93,517))
-        counterclockwise = v.counterClockwiseRotationBy90Degrees()
+        counterclockwise = v.counterclockwiseRotationBy90Degrees()
         assert counterclockwise.clockwiseRotationBy90Degrees() == v
 
 
-    def test90DegreeCounterClockwiseRotationFor2dVector(self):
+    def test90DegreeCounterclockwiseRotationFor2dVector(self):
         v = Vector((3,2), (-1,-50))
-        counterclockwise = v.counterClockwiseRotationBy90Degrees()
+        counterclockwise = v.counterclockwiseRotationBy90Degrees()
         assert counterclockwise.dotProduct(v) == 0
         assert counterclockwise.angleBetween(v) == math.pi/2
         assert counterclockwise.norm() == v.norm()
 
-    def test90DegreeCounterClockwiseRotationIsCounterClockwiseInComputerGraphicsCoordinatesFor2dVector(self):
+    def test90DegreeCounterclockwiseRotationIsCounterclockwiseInComputerGraphicsCoordinatesFor2dVector(self):
         a = 4
         v = Vector((a, 0))
-        assert v.counterClockwiseRotationBy90Degrees() == Vector((0,-a))
-        assert v.counterClockwiseRotationBy90Degrees().counterClockwiseRotationBy90Degrees() == Vector((-a,0))
-        assert v.counterClockwiseRotationBy90Degrees().counterClockwiseRotationBy90Degrees().counterClockwiseRotationBy90Degrees() == Vector((0,a))
-        assert v.counterClockwiseRotationBy90Degrees().counterClockwiseRotationBy90Degrees().counterClockwiseRotationBy90Degrees().counterClockwiseRotationBy90Degrees() == v
+        assert v.counterclockwiseRotationBy90Degrees() == Vector((0,-a))
+        assert v.counterclockwiseRotationBy90Degrees().counterclockwiseRotationBy90Degrees() == Vector((-a,0))
+        assert v.counterclockwiseRotationBy90Degrees().counterclockwiseRotationBy90Degrees().counterclockwiseRotationBy90Degrees() == Vector((0,a))
+        assert v.counterclockwiseRotationBy90Degrees().counterclockwiseRotationBy90Degrees().counterclockwiseRotationBy90Degrees().counterclockwiseRotationBy90Degrees() == v
 
-    def test90DegreeCounterClockwiseRotationOverClockwiseRotationIsTheOriginal2dVector(self):
+    def test90DegreeCounterclockwiseRotationOverClockwiseRotationIsTheOriginal2dVector(self):
         v = Vector((312,460), (-93,517))
         clockwise = v.clockwiseRotationBy90Degrees()
-        assert clockwise.counterClockwiseRotationBy90Degrees() == v
+        assert clockwise.counterclockwiseRotationBy90Degrees() == v
 
     def test90DegreeClockwiseRotationIsNotImplementedFor3dVectors(self):
         v = Vector((5,7,9))
@@ -410,11 +438,11 @@ class VectorTest(TestCase):
             exceptionThrown = True
         assert exceptionThrown
 
-    def test90DegreeCounterClockwiseRotationIsNotImplementedFor2dVectors(self):
+    def test90DegreeCounterclockwiseRotationIsNotImplementedFor2dVectors(self):
         v = Vector((5,7,9))
         exceptionThrown = False
         try:
-            v.counterClockwiseRotationBy90Degrees()
+            v.counterclockwiseRotationBy90Degrees()
         except NotImplementedError:
             exceptionThrown = True
         assert exceptionThrown

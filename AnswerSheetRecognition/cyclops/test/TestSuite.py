@@ -6,15 +6,19 @@ from PatternFactoryTest import *
 from PatternMatchTest import *
 from MathUtilTest import *
 from VectorTest import *
-from QuadrilateralTest import *
+from PolygonTest import *
+from ConvexPolygonTest import *
+from ConvexQuadrilateralTest import *
 
 ALL_TESTS = (
-    makeSuite(FrameExtractorTest),
-    makeSuite(PatternFactoryTest),
     makeSuite(MathUtilTest),
-    makeSuite(PatternMatchTest),
     makeSuite(VectorTest),
-    makeSuite(QuadrilateralTest)
+    makeSuite(PolygonTest),
+    makeSuite(ConvexPolygonTest),
+    makeSuite(ConvexQuadrilateralTest),
+    makeSuite(PatternFactoryTest),
+    makeSuite(PatternMatchTest),
+    makeSuite(FrameExtractorTest)
 )
 
 

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import math
 
 class Vector:
@@ -48,6 +50,20 @@ class Vector:
             dotProduct += i*j
         return dotProduct
 
+    """
+    The "perp dot product" (a^⊥ · b) for a and b vectors in the plane is a modification 
+    of the two-dimensional dot product in which a is replaced by the perpendicular vector
+    rotated 90 degrees (counterclockwise in standard Euclidean coordinates, clockwise in computer graphics coordinates).
+    http://mathworld.wolfram.com/PerpDotProduct.html
+    """
+    def perpendicularDotProduct(self, anotherVector):
+        if self.z != 0 or anotherVector.z != 0:
+            raise NotImplementedError("Perpendicular dot product for 3D vectors is not implemented.")
+        a = self
+        b = anotherVector
+        theta = a.angleBetween(b)
+        return a.x*b.y - a.y*b.x
+
     def crossProduct(self, anotherVector):
         u = self
         v = anotherVector
@@ -85,14 +101,14 @@ class Vector:
     
     def clockwiseRotationBy90Degrees(self):
         if self.z != 0:
-            raise NotImplementedError("Rotation over 3D vectors are not implemented.")
+            raise NotImplementedError("Rotation over 3D vectors is not implemented.")
         coordinates = (-self.y, self.x)
         terminalPoint = (coordinates[0] + self.initialPoint[0], coordinates[1] + self.initialPoint[1])
         return Vector(terminalPoint, self.initialPoint)
 
-    def counterClockwiseRotationBy90Degrees(self):
+    def counterclockwiseRotationBy90Degrees(self):
         if self.z != 0:
-            raise NotImplementedError("Rotation over 3D vectors are not implemented.")
+            raise NotImplementedError("Rotation over 3D vectors is not implemented.")
         coordinates = (self.y, -self.x)
         terminalPoint = (coordinates[0] + self.initialPoint[0], coordinates[1] + self.initialPoint[1])
         return Vector(terminalPoint, self.initialPoint)
@@ -105,10 +121,7 @@ class Vector:
         pass
 
     def __getitem__(self, index):
-        if index < len(self._coordinates):
-            return self._coordinates[index]
-        else:
-            raise IndexError()
+        return self._coordinates[index]
 
     def __eq__(self, other):
         if not isinstance(other, Vector):
@@ -119,7 +132,10 @@ class Vector:
         return hash(self._coordinates)
 
     def __str__(self):
-        return str(self._coordinates)
+        return repr(self)
+
+    def __repr__(self):
+        return repr(self._coordinates)
 
     def __iter__(self):
         return iter(self.coordinates)
