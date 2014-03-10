@@ -76,20 +76,34 @@ class FrameExtractor:
         convexQuadrilaterals = set()
 
         for firstPoint in otherPoints:
-            baseDistance = MathUtil.distanceBetweenPoints(firstPoint, basePoint)
+            baseDistance = self.__getDistance(firstPoint, basePoint)
             for secondPoint in otherPoints:
                 if secondPoint == firstPoint:
                     continue                    
-                if MathUtil.equalWithinRatio(MathUtil.distanceBetweenPoints(firstPoint, secondPoint), baseDistance, self._sizeRelaxationRatio):
+                if self.__areDistancesRoughlyEqual(self.__getDistance(firstPoint, secondPoint), baseDistance):
                     for thirdPoint in otherPoints:
                         if thirdPoint == firstPoint or thirdPoint == secondPoint:
                             continue    
-                        if MathUtil.equalWithinRatio(MathUtil.distanceBetweenPoints(secondPoint, thirdPoint), baseDistance, self._sizeRelaxationRatio):
-                            if MathUtil.equalWithinRatio(MathUtil.distanceBetweenPoints(thirdPoint, basePoint), baseDistance, self._sizeRelaxationRatio):
-                                quadrilateral = Polygon([basePoint, firstPoint, secondPoint, thirdPoint])
-                                if quadrilateral.isConvex:
-                                    convexQuadrilateral = ConvexQuadrilateral(quadrilateral.vertexes)
-                                    if convexQuadrilateral.hasRightInteriorAnglesWithRelaxationOf(self._angleRelaxationInRadians):
-                                        convexQuadrilaterals.add(convexQuadrilateral)
-            
+                        if self.__areDistancesRoughlyEqual(self.__getDistance(secondPoint, thirdPoint), baseDistance):
+                            if self.__areDistancesRoughlyEqual(self.__getDistance(thirdPoint, basePoint), baseDistance):
+                                points = (basePoint, firstPoint, secondPoint, thirdPoint)
+                                quadrilateral = self.__getConvexQuadrilateralWithRoughlyRightInteriorAngles(points)
+                                if quadrilateral != None:
+                                    convexQuadrilaterals.add(quadrilateral)
+
         return convexQuadrilaterals
+           
+    def __getConvexQuadrilateralWithRoughlyRightInteriorAngles(self, points):
+        polygon = Polygon(points)
+        if polygon.isConvex:
+            convexQuadrilateral = ConvexQuadrilateral(polygon.vertexes)
+            if convexQuadrilateral.hasRightInteriorAnglesWithRelaxationOf(self._angleRelaxationInRadians):
+                return convexQuadrilateral
+        return None
+
+    def __areDistancesRoughlyEqual(self, distance1, distance2):
+        return MathUtil.equalWithinRatio(distance1, distance2, self._sizeRelaxationRatio)
+
+    @staticmethod
+    def __getDistance(point1, point2):
+        return MathUtil.distanceBetweenPoints(point1, point2)
