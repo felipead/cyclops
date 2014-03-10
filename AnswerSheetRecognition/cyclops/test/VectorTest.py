@@ -8,14 +8,14 @@ from ..geometry.Vector import *
 
 class VectorTest(TestCase):
 
-    def testCreate2dVectorInstanceWithTerminalPointAsTuple(self):
+    def testCreate2dVectorInstanceWithHeadPointAsTuple(self):
         (x, y) = (1, 2)
         v = Vector((x,y))
         assert v.x == x
         assert v.y == y
         assert v.z == 0
 
-    def testCreate2dVectorInstanceWithTerminalAndInitialPointsAsTuples(self):
+    def testCreate2dVectorInstanceWithHeadAndTailPointsAsTuples(self):
         (x0, y0) = (1, 2)
         (x1, y1) = (5, -6)
         v = Vector((x1,y1), (x0,y0))
@@ -23,7 +23,7 @@ class VectorTest(TestCase):
         assert v.y == y1 - y0
         assert v.z == 0
 
-    def testCreate2dVectorInstanceWithTerminalAndInitialPointsAsVectors(self):
+    def testCreate2dVectorInstanceWithHeadAndTailPointsAsVectors(self):
         (x0, y0) = (1, 2)
         (x1, y1) = (5, -6)
         v = Vector(Vector((x1,y1)), Vector((x0,y0)))
@@ -31,14 +31,14 @@ class VectorTest(TestCase):
         assert v.y == y1 - y0
         assert v.z == 0
 
-    def testCreate3dVectorInstanceWithTerminalPointAsTuple(self):
+    def testCreate3dVectorInstanceWithHeadPointAsTuple(self):
         (x, y, z) = (1, 2, 3)
         v = Vector((x,y,z))
         assert v.x == x
         assert v.y == y
         assert v.z == z
 
-    def testCreate3dVectorInstanceWithTerminalAndInitialPointsAsTuples(self):
+    def testCreate3dVectorInstanceWithHeadAndTailPointsAsTuples(self):
         (x0, y0, z0) = (1, 2, 7)
         (x1, y1, z1) = (5, -6, -4)
         v = Vector((x1,y1,z1), (x0,y0,z0))
@@ -46,30 +46,13 @@ class VectorTest(TestCase):
         assert v.y == y1 - y0
         assert v.z == z1 - z0
 
-    def testCreate3dVectorInstanceWithTerminalAndInitialPointsAsVectors(self):
+    def testCreate3dVectorInstanceWithHeadAndTailPointsAsVectors(self):
         (x0, y0, z0) = (1, 2, -3)
         (x1, y1, z1) = (5, -6, 9)
         v = Vector(Vector((x1,y1,z1)), Vector((x0,y0,z0)))
         assert v.x == x1 - x0
         assert v.y == y1 - y0
         assert v.z == z1 - z0
-
-    def testCanNotCreateVectorsWithMoreThan3Dimensions(self):
-        exceptionThrown = False
-        try:
-            Vector((1,2,3,4))
-        except NotImplementedError:
-            exceptionThrown = True
-        assert exceptionThrown
-
-    def testCanNotCreateVectorsWithLessThan2Dimensions(self):
-        exceptionThrown = False
-        try:
-            Vector((1,))
-        except NotImplementedError:
-            exceptionThrown = True
-        assert exceptionThrown
-
 
     def testAccess2dVectorCoordinates(self):
         (x, y) = (9, 5)
@@ -85,12 +68,21 @@ class VectorTest(TestCase):
         assert v[1] == v.y == v.coordinates[1] == y
         assert v[2] == v.z == v.coordinates[2] == z
 
-    def test2dAnd3dVectorsHaveLength3(self):
-        v1 = Vector((5,3))
-        assert len(v1) == len(v1.coordinates) == 3
+    def test1dVectorHasLength1(self):
+        v1 = Vector((5,))
+        assert len(v1) == len(v1.coordinates) == 1
+        v2 = Vector((5,0))
+        assert len(v2) == len(v2.coordinates) == 1
+        v3 = Vector((5,0,0))
+        assert len(v3) == len(v3.coordinates) == 1
 
-        v2 = Vector((5,3,8))
-        assert len(v2) == len(v2.coordinates) == 3
+    def test2dVectorHasLength2(self):
+        v = Vector((5,3))
+        assert len(v) == len(v.coordinates) == 2
+
+    def test3dVectorHasLength3(self):
+        v = Vector((5,3,8))
+        assert len(v) == len(v.coordinates) == 3
 
 
     def testVectorIsNotEqualToObjectWithDifferentType(self):
@@ -102,6 +94,8 @@ class VectorTest(TestCase):
 
         assert Vector((x,y)) == Vector((x,y)) == Vector((x,y,0))
         assert Vector((x,y,z)) == Vector((x,y,z))
+        assert Vector((-7,4,0)) == Vector((-7,4,0))
+        assert not (Vector((-7,4,0)) != Vector((-7,4,0)))
 
     def testVectorsWithDifferentCoordinatesAreDifferent(self):
         assert Vector((5,3)) != Vector((3,5))
@@ -169,7 +163,7 @@ class VectorTest(TestCase):
         (w1,w2) = (8.65,3.5)
         w = Vector((w1,w2))
 
-        assert v.perpendicularDotProduct(w) == v.clockwiseRotationBy90Degrees().dotProduct(w)
+        assert v.perpendicularDotProduct(w) == v.counterclockwiseRotationBy90Degrees().dotProduct(w)
 
     def testPerpendicularDotProductBetween3dVectorsIsNotImplemented(self):
         v = Vector((3,4.23,50))
@@ -189,7 +183,7 @@ class VectorTest(TestCase):
         clockwise = v1.crossProduct(v2)
         assert clockwise[0] == 0
         assert clockwise[1] == 0
-        assert clockwise[2] == -clockwise.norm() == - (v1.norm() * v2.norm()) < 0
+        assert clockwise[2] == -clockwise.norm == - (v1.norm * v2.norm) < 0
 
     def testCounterclockwiseCrossProductBetweenTwo2dVectors90DegreesAwayHasPositiveZ(self):
         v1 = Vector((0,50))
@@ -197,7 +191,7 @@ class VectorTest(TestCase):
         counterclockwise = v2.crossProduct(v1)
         assert counterclockwise[0] == 0
         assert counterclockwise[1] == 0
-        assert counterclockwise[2] == counterclockwise.norm() == (v1.norm() * v2.norm()) > 0
+        assert counterclockwise[2] == counterclockwise.norm == (v1.norm * v2.norm) > 0
 
     def testCrossProductBetweenCanonicalBasis(self):
         i = Vector((1,0,0))
@@ -230,12 +224,12 @@ class VectorTest(TestCase):
     def testNormOf2dVector(self):
         (v1,v2) = (3,4)
         v = Vector((v1,v2))
-        assert v.norm() == math.sqrt(v1*v1 + v2*v2)
+        assert v.norm == math.sqrt(v1*v1 + v2*v2)
 
     def testNormOf3dVector(self):
         (v1,v2,v3) = (3,4,5)
         v = Vector((v1,v2,v3))
-        assert v.norm() == math.sqrt(v1*v1 + v2*v2 + v3*v3)
+        assert v.norm == math.sqrt(v1*v1 + v2*v2 + v3*v3)
 
 
     def testAngleBetweenVectorAndZeroIsZero(self):
@@ -377,9 +371,9 @@ class VectorTest(TestCase):
     def testReflection(self):
         v = Vector((3,2,-3), (4,5,1))
         mirror = v.reflection()
-        assert mirror.initialPoint == v.terminalPoint
-        assert mirror.terminalPoint == v.initialPoint
-        assert v.norm() == mirror.norm()
+        assert mirror.tail == v.head
+        assert mirror.head == v.tail
+        assert v.norm == mirror.norm
         assert MathUtil.equalWithinError(v.angleBetween(mirror), math.pi, 0.0000001)
 
     def testReflectionFromReflectionIsTheOriginalVector(self):
@@ -393,14 +387,14 @@ class VectorTest(TestCase):
         clockwise = v.clockwiseRotationBy90Degrees()
         assert clockwise.dotProduct(v) == 0
         assert clockwise.angleBetween(v) == math.pi/2
-        assert clockwise.norm() == v.norm()
+        assert clockwise.norm == v.norm
 
-    def test90DegreeClockwiseRotationIsClockwiseInComputerGraphicsCoordinatesFor2dVector(self):
+    def test90DegreeClockwiseRotationIsClockwiseFor2dVector(self):
         a = 4
-        v = Vector((a, 0))
-        assert v.clockwiseRotationBy90Degrees() == Vector((0,a))
-        assert v.clockwiseRotationBy90Degrees().clockwiseRotationBy90Degrees() == Vector((-a,0))
-        assert v.clockwiseRotationBy90Degrees().clockwiseRotationBy90Degrees().clockwiseRotationBy90Degrees() == Vector((0,-a))
+        v = Vector((0, a))
+        assert v.clockwiseRotationBy90Degrees() == Vector((a,0))
+        assert v.clockwiseRotationBy90Degrees().clockwiseRotationBy90Degrees() == Vector((0,-a))
+        assert v.clockwiseRotationBy90Degrees().clockwiseRotationBy90Degrees().clockwiseRotationBy90Degrees() == Vector((-a,0))
         assert v.clockwiseRotationBy90Degrees().clockwiseRotationBy90Degrees().clockwiseRotationBy90Degrees().clockwiseRotationBy90Degrees() == v
 
     def test90DegreeClockwiseRotationOverCounterclockwiseRotationIsTheOriginal2dVector(self):
@@ -414,14 +408,14 @@ class VectorTest(TestCase):
         counterclockwise = v.counterclockwiseRotationBy90Degrees()
         assert counterclockwise.dotProduct(v) == 0
         assert counterclockwise.angleBetween(v) == math.pi/2
-        assert counterclockwise.norm() == v.norm()
+        assert counterclockwise.norm == v.norm
 
-    def test90DegreeCounterclockwiseRotationIsCounterclockwiseInComputerGraphicsCoordinatesFor2dVector(self):
+    def test90DegreeCounterclockwiseRotationIsCounterclockwiseFor2dVector(self):
         a = 4
-        v = Vector((a, 0))
-        assert v.counterclockwiseRotationBy90Degrees() == Vector((0,-a))
-        assert v.counterclockwiseRotationBy90Degrees().counterclockwiseRotationBy90Degrees() == Vector((-a,0))
-        assert v.counterclockwiseRotationBy90Degrees().counterclockwiseRotationBy90Degrees().counterclockwiseRotationBy90Degrees() == Vector((0,a))
+        v = Vector((0, a))
+        assert v.counterclockwiseRotationBy90Degrees() == Vector((-a, 0))
+        assert v.counterclockwiseRotationBy90Degrees().counterclockwiseRotationBy90Degrees() == Vector((0, -a))
+        assert v.counterclockwiseRotationBy90Degrees().counterclockwiseRotationBy90Degrees().counterclockwiseRotationBy90Degrees() == Vector((a, 0))
         assert v.counterclockwiseRotationBy90Degrees().counterclockwiseRotationBy90Degrees().counterclockwiseRotationBy90Degrees().counterclockwiseRotationBy90Degrees() == v
 
     def test90DegreeCounterclockwiseRotationOverClockwiseRotationIsTheOriginal2dVector(self):

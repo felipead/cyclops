@@ -6,12 +6,13 @@ from ..pattern.FrameOrientationPatternMatcher import *
 
 from ..geometry.Vector import *
 from ..geometry.ConvexQuadrilateral import *
+from ..geometry.Square import *
 from ..util.MathUtil import *
 from ..util.DrawingUtil import *
 
 class FrameExtractor:
 
-    def __init__(self, sizeRelaxationRatio=1.10, angleRelaxationInRadians=0.2, debugEnabled=True):
+    def __init__(self, sizeRelaxationRatio=1.10, angleRelaxationInRadians=0.3, debugEnabled=True):
         self._sizeRelaxationRatio = sizeRelaxationRatio
         self._angleRelaxationInRadians = angleRelaxationInRadians
         self._debugEnabled = debugEnabled
@@ -35,19 +36,22 @@ class FrameExtractor:
             frameOrientationMatchPoints = []
             for match in frameOrientationMatches:
                 frameOrientationMatchPoints.append(match.center)
-            print "Frame Orientation Matches: " + str(frameOrientationMatchPoints)
+            #print "Frame Orientation Matches: " + str(frameOrientationMatchPoints)
             frameAlignmentMatchPoints = []
             for match in frameAlignmentMatches:
                 frameAlignmentMatchPoints.append(match.center)
-            print "Frame Alignment Matches: " + str(frameAlignmentMatchPoints)
+            #print "Frame Alignment Matches: " + str(frameAlignmentMatchPoints)
 
             if len(possibleFrames) != 0:
                 for frame in possibleFrames:
                     print "Extracted Frame: " + str(frame)
                     DrawingUtil.drawQuadrilateralLines(picture, frame.vertexes, DrawingUtil.COLOR_RED, 1)
+                    correctedFrame = Square.projectQuadrilateral(frame)
+                    print "Corrected Frame: " + str(correctedFrame)
+                    DrawingUtil.drawQuadrilateralLines(picture, correctedFrame.vertexes, DrawingUtil.COLOR_WHITE, 1)
+                    DrawingUtil.drawFilledCircle(picture, correctedFrame[0], 3, DrawingUtil.COLOR_YELLOW)
                     for vertex in frame.vertexes:
                         DrawingUtil.drawFilledCircle(picture, vertex, 1, DrawingUtil.COLOR_YELLOW)
-            print "---------"
 
         if len(possibleFrames) != 0:
             return possibleFrames[0]
@@ -83,9 +87,9 @@ class FrameExtractor:
                         if MathUtil.equalWithinRatio(MathUtil.distanceBetweenPoints(secondPoint, thirdPoint), baseDistance, self._sizeRelaxationRatio):
                             if MathUtil.equalWithinRatio(MathUtil.distanceBetweenPoints(thirdPoint, basePoint), baseDistance, self._sizeRelaxationRatio):
                                 quadrilateral = Polygon([basePoint, firstPoint, secondPoint, thirdPoint])
-                                if quadrilateral.isConvex():
+                                if quadrilateral.isConvex:
                                     convexQuadrilateral = ConvexQuadrilateral(quadrilateral.vertexes)
-                                    if convexQuadrilateral.hasRightInteriorAnglesWithRelaxation(self._angleRelaxationInRadians):
+                                    if convexQuadrilateral.hasRightInteriorAnglesWithRelaxationOf(self._angleRelaxationInRadians):
                                         convexQuadrilaterals.add(convexQuadrilateral)
             
         return convexQuadrilaterals

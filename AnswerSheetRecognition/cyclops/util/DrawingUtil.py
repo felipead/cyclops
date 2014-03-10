@@ -24,7 +24,7 @@ class DrawingUtil:
 
     @staticmethod
     def drawLine(image, point1, point2, rgbColor, thickness=1):
-        line(image, point1, point2, RGB(rgbColor[0],rgbColor[1],rgbColor[2]), thickness)
+        line(image, (point1[0], point1[1]), (point2[0], point2[1]), RGB(rgbColor[0],rgbColor[1],rgbColor[2]), thickness)
 
     @staticmethod
     def drawQuadrilateralLines(image, vertexes, rgbColor, thickness=1):

@@ -22,7 +22,7 @@ class FrameExtractorTest(TestCase):
         assert ConvexQuadrilateral([(125, 98), (135, 327), (359, 333), (364, 99)]) in quadrilaterals
         assert ConvexQuadrilateral([(125, 98), (135, 327), (359, 333), (362, 99)]) in quadrilaterals
         for quadrilateral in quadrilaterals:
-            assert quadrilateral.hasRightInteriorAnglesWithRelaxation(self.angleRelaxationInRadians)
+            assert quadrilateral.hasRightInteriorAnglesWithRelaxationOf(self.angleRelaxationInRadians)
 
 
     def testFindFramesSample01(self):

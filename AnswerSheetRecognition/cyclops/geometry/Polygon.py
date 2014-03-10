@@ -12,13 +12,24 @@ a plane, with no three successive points collinear, together with the line segme
 consecutive pairs of the points. In other words, a polygon is closed broken line lying in a plane"
 (Coxeter and Greitzer 1967, p. 51).
 http://mathworld.wolfram.com/Polygon.html
+
+Polygons are read-only objects.
 """
 class Polygon(object):
 
     def __init__(self, vertexes):
         if len(vertexes) < 3:
             raise Exception("Polygon can not have less than 3 vertexes.")
-        self._vertexes = tuple(vertexes)
+        
+        points = []
+        for vertex in vertexes:
+            points.append(Point(vertex))
+        self._vertexes = tuple(points)
+
+        self._interiorAngles = None
+        self._sides = None
+        self._contour = None
+        self._isConvex = None
 
     @property
     def vertexes(self):
@@ -26,38 +37,47 @@ class Polygon(object):
 
     @property
     def sides(self):
-        n = len(self.vertexes)
-        sides = []
-        for i in xrange(n):
-            v1 = self.vertexes[i]
-            v2 = self.vertexes[(i + 1) % n]
-            sides.append((v1,v2))
-        return sides
+        if self._sides == None:
+            n = len(self.vertexes)
+            sides = []
+            for i in xrange(n):
+                v1 = self.vertexes[i]
+                v2 = self.vertexes[(i + 1) % n]
+                sides.append((v1,v2))
+            self._sides = tuple(sides)
+
+        return self._sides
 
     """
     The ordered list of vectors that, when connected, draw this polygon.
     """
     @property
     def contour(self):
-        contour = []
-        for side in self.sides:
-            contour.append(Vector(side[1], side[0]))
-        return contour
+        if self._contour == None:
+            contour = []
+            for side in self.sides:
+                contour.append(Vector(side[1], side[0]))
+            self._contour = tuple(contour)
+        
+        return self._contour
 
     """
     The list of interior angles in the same order as the list of vertexes.
     """
     @property
     def interiorAngles(self):
-        n = len(self.vertexes)
-        angles = []
-        for i in xrange(n):
-            v1 = self.vertexes[i]
-            v2 = self.vertexes[(i - 1) % n]
-            v3 = self.vertexes[(i + 1) % n]
-            angle = Vector(v1,v2).angleBetween(Vector(v1,v3))
-            angles.append(angle)
-        return angles
+        if self._interiorAngles == None:
+            n = len(self.vertexes)
+            angles = []
+            for i in xrange(n):
+                v1 = self.vertexes[i]
+                v2 = self.vertexes[(i - 1) % n]
+                v3 = self.vertexes[(i + 1) % n]
+                angle = Vector(v1,v2).angleBetween(Vector(v1,v3))
+                angles.append(angle)
+            self._interiorAngles = tuple(angles)
+        
+        return self._interiorAngles
 
     """
     A planar polygon is convex if it contains all the line segments connecting any pair of its
@@ -72,24 +92,30 @@ class Polygon(object):
     has the same sign for all i, where (a^⊥ · b) denotes the perpendicular dot product.
     http://mathworld.wolfram.com/ConvexPolygon.html
     """
+    @property
     def isConvex(self):
-        contour = self.contour
-        n = len(contour)
-        
-        previousSign = None
-        for i in xrange(n):
-            v1 = contour[i]
-            v2 = contour[(i+1) % n]
-            sign = MathUtil.sign(v1.perpendicularDotProduct(v2))
-            
-            if sign == 0:
-                return False
-            if previousSign != None:
-                if sign != previousSign:
-                    return False
-            previousSign = sign
+        if self._isConvex == None:
+            contour = self.contour
+            n = len(contour)
+            previousSign = None
+            for i in xrange(n):
+                v1 = contour[i]
+                v2 = contour[(i+1) % n]
+                sign = MathUtil.sign(v1.perpendicularDotProduct(v2))
+                
+                if sign == 0:
+                    self._isConvex = False
+                    break
+                if previousSign != None:
+                    if sign != previousSign:
+                        self._isConvex = False
+                        break
+                previousSign = sign
+            if self._isConvex == None:
+                self._isConvex = True
 
-        return True
+        return self._isConvex
+
 
     def __getitem__(self, index):
         return self._vertexes[index]
@@ -113,7 +139,7 @@ class Polygon(object):
         if not isinstance(other, Polygon):
             return False
 
-        if self._vertexes == other._vertexes:
+        if self.vertexes == other.vertexes:
             return True
 
         return False

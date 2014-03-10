@@ -13,7 +13,7 @@ class ConvexQuadrilateralTest(TestCase):
         v3 = (15,15)
         v4 = (15,0)
         quadrilateral = ConvexQuadrilateral([v1,v2,v3,v4])
-        assert quadrilateral.isConvex()
+        assert quadrilateral.isConvex
 
     def testDoNotCreateNonConvexQuadrilateral(self):
         v1 = (0,0)
@@ -68,68 +68,44 @@ class ConvexQuadrilateralTest(TestCase):
     def testRoughSquareHasRouglhyRightInteriorAngles(self):
         d = 0.3
         roughSquare = ConvexQuadrilateral([(0,d), (5+d,0), (5+d,5-d), (0-d,5+d)])
-        assert roughSquare.hasRightInteriorAnglesWithRelaxation(0.2)
+        assert roughSquare.hasRightInteriorAnglesWithRelaxationOf(0.2)
 
     def testTooRoughSquareDoesNotHaveRouglhyRightInteriorAngles(self):
         d = 0.7
         tooRoughSquare = ConvexQuadrilateral([(0,d), (5+d,0), (5+d,5-d), (0-d,5+d)])
-        assert not tooRoughSquare.hasRightInteriorAnglesWithRelaxation(0.2)
+        assert not tooRoughSquare.hasRightInteriorAnglesWithRelaxationOf(0.2)
 
     def testTrapezoidDoesNotHaveRoughlyRightInteriorAngles(self):
         trapezoid = ConvexQuadrilateral([(1,-2), (13,4), (6,8), (-2,4)])
-        assert not trapezoid.hasRightInteriorAnglesWithRelaxation(0.5)
+        assert not trapezoid.hasRightInteriorAnglesWithRelaxationOf(0.5)
 
-    
-    def testConvexQuadrilateralIsNotEqualToObjectWithDifferentType(self):
-        v1 = (0,0)
-        v2 = (5,0)
-        v3 = (5,5)
-        v4 = (0,5)
-        quadrilateral = ConvexQuadrilateral([v1, v2, v3, v4])
-        assert quadrilateral != 5
 
-    def testConvexQuadrilateralsWithSameVertexesInTheSameOrderAreEqual(self):
-        v1 = (0,0)
-        v2 = (5,0)
-        v3 = (5,5)
-        v4 = (0,5)
-        quadrilateral1 = ConvexQuadrilateral([v1, v2, v3, v4])
-        quadrilateral2 = ConvexQuadrilateral([v1, v2, v3, v4])
-        assert quadrilateral1 == quadrilateral2
+    def testExactSquareHasEqualSides(self):
+        square = ConvexQuadrilateral([(0,0), (5,0), (5,5), (0,5)])
+        assert square.hasEqualSides()
 
-    def testConvexQuadrilateralsWithSlightlyDifferentVertexesAreNotEqual(self):
-        quadrilateral1 = ConvexQuadrilateral([(0,0), (5,0), (5,5), (0,5)])
-        quadrilateral2 = ConvexQuadrilateral([(0,0), (6,0), (5,5), (0,5)])
-        assert quadrilateral1 != quadrilateral2
+    def testExactEquilateralLozengeHasEqualSides(self):
+        lozenge = ConvexQuadrilateral([(0,0), (2,-1), (4,0), (2,1)])
+        assert lozenge.hasEqualSides()
 
-    def testConvexQuadrilateralsWithVeryDifferentVertexesAreNotEqual(self):
-        quadrilateral1 = ConvexQuadrilateral([(0,0), (5,0), (5,5), (0,5)])
-        quadrilateral2 = ConvexQuadrilateral([(1,-2), (13,4), (6,8), (-2,4)])
-        assert quadrilateral1 != quadrilateral2
+    def testRoughSquareHasRoughlyEqualSides(self):
+        d = 0.3
+        roughSquare = ConvexQuadrilateral([(0,d), (5+d,0), (5+d,5-d), (0-d,5+d)])
+        assert roughSquare.hasEqualSidesWithRelaxationRatioOf(1.15)
 
-    def testMirroredConvexQuadrilateralsAreEqual(self):
-        v1 = (1,-2)
-        v2 = (13,4)
-        v3 = (6,8)
-        v4 = (-2,4)
-        quadrilateral1 = ConvexQuadrilateral([v1, v4, v3, v2])
-        quadrilateral2 = ConvexQuadrilateral([v1, v2, v3, v4])
-        assert quadrilateral1 == quadrilateral2
+    def testTooRoughSquareDoesNotHaveRoughlyEqualSides(self):
+        d = 2
+        tooRoughSquare = ConvexQuadrilateral([(0,d), (5+d,0), (5+d,5-d), (0-d,5+d)])
+        assert not tooRoughSquare.hasEqualSidesWithRelaxationRatioOf(1.15)
 
-    def testHashCodeShouldBeDependentOnlyOnVertexesRegardlessOfTheOrder(self):
-        v1 = (1,-2)
-        v2 = (13,4)
-        v3 = (6,8)
-        v4 = (-2,4)
-        quadrilateral1 = ConvexQuadrilateral([v1, v4, v3, v2])
-        quadrilateral2 = ConvexQuadrilateral([v1, v2, v3, v4])
-        quadrilateral3 = ConvexQuadrilateral([v4, v3, v2, v1])
-        assert hash(quadrilateral1) == hash(quadrilateral2) == hash(quadrilateral3)
+    def testExactRectangleDoesNotHaveEqualSides(self):
+        rectangle = ConvexQuadrilateral([(0,0), (7,0), (7,5), (0,5)])
+        assert not rectangle.hasEqualSides()
+        assert not rectangle.hasEqualSidesWithRelaxationRatioOf(1.15)
 
-        quadrilateral4 = ConvexQuadrilateral([v1, v2, v3, (-3, 5)])
-        quadrilateral5 = ConvexQuadrilateral([v1, (13.5,4.3), v3, (-3, 5)])
-        quadrilateral6 = ConvexQuadrilateral([(0,-2), (13.5,4.3), v3, (-3, 5)])
-        assert hash(quadrilateral1) != hash(quadrilateral4) != hash(quadrilateral5) != hash(quadrilateral6)
+    def testTrapezoidDoesNotHaveRoughlyEqualSides(self):
+        trapezoid = ConvexQuadrilateral([(1,-2), (13,4), (6,8), (-2,4)])
+        assert not trapezoid.hasEqualSidesWithRelaxationRatioOf(1.15)
 
 if __name__ == "__main__":
     unittest.main()

@@ -22,30 +22,20 @@ class ConvexQuadrilateral(ConvexPolygon):
             raise Exception("Quadrilateral must have 4 vertexes.")
 
     def hasRightInteriorAngles(self):
-        return self.hasRightInteriorAnglesWithRelaxation(0)
+        return self.hasRightInteriorAnglesWithRelaxationOf(0)
 
-    def hasRightInteriorAnglesWithRelaxation(self, relaxationInRadians):
+    def hasRightInteriorAnglesWithRelaxationOf(self, relaxationInRadians):
         rightAngle = Angles._90_DEGREES
         for angle in self.interiorAngles:
             if angle < (rightAngle - relaxationInRadians) or angle > (rightAngle + relaxationInRadians):
                 return False
         return True
 
-    def __eq__(self, other):
-        if not isinstance(other, ConvexQuadrilateral):
-            return False
+    def hasEqualSides(self):
+        return self.hasEqualSidesWithRelaxationRatioOf(1.0)
 
-        if self._vertexes == other._vertexes:
-            return True
-
-        if self[0] == other[0] and self[2] == other[2]:
-            if self[1] == other[3] and self[3] == other[1]:
-                return True
-
-        return False
-
-    def __hash__(self):
-        hashValue = 0
-        for v in self._vertexes:
-             hashValue ^= hash(v)
-        return hashValue
+    def hasEqualSidesWithRelaxationRatioOf(self, relaxationRatio):
+        (size1, size2, size3, size4) = map((lambda v : v.norm), self.contour)
+        return MathUtil.equalWithinRatio(size1, size2, relaxationRatio) and MathUtil.equalWithinRatio(size1, size3, relaxationRatio) \
+            and MathUtil.equalWithinRatio(size1, size4, relaxationRatio)
+            
