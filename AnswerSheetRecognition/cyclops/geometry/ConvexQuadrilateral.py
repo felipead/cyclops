@@ -16,6 +16,8 @@ http://mathworld.wolfram.com/Quadrilateral.html
 """
 class ConvexQuadrilateral(ConvexPolygon):
 
+    __90_DEGREES = math.pi/2
+
     def __init__(self, vertexes):
         super(ConvexQuadrilateral, self).__init__(vertexes)
         if len(vertexes) != 4:
@@ -25,7 +27,7 @@ class ConvexQuadrilateral(ConvexPolygon):
         return self.hasRightInteriorAnglesWithRelaxationOf(0)
 
     def hasRightInteriorAnglesWithRelaxationOf(self, relaxationInRadians):
-        rightAngle = Angles._90_DEGREES
+        rightAngle = self.__90_DEGREES
         for angle in self.interiorAngles:
             if angle < (rightAngle - relaxationInRadians) or angle > (rightAngle + relaxationInRadians):
                 return False

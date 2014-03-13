@@ -1,7 +1,6 @@
 from ..geometry.Polygon import *
 from ..geometry.Vector import *
 from ..util.MathUtil import *
-from ..util.Angles import *
 
 from unittest import *
 import math
@@ -65,7 +64,7 @@ class PolygonTest(TestCase):
         quadrilateral = Polygon((v1, v2, v3, v4))
         interiorAngles = quadrilateral.interiorAngles
         assert len(interiorAngles) == 4
-        MathUtil.equalWithinError(sum(interiorAngles), Angles._360_DEGREES, 0.00000000000001)
+        MathUtil.equalWithinError(sum(interiorAngles), 2*math.pi, 0.00000000000001)
 
     def testSumOfQuadrilateralInteriorAnglesIs360Degrees(self):
         v1 = (0,0)
@@ -75,7 +74,7 @@ class PolygonTest(TestCase):
         quadrilateral = Polygon((v1, v2, v3, v4))
         interiorAngles = quadrilateral.interiorAngles
         assert len(interiorAngles) == 4
-        MathUtil.equalWithinError(sum(interiorAngles), Angles._360_DEGREES, 0.00000000000001)
+        MathUtil.equalWithinError(sum(interiorAngles), 2*math.pi, 0.00000000000001)
 
     def testSquareInteriorAnglesAre90Degrees(self):
         v1 = (0,0)
@@ -85,7 +84,7 @@ class PolygonTest(TestCase):
         square = Polygon((v1, v2, v3, v4))
         interiorAngles = square.interiorAngles
         for angle in interiorAngles:
-            assert angle == Angles._90_DEGREES
+            assert angle == math.pi/2
 
     def testSumOfTriangleInteriorAnglesIs180Degrees(self):
         v1 = (0,0)
@@ -94,7 +93,7 @@ class PolygonTest(TestCase):
         triangle = Polygon((v1, v2, v3))
         interiorAngles = triangle.interiorAngles
         assert len(interiorAngles) == 3
-        assert MathUtil.equalWithinError(sum(interiorAngles), Angles._180_DEGREES, 0.00000000000001)
+        assert MathUtil.equalWithinError(sum(interiorAngles), math.pi, 0.00000000000001)
 
     def testRectangleTriangleAnglesAre45And90Degrees(self):
         v1 = (0,0)
@@ -102,9 +101,9 @@ class PolygonTest(TestCase):
         v3 = (15,0)
         triangle = Polygon((v1, v2, v3))
         interiorAngles = triangle.interiorAngles
-        assert MathUtil.equalWithinError(interiorAngles[0], Angles._45_DEGREES, 0.00000000000001)
-        assert MathUtil.equalWithinError(interiorAngles[1], Angles._45_DEGREES, 0.00000000000001)
-        assert MathUtil.equalWithinError(interiorAngles[2], Angles._90_DEGREES, 0.00000000000001)
+        assert MathUtil.equalWithinError(interiorAngles[0], math.pi/4, 0.00000000000001)
+        assert MathUtil.equalWithinError(interiorAngles[1], math.pi/4, 0.00000000000001)
+        assert MathUtil.equalWithinError(interiorAngles[2], math.pi/2, 0.00000000000001)
         assert len(interiorAngles) == 3
 
     def testTriangleIsConvex(self):
