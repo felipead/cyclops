@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import math
+
 from ConvexQuadrilateral import *
 
 """
@@ -17,6 +19,30 @@ class Square(ConvexQuadrilateral):
         if not self.hasEqualSides():
             raise Exception("All square sides must be equal.")
         self._sideLength = None
+        self._center = None
+
+    @property
+    def center(self):
+        if self._center == None:
+            
+            smallestX = None
+            smallestY = None
+            biggestX = None
+            biggestY = None
+
+            for vertex in self.vertexes:
+                if biggestX == None or vertex.x > biggestX:
+                    biggestX = vertex.x
+                if smallestX == None or vertex.x < smallestX:
+                    smallestX = vertex.x
+                if biggestY == None or vertex.y > biggestY:
+                    biggestY = vertex.y
+                if smallestY == None or vertex.y < smallestY:
+                    smallestY = vertex.y
+
+            self._center = Point(( (biggestX-smallestX)/float(2), (biggestY-smallestY)/float(2) ))
+
+        return self._center
 
     @property
     def sideLength(self):
@@ -24,6 +50,59 @@ class Square(ConvexQuadrilateral):
             self._sideLength = Vector(self[0], self[1]).norm
         return self._sideLength
 
+    """
+    Gets a new square rotated clockwise by a certain angle (in radians) along 
+    this square center.
+    This method may suffer from floating point precision loss.
+    """
+    def clockwiseRotationBy(self, angleInRadians):
+        return self.counterclockwiseRotationBy(-angleInRadians)
+
+    """
+    Gets a new square rotated counterclockwise by a certain angle (in radians)
+    along this square center.
+    This method may suffer from floating point precision loss.
+    """
+    def counterclockwiseRotationBy(self, angleInRadians):
+        cos = math.cos(angleInRadians)
+        sin = math.sin(angleInRadians)
+        center = self.center
+
+        rotatedVertexes = []
+        for v in self.vertexes:
+            rotatedX = (v.x - center.x) * cos  -  (v.y - center.y) * sin + center.x;
+            rotatedY = (v.x - center.x) * sin  +  (v.y - center.y) * cos + center.y;
+            rotatedPoint = Point((rotatedX, rotatedY))
+            rotatedVertexes.append(rotatedPoint)
+        return Square(rotatedVertexes)
+
+    """
+    Gets a new square rotated 90˚ clockwise along this square center.
+    This method does not suffer from floating point precision loss.
+    """
+    def clockwiseRotationBy90Degrees(self):
+        center = self.center
+        rotatedVertexes = []
+        for v in self.vertexes:
+            rotatedX =   (v.y - center.y) + center.x;
+            rotatedY = - (v.x - center.x) + center.y;
+            rotatedPoint = Point((rotatedX, rotatedY))
+            rotatedVertexes.append(rotatedPoint)
+        return Square(rotatedVertexes)
+
+    """
+    Gets a new square rotated 90˚ counterclockwise along this square center.
+    This method does not suffer from floating point precision loss.
+    """
+    def counterclockwiseRotationBy90Degrees(self):
+        center = self.center
+        rotatedVertexes = []
+        for v in self.vertexes:
+            rotatedX = - (v.y - center.y) + center.x;
+            rotatedY =   (v.x - center.x) + center.y;
+            rotatedPoint = Point((rotatedX, rotatedY))
+            rotatedVertexes.append(rotatedPoint)
+        return Square(rotatedVertexes)
 
     """
     Project a quadrilateral to a square with sides equal to the largest side of this polygon.

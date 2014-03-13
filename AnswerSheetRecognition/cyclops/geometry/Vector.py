@@ -124,6 +124,9 @@ class Vector:
                        u[2]*v[0] - u[0]*v[2],\
                        u[0]*v[1] - u[1]*v[0]))
 
+    """
+    Inner (shortest) angle between two vectors. Orientation agnostic.
+    """
     def angleBetween(self, anotherVector):
         v = self
         w = anotherVector
@@ -144,26 +147,66 @@ class Vector:
 
 
     """
-    The reflection of a vector (AB)^→ is (BA)^→
+    Gets the reflection of this vector. Like in a mirror, the reflection of a vector AB is BA.
     """
     def reflection(self):
         return Vector(self.tail, self.head)
     
+    """
+    Gets a clockwise rotation of this vector, in radians.
+    http://en.wikipedia.org/wiki/Rotation_matrix
+    """
+    def clockwiseRotationBy(self, angleInRadians):
+        return self.counterclockwiseRotationBy(-angleInRadians)
 
+    """
+    Gets a counterclockwise rotation of this vector, in radians.
+    http://en.wikipedia.org/wiki/Rotation_matrix
+    """
+    def counterclockwiseRotationBy(self, angleInRadians):
+        if self.z != 0:
+            raise NotImplementedError("Rotation for 3D vectors is not implemented.")
+        x = self.x * math.cos(angleInRadians) - self.y * math.sin(angleInRadians)
+        y = self.x * math.sin(angleInRadians) + self.y * math.cos(angleInRadians)
+        head = (x + self.tail[0], y + self.tail[1])
+        return Vector(head, self.tail)
+
+    """
+    Gets a 90˚ counterclockwise rotation of this vector (left turn).
+    """
     def counterclockwiseRotationBy90Degrees(self):
         if self.z != 0:
-            raise NotImplementedError("Rotation over 3D vectors is not implemented.")
+            raise NotImplementedError("Rotation for 3D vectors is not implemented.")
         coordinates = (-self.y, self.x)
         head = (coordinates[0] + self.tail[0], coordinates[1] + self.tail[1])
         return Vector(head, self.tail)
 
+    """
+    Gets a 90˚ clockwise rotation of this vector (right turn).
+    """
     def clockwiseRotationBy90Degrees(self):
         if self.z != 0:
-            raise NotImplementedError("Rotation over 3D vectors is not implemented.")
+            raise NotImplementedError("Rotation for 3D vectors is not implemented.")
         coordinates = (self.y, -self.x)
         head = (coordinates[0] + self.tail[0], coordinates[1] + self.tail[1])
         return Vector(head, self.tail)
 
+    """
+    True if this vector has a clockwise angular distance from another vector. This
+    means that the shortest angular distance that makes this vector parallel to another
+    vector is rotating this vector clockwise by an angle between 0˚ and 180˚ (inclusive).
+    """
+    def isClockwiseDistanceFrom(self, anotherVector):
+        return self.crossProduct(anotherVector).z <= 0
+
+    """
+    True if this vector has a counterclockwise angular distance from another vector. This
+    means that the shortest angular distance that makes this vector parallel to another
+    vector is rotating this vector counterclockwise by an angle between 0˚ and 180˚ 
+    (inclusive).
+    """
+    def isCounterclockwiseDistanceFrom(self, anotherVector):
+        return self.crossProduct(anotherVector).z >= 0
 
     def __len__(self):
         return len(self._coordinates)

@@ -24,18 +24,12 @@ class ConvexPolygon(Polygon):
     @property
     def isClockwise(self):
         if self._isClockwise == None:
-
             contour = self.contour
-            # since this polygon is guaranteed to be convex, we can pick any pair of vectors
-            # from its oriented contour
+            # since this polygon is guaranteed to be convex, we can pick (in order) any pair 
+            # of vectors from its oriented contour
             v1 = contour[0]
             v2 = contour[1]
-
-            cross = v1.crossProduct(v2)
-            if cross.z <= 0:
-                self._isClockwise = True
-            else:
-                self._isClockwise = False
+            self._isClockwise = v1.isClockwiseDistanceFrom(v2)
 
         return self._isClockwise
 

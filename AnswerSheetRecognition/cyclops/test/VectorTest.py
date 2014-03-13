@@ -382,12 +382,57 @@ class VectorTest(TestCase):
         assert mirror.reflection() == v
 
 
+    def testVectorIsClockwiseDistanceFromAnoterVector(self):
+        v1 = Vector((5,5))
+        v2 = Vector((5,-5))
+        assert v1.isClockwiseDistanceFrom(v2)
+        assert not v2.isClockwiseDistanceFrom(v1)
+
+    def testVectorIsCounterclockwiseDistanceFromAnoterVector(self):
+        v1 = Vector((5,-5))
+        v2 = Vector((5,5))
+        assert v1.isCounterclockwiseDistanceFrom(v2)
+        assert not v2.isCounterclockwiseDistanceFrom(v1)
+
+
+    def testParallelVectorsAreAtBothClockwiseAndCouterclockwiseDistanceFromEachOther(self):
+        a = 5
+        v1 = Vector((a,a))
+        v2 = Vector((2*a,2*a))
+        assert v1.isClockwiseDistanceFrom(v2)
+        assert v2.isCounterclockwiseDistanceFrom(v1)
+
+        a = 5
+        v1 = Vector((a,a))
+        v2 = Vector((-2*a,-2*a))
+        assert v1.isClockwiseDistanceFrom(v2)
+        assert v2.isCounterclockwiseDistanceFrom(v1)
+
+    def test45DegreeClockwiseRotationOf2dVector(self):
+        radians = math.radians(45)
+        a = 5
+        v = Vector((a,0))
+        clockwise = v.clockwiseRotationBy(radians)
+        assert v.angleBetween(clockwise) == radians
+        assert clockwise.isCounterclockwiseDistanceFrom(v)
+        assert clockwise.norm == v.norm == a
+
+    def test45DegreeCounterclockwiseRotationOf2dVector(self):
+        radians = math.radians(45)
+        a = 5
+        v = Vector((a,0))
+        counterclockwise = v.counterclockwiseRotationBy(radians)
+        assert v.angleBetween(counterclockwise) == radians
+        assert counterclockwise.isClockwiseDistanceFrom(v)
+        assert counterclockwise.norm == v.norm == a
+
     def test90DegreeClockwiseRotationOf2dVector(self):
         v = Vector((3,2), (-1,-50))
         clockwise = v.clockwiseRotationBy90Degrees()
         assert clockwise.dotProduct(v) == 0
         assert clockwise.angleBetween(v) == math.pi/2
         assert clockwise.norm == v.norm
+        assert clockwise == v.clockwiseRotationBy(math.pi/2)
 
     def test90DegreeClockwiseRotationIsClockwiseFor2dVector(self):
         a = 4
@@ -402,6 +447,10 @@ class VectorTest(TestCase):
         counterclockwise = v.counterclockwiseRotationBy90Degrees()
         assert counterclockwise.clockwiseRotationBy90Degrees() == v
 
+        v = Vector((312,460), (-93,517))
+        counterclockwise = v.counterclockwiseRotationBy(math.pi/2)
+        assert counterclockwise.clockwiseRotationBy(math.pi/2) == v
+
 
     def test90DegreeCounterclockwiseRotationFor2dVector(self):
         v = Vector((3,2), (-1,-50))
@@ -409,6 +458,7 @@ class VectorTest(TestCase):
         assert counterclockwise.dotProduct(v) == 0
         assert counterclockwise.angleBetween(v) == math.pi/2
         assert counterclockwise.norm == v.norm
+        assert counterclockwise == v.counterclockwiseRotationBy(math.pi/2)
 
     def test90DegreeCounterclockwiseRotationIsCounterclockwiseFor2dVector(self):
         a = 4
@@ -422,6 +472,10 @@ class VectorTest(TestCase):
         v = Vector((312,460), (-93,517))
         clockwise = v.clockwiseRotationBy90Degrees()
         assert clockwise.counterclockwiseRotationBy90Degrees() == v
+
+        v = Vector((312,460), (-93,517))
+        clockwise = v.clockwiseRotationBy(math.pi/2)
+        assert clockwise.counterclockwiseRotationBy(math.pi/2) == v
 
     def test90DegreeClockwiseRotationIsNotImplementedFor3dVectors(self):
         v = Vector((5,7,9))
@@ -440,3 +494,39 @@ class VectorTest(TestCase):
         except NotImplementedError:
             exceptionThrown = True
         assert exceptionThrown
+
+    def testClockwiseRotationIsNotImplementedFor3dVectors(self):
+        v = Vector((5,7,9))
+        exceptionThrown = False
+        try:
+            v.clockwiseRotationBy(math.pi)
+        except NotImplementedError:
+            exceptionThrown = True
+        assert exceptionThrown
+
+    def testCounterclockwiseRotationIsNotImplementedFor2dVectors(self):
+        v = Vector((5,7,9))
+        exceptionThrown = False
+        try:
+            v.counterclockwiseRotationBy(math.pi)
+        except NotImplementedError:
+            exceptionThrown = True
+        assert exceptionThrown
+
+    def test180DegreeClockwiseRotationOf2dVector(self):
+        radians = math.pi
+        a = 5
+        v = Vector((a,0))
+        clockwise = v.clockwiseRotationBy(radians)
+        assert v.angleBetween(clockwise) == radians
+        assert clockwise.isCounterclockwiseDistanceFrom(v)
+        assert clockwise.norm == v.norm == a
+
+    def test180DegreeCounterclockwiseRotationOf2dVector(self):
+        radians = math.pi
+        a = 5
+        v = Vector((a,0))
+        counterclockwise = v.counterclockwiseRotationBy(radians)
+        assert v.angleBetween(counterclockwise) == radians
+        assert counterclockwise.isClockwiseDistanceFrom(v)
+        assert counterclockwise.norm == v.norm == a
