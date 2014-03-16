@@ -1,5 +1,7 @@
-import numpy as np
 import math
+
+from FrameExtractionResult import *
+from Frame import *
 
 from ..pattern.FrameAlignmentPatternMatcher import *
 from ..pattern.FrameOrientationPatternMatcher import *
@@ -8,58 +10,43 @@ from ..geometry.Vector import *
 from ..geometry.ConvexQuadrilateral import *
 from ..geometry.Square import *
 from ..util.MathUtil import *
-from ..util.DrawingUtil import *
+from ..util.PerspectiveUtil import *
 
 class FrameExtractor:
 
-    def __init__(self, sizeRelaxationRatio=1.10, angleRelaxationInRadians=0.3, debugEnabled=True):
+    def __init__(self, sizeRelaxationRatio=1.10, angleRelaxationInRadians=0.3):
         self._sizeRelaxationRatio = sizeRelaxationRatio
         self._angleRelaxationInRadians = angleRelaxationInRadians
-        self._debugEnabled = debugEnabled
         self._frameAlignmentMatcher = FrameAlignmentPatternMatcher()
         self._frameOrientationMatcher = FrameOrientationPatternMatcher()
 
+    def extractFrames(self, picture):
 
-    def extractFrame(self, picture):
         frameOrientationMatches = self._frameOrientationMatcher.match(picture, 1)
-        if self._debugEnabled:
-            for match in frameOrientationMatches:
-                DrawingUtil.drawRectangle(picture, match.location, match.size, DrawingUtil.COLOR_BLUE)
-
         frameAlignmentMatches = self._frameAlignmentMatcher.match(picture, 3)
-        if self._debugEnabled:
-            for match in frameAlignmentMatches:
-                DrawingUtil.drawRectangle(picture, match.location, match.size, DrawingUtil.COLOR_GREEN)
 
-        possibleFrames = self._findFrames(frameOrientationMatches, frameAlignmentMatches)
-        if self._debugEnabled:
-            frameOrientationMatchPoints = []
-            for match in frameOrientationMatches:
-                frameOrientationMatchPoints.append(match.center)
-            #print "Frame Orientation Matches: " + str(frameOrientationMatchPoints)
-            frameAlignmentMatchPoints = []
-            for match in frameAlignmentMatches:
-                frameAlignmentMatchPoints.append(match.center)
-            #print "Frame Alignment Matches: " + str(frameAlignmentMatchPoints)
+        bestAnswerSheetQuadrilateral = None
+        answerSheetQuadrilaterals = self._findAnswerSheetQuadrilaterals(frameOrientationMatches, frameAlignmentMatches)
+        if answerSheetQuadrilaterals != []:
+            bestAnswerSheetQuadrilateral = self._chooseQuadrilateralThatBestResemblesSquare(answerSheetQuadrilaterals)
 
-            if len(possibleFrames) != 0:
-                for frame in possibleFrames:
-                    print "Extracted Frame: " + str(frame)
-                    DrawingUtil.drawQuadrilateralLines(picture, frame.vertexes, DrawingUtil.COLOR_RED, 1)
-                    correctedFrame = Square.projectQuadrilateral(frame)
-                    print "Corrected Frame: " + str(correctedFrame)
-                    DrawingUtil.drawQuadrilateralLines(picture, correctedFrame.vertexes, DrawingUtil.COLOR_WHITE, 1)
-                    DrawingUtil.drawFilledCircle(picture, correctedFrame[0], 3, DrawingUtil.COLOR_YELLOW)
-                    for vertex in frame.vertexes:
-                        DrawingUtil.drawFilledCircle(picture, vertex, 1, DrawingUtil.COLOR_YELLOW)
+        answerSheetFrame = None
+        if bestAnswerSheetQuadrilateral != None:
+            projectedSquare = Square.projectQuadrilateral(bestAnswerSheetQuadrilateral)
+            projectedPicture = PerspectiveUtil.projectQuadrilateralInsidePictureToSquarePicture(picture, bestAnswerSheetQuadrilateral)
 
-        if len(possibleFrames) != 0:
-            return possibleFrames[0]
-        else:
-            return None
+            answerSheetFrame = Frame()
+            answerSheetFrame.originalQuadrilateral = bestAnswerSheetQuadrilateral
+            answerSheetFrame.alignedQuadrilateral = projectedSquare
 
+        result = FrameExtractionResult()
+        result.frameOrientationMatches = frameOrientationMatches
+        result.frameAlignmentMatches = frameAlignmentMatches
+        result.answerSheetFrame = answerSheetFrame
 
-    def _findFrames(self, frameOrientationMatches, frameAlignmentMatches):
+        return result
+
+    def _findAnswerSheetQuadrilaterals(self, frameOrientationMatches, frameAlignmentMatches):
         otherPoints = []
         for frameAlignmentMatch in frameAlignmentMatches:
             otherPoints.append(frameAlignmentMatch.center)
@@ -71,6 +58,9 @@ class FrameExtractor:
 
         return list(quadrilaterals)
 
+    def _chooseQuadrilateralThatBestResemblesSquare(self, frames):
+        # TODO
+        return frames[0]
 
     def _findConvexQuadrilateralsWithRoughlyEqualSizesAndAngles(self, basePoint, otherPoints):
         convexQuadrilaterals = set()

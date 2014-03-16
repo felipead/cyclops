@@ -1,7 +1,7 @@
 from abc import *
 
-from cv2 import *
-from cv import *
+from cv2 import floodFill, cvtColor, matchTemplate, normalize, threshold, minMaxLoc, NORM_MINMAX
+from cv import CV_BGR2GRAY, CV_TM_CCOEFF_NORMED, CV_THRESH_TOZERO
 
 import numpy as np
 

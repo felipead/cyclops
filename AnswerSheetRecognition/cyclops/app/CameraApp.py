@@ -1,8 +1,9 @@
-from cv2 import *
+from cv2 import namedWindow, imshow, flip, waitKey, VideoCapture
 
 from ..recognition.AnswerSheetRecognizer import *
 
-WINDOW_NAME = "preview"
+MAIN_PICTURE_WINDOW_NAME = "main"
+ANSWER_SHEET_PICTURE_WINDOW_NAME = "answer sheet"
 
 def readCamera(camera):
     _, picture = camera.read()
@@ -11,19 +12,22 @@ def readCamera(camera):
 
 
 def execute():
-    namedWindow(WINDOW_NAME)
+    namedWindow(MAIN_PICTURE_WINDOW_NAME)
+    namedWindow(ANSWER_SHEET_PICTURE_WINDOW_NAME)
     camera = VideoCapture(0)
 
-    picture = readCamera(camera)
+    mainPicture = readCamera(camera)
 
     while True:
 
-        if picture is not None:
+        if mainPicture != None:
             recognizer = AnswerSheetRecognizer()
-            recognizer.recognize(picture)
-            imshow(WINDOW_NAME, picture)
+            answerSheetPicture = recognizer.recognize(mainPicture)
+            imshow(MAIN_PICTURE_WINDOW_NAME, mainPicture)
+            if answerSheetPicture != None:
+                imshow(ANSWER_SHEET_PICTURE_WINDOW_NAME, answerSheetPicture)
         
-        picture = readCamera(camera)
+        mainPicture = readCamera(camera)
 
         if waitKey(1) & 0xFF == ord('q'):
             break

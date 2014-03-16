@@ -71,7 +71,7 @@ class FrameExtractorTest(TestCase):
 
     
     def findFramesTestRunner(self, frameOrientationMatches, frameAlignmentMatches, expectedFrames):
-        foundFrames = self.frameExtractor._findFrames(frameOrientationMatches, frameAlignmentMatches)
+        foundFrames = self.frameExtractor._findAnswerSheetQuadrilaterals(frameOrientationMatches, frameAlignmentMatches)
         for expectedFrame in expectedFrames:
             assert expectedFrame in foundFrames
 
