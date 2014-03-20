@@ -9,10 +9,10 @@ class AnswerSheetRecognizer:
     def recognize(self, mainPicture):
         result = self._frameExtractor.extractFrames(mainPicture)
 
-#        for match in result.frameOrientationMatches:
-#            DrawingUtil.drawRectangle(mainPicture, match.location, match.size, DrawingUtil.COLOR_BLUE)
-#        for match in result.frameAlignmentMatches:
-#            DrawingUtil.drawRectangle(mainPicture, match.location, match.size, DrawingUtil.COLOR_GREEN)
+       # for match in result.frameOrientationMatches:
+       #     DrawingUtil.drawRectangle(mainPicture, match.location, match.size, DrawingUtil.COLOR_BLUE)
+       # for match in result.frameAlignmentMatches:
+       #     DrawingUtil.drawRectangle(mainPicture, match.location, match.size, DrawingUtil.COLOR_GREEN)
 
         if result.answerSheetFrame != None:
             self._drawFrame(mainPicture, result.answerSheetFrame)

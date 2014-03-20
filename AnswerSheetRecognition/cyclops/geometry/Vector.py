@@ -63,7 +63,7 @@ class Vector:
     """
     @property
     def norm(self):
-        if self._norm == None:
+        if self._norm is None:
             sumOfSquares = 0
             for i in self.coordinates:
                 sumOfSquares += i**2
@@ -236,3 +236,6 @@ class Vector:
 
     def __iter__(self):
         return iter(self.coordinates)
+
+    def __reversed__(self):
+        return self.reflection()

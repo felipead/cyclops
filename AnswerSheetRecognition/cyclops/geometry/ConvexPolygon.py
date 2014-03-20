@@ -15,6 +15,8 @@ class ConvexPolygon(Polygon):
         if not self.isConvex:
             raise Exception("Polygon must be convex.")
         self._isClockwise = None
+        self._centroid = None
+        self._area = None
 
     """
     Determine if a polygon is clockwise oriented, i.e., it's vertexes are ordered to form
@@ -23,7 +25,7 @@ class ConvexPolygon(Polygon):
     """
     @property
     def isClockwise(self):
-        if self._isClockwise == None:
+        if self._isClockwise is None:
             contour = self.contour
             # since this polygon is guaranteed to be convex, we can pick (in order) any pair 
             # of vectors from its oriented contour
@@ -32,6 +34,37 @@ class ConvexPolygon(Polygon):
             self._isClockwise = v1.isClockwiseDistanceFrom(v2)
 
         return self._isClockwise
+
+    """
+    The centroid or geometric center of a two-dimensional region is, informally, the point at which 
+    a cardboard cut-out of the region could be perfectly balanced on the tip of a pencil (assuming
+    uniform density and a uniform gravitational field). Formally, the centroid of a plane figure or
+    two-dimensional shape is the arithmetic mean ("average") position of all the points in the shape.
+    The definition extends to any object in n-dimensional space: its centroid is the mean position 
+    of all the points in all of the coordinate directions.
+    http://en.wikipedia.org/wiki/Centroid
+    """
+    @property
+    def centroid(self):
+        if self._centroid is None:
+            xSum = 0
+            ySum = 0
+            for vertex in self:
+                xSum += vertex.x
+                ySum += vertex.y
+            n = float(len(self))
+            self._centroid = Point((xSum/n, ySum/n))
+
+        return self._centroid
+
+    @property
+    def area(self):
+        if self._area is None:
+            summation = 0 
+            for i in xrange(len(self)-1):
+                summation += (self[i].x * self[i+1].y) - (self[i+1].x * self[i].y)
+            self._area = summation/float(2)
+        return self._area
 
     def __eq__(self, other):
         if not isinstance(other,ConvexPolygon):

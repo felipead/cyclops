@@ -32,12 +32,13 @@ class FrameExtractor:
 
         answerSheetFrame = None
         if bestAnswerSheetQuadrilateral != None:
-            projectedSquare = Square.projectQuadrilateral(bestAnswerSheetQuadrilateral)
+            projectedSquare = bestAnswerSheetQuadrilateral.projectToSquare()
             projectedPicture = PerspectiveUtil.projectQuadrilateralInsidePictureToSquarePicture(picture, bestAnswerSheetQuadrilateral)
 
             answerSheetFrame = Frame()
             answerSheetFrame.originalQuadrilateral = bestAnswerSheetQuadrilateral
             answerSheetFrame.alignedQuadrilateral = projectedSquare
+            answerSheetFrame.alignedPicture = projectedPicture
 
         result = FrameExtractionResult()
         result.frameOrientationMatches = frameOrientationMatches

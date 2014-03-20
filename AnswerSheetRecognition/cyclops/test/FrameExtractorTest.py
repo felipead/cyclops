@@ -81,6 +81,3 @@ class FrameExtractorTest(TestCase):
             matches.append(PatternMatch.fromCenter(center, size))
         return matches
 
-
-if __name__ == "__main__":
-    unittest.main()

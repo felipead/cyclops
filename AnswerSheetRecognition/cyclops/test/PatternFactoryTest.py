@@ -15,6 +15,3 @@ class PatternFactoryTest(TestCase):
     def testGetFrameOrientationPattern(self):
         assert PatternFactory.getPattern("FrameOrientation", 32).shape[:2] == (32,32)
         assert PatternFactory.getPattern("FrameOrientation", 48).shape[:2] == (48,48)
-
-if __name__ == "__main__":
-    unittest.main()

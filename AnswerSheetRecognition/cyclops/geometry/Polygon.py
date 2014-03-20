@@ -37,7 +37,7 @@ class Polygon(object):
 
     @property
     def sides(self):
-        if self._sides == None:
+        if self._sides is None:
             n = len(self.vertexes)
             sides = []
             for i in xrange(n):
@@ -53,7 +53,7 @@ class Polygon(object):
     """
     @property
     def contour(self):
-        if self._contour == None:
+        if self._contour is None:
             contour = []
             for side in self.sides:
                 contour.append(Vector(side[1], side[0]))
@@ -66,7 +66,7 @@ class Polygon(object):
     """
     @property
     def interiorAngles(self):
-        if self._interiorAngles == None:
+        if self._interiorAngles is None:
             n = len(self.vertexes)
             angles = []
             for i in xrange(n):
@@ -94,7 +94,7 @@ class Polygon(object):
     """
     @property
     def isConvex(self):
-        if self._isConvex == None:
+        if self._isConvex is None:
             contour = self.contour
             n = len(contour)
             previousSign = None
@@ -111,7 +111,7 @@ class Polygon(object):
                         self._isConvex = False
                         break
                 previousSign = sign
-            if self._isConvex == None:
+            if self._isConvex is None:
                 self._isConvex = True
 
         return self._isConvex
