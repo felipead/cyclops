@@ -143,3 +143,6 @@ class Polygon(object):
             return True
 
         return False
+
+    def __ne__(self,other):
+        return not self.__eq__(other)
