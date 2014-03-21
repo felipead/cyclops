@@ -5,6 +5,7 @@ from FrameExtractorTest import *
 from PatternFactoryTest import *
 from PatternMatchTest import *
 from MathUtilTest import *
+from OrientationUtilTest import *
 from PointTest import *
 from VectorTest import *
 from PolygonTest import *
@@ -14,6 +15,7 @@ from SquareTest import *
 
 ALL_TESTS = (
     makeSuite(MathUtilTest),
+    makeSuite(OrientationUtilTest),
     makeSuite(PointTest),
     makeSuite(VectorTest),
     makeSuite(PolygonTest),

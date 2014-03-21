@@ -83,7 +83,7 @@ class FrameExtractor:
                                     convexQuadrilaterals.add(quadrilateral)
 
         return convexQuadrilaterals
-           
+
     def __getConvexQuadrilateralWithRoughlyRightInteriorAngles(self, points):
         polygon = Polygon(points)
         if polygon.isConvex:

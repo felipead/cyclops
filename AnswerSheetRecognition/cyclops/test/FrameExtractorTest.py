@@ -68,7 +68,6 @@ class FrameExtractorTest(TestCase):
         expectedFrames.append(ConvexQuadrilateral([(125, 98), (135, 327), (359, 333), (364, 99)]))
         expectedFrames.append(ConvexQuadrilateral([(125, 98), (135, 327), (359, 333), (362, 99)]))
         self.findFramesTestRunner(frameOrientationMatches, frameAlignmentMatches, expectedFrames)
-
     
     def findFramesTestRunner(self, frameOrientationMatches, frameAlignmentMatches, expectedFrames):
         foundFrames = self.frameExtractor._findAnswerSheetQuadrilaterals(frameOrientationMatches, frameAlignmentMatches)
