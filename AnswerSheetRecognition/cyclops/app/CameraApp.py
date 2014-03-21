@@ -7,7 +7,6 @@ ANSWER_SHEET_PICTURE_WINDOW_NAME = "answer sheet"
 
 def readCamera(camera):
     _, picture = camera.read()
-    picture = flip(picture, 1);
     return picture
 
 
@@ -23,8 +22,11 @@ def execute():
         if mainPicture != None:
             recognizer = AnswerSheetRecognizer()
             answerSheetPicture = recognizer.recognize(mainPicture)
+
+            mainPicture = flip(mainPicture, 1);
             imshow(MAIN_PICTURE_WINDOW_NAME, mainPicture)
             if answerSheetPicture != None:
+                answerSheetPicture = flip(answerSheetPicture, 1);
                 imshow(ANSWER_SHEET_PICTURE_WINDOW_NAME, answerSheetPicture)
         
         mainPicture = readCamera(camera)
