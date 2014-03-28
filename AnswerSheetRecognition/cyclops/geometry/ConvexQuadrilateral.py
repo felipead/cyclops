@@ -221,7 +221,7 @@ class ConvexQuadrilateral(ConvexPolygon):
         # deformed trapezoid), then its centroid will be near that vertex. When that happens,
         # the remaining 3 vertexes are so distant from the centroid that we might capture
         # more than two bottom or top points. Here we fix this, moving a possible extra bottom
-        # points to the list of top points, and vice versa.
+        # point to the list of top points, and vice versa.
         if len(bottom) == 3:
             p = self.__findPointWithBiggestY(bottom)
             bottom.remove(p)
