@@ -794,3 +794,39 @@ class ConvexQuadrilateralTest(TestCase):
         assert clockwise.topLeftCorner == counterclockwise.topLeftCorner
         assert clockwise.bottomRightCorner == counterclockwise.bottomRightCorner
         assert clockwise.topRightCorner == counterclockwise.topRightCorner
+
+    def testCornersOfRandomQuadrilateral1(self):
+        a = (197, 385)
+        b = (345, 239)
+        c = (197, 82)
+        d = (55, 251)
+        quadrilateral = ConvexQuadrilateral([a,b,c,d])
+
+        assert quadrilateral.bottomLeftCorner == c
+        assert quadrilateral.bottomRightCorner == b
+        assert quadrilateral.topRightCorner == a
+        assert quadrilateral.topLeftCorner == d
+
+        reversedQuadrilateral = ConvexQuadrilateral([a,d,c,b])
+        assert reversedQuadrilateral.bottomLeftCorner == c
+        assert reversedQuadrilateral.bottomRightCorner == b
+        assert reversedQuadrilateral.topRightCorner == a
+        assert reversedQuadrilateral.topLeftCorner == d
+
+    def testCornersOfRandomQuadrilateral2(self):
+        a = (153, 346)
+        b = (203, 98)
+        c = (450, 96)
+        d = (430, 370)
+        quadrilateral = ConvexQuadrilateral([a,b,c,d])
+
+        assert quadrilateral.bottomLeftCorner == b
+        assert quadrilateral.bottomRightCorner == c
+        assert quadrilateral.topRightCorner == d
+        assert quadrilateral.topLeftCorner == a
+
+        reversedQuadrilateral = ConvexQuadrilateral([a,d,c,b])
+        assert reversedQuadrilateral.bottomLeftCorner == b
+        assert reversedQuadrilateral.bottomRightCorner == c
+        assert reversedQuadrilateral.topRightCorner == d
+        assert reversedQuadrilateral.topLeftCorner == a

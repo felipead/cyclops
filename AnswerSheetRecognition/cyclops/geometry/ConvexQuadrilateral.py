@@ -190,74 +190,75 @@ class ConvexQuadrilateral(ConvexPolygon):
 
         return largestSide
 
-
-    # FIXME: remove tuple, fix Point hashCode and equals
     def __findCorners(self):
-        projectedSquare = self.projectToSquare()
-        projectedSquareSortedVertexes = self.__sortVertexesOfSquareCounterclockwiseWithBottomLeftVertexFirst(projectedSquare)
-
-        thisQuadrilateralVertexSet = set([tuple(v) for v in self.vertexes])
-        projectedSquareVertexSet = set(projectedSquareSortedVertexes)
-        vertexesInBothThisQuadrilateralAndItsProjectedSquare = (thisQuadrilateralVertexSet & projectedSquareVertexSet)
-        vertexesNotInTheProjectedSquare = list(thisQuadrilateralVertexSet - projectedSquareVertexSet)
-
-        thisQuadrilateralSortedVertexes = [None, None, None, None]
-        missingIndexes = []
-        for index in xrange(len(projectedSquareSortedVertexes)):
-            vertex = projectedSquareSortedVertexes[index]
-            if vertex in vertexesInBothThisQuadrilateralAndItsProjectedSquare:
-                thisQuadrilateralSortedVertexes[index] = vertex
-            else:
-                missingIndexes.append(index)
-
-        if len(missingIndexes) == 1:
-            thisQuadrilateralSortedVertexes[missingIndexes[0]] = vertexesNotInTheProjectedSquare[0]
-        elif len(missingIndexes) == 2:
-            thisQuadrilateralSortedVertexes[missingIndexes[0]] = vertexesNotInTheProjectedSquare[0]
-            thisQuadrilateralSortedVertexes[missingIndexes[1]] = vertexesNotInTheProjectedSquare[1]
-
-        self._bottomLeftCorner = thisQuadrilateralSortedVertexes[0]
-        self._bottomRightCorner = thisQuadrilateralSortedVertexes[1]
-        self._topRightCorner = thisQuadrilateralSortedVertexes[2]
-        self._topLeftCorner = thisQuadrilateralSortedVertexes[3]
-
-
-    # FIXME: remove tuple, fix Point hashCode and equals
-    @staticmethod
-    def __sortVertexesOfSquareCounterclockwiseWithBottomLeftVertexFirst(square):
-        topLine = []
-        bottomLine = []
+        top = []
+        bottom = []
         middle = []
-        centerY = square.centroid.y
+        center = self.centroid
 
-        for vertex in square.vertexes:
-            if vertex.y > centerY:
-                topLine.append(vertex)
-            elif vertex.y < centerY:
-                bottomLine.append(vertex)
-            else: # equal
+        # First we collect the points which are higher, lower and on the same level than the
+        #  centroid (y coordinates).
+        for vertex in self.vertexes:
+            if vertex.y > center.y:
+                top.append(vertex)
+            elif vertex.y < center.y:
+                bottom.append(vertex)
+            else: 
                 middle.append(vertex)
 
+        # If we have middle points then two vertexes and the centroid are connected by
+        # a line parallel to the x axis. This happens, for instance, if this quadrilateral
+        # is a perfect square rotated exactly 45˚ around the x axis.
         if len(middle) == 2:
             if middle[0].x < middle[1].x:
-                topLine.append(middle[0])
-                bottomLine.append(middle[1])
+                top.append(middle[0])
+                bottom.append(middle[1])
             else:
-                bottomLine.append(middle[0])
-                topLine.append(middle[1])
+                bottom.append(middle[0])
+                top.append(middle[1])
 
-        if topLine[0].x < topLine[1].x:
-            topLeft = topLine[0]
-            topRight = topLine[1]
+        # If this quadrilateral has a vertex that is too far from the others (for instance, a 
+        # deformed trapezoid), then its centroid will be near that vertex. When that happens,
+        # the remaining 3 vertexes are so distant from the centroid that we might capture
+        # more than two bottom or top points. Here we fix this, moving a possible extra bottom
+        # points to the list of top points, and vice versa.
+        if len(bottom) == 3:
+            p = self.__findPointWithBiggestY(bottom)
+            bottom.remove(p)
+            top.append(p)
+        elif len(top) == 3:
+            p = self.__findPointWithSmallestY(top)
+            top.remove(p)
+            bottom.append(p)
+
+        # Now that we have determined the top and bottom points, determine which ones
+        # belong to the left and which ones belong to the right.
+        if top[0].x < top[1].x:
+            self._topLeftCorner = top[0]
+            self._topRightCorner = top[1]
         else:
-            topLeft = topLine[1]
-            topRight = topLine[0]
-
-        if bottomLine[0].x < bottomLine[1].x:
-            bottomLeft = bottomLine[0]
-            bottomRight = bottomLine[1]
+            self._topLeftCorner = top[1]
+            self._topRightCorner = top[0]
+        if bottom[0].x < bottom[1].x:
+            self._bottomLeftCorner = bottom[0]
+            self._bottomRightCorner = bottom[1]
         else:
-            bottomLeft = bottomLine[1]
-            bottomRight = bottomLine[0]
+            self._bottomLeftCorner = bottom[1]
+            self._bottomRightCorner = bottom[0]
 
-        return (tuple(bottomLeft), tuple(bottomRight), tuple(topRight), tuple(topLeft))
+
+    @staticmethod
+    def __findPointWithBiggestY(points):
+        pointWithBiggestY = points[0]
+        for point in points[1:]:
+            if point.y > pointWithBiggestY.y:
+                pointWithBiggestY = point
+        return pointWithBiggestY
+
+    @staticmethod
+    def __findPointWithSmallestY(points):
+        pointWithSmallestY = points[0]
+        for point in points[1:]:
+            if point.y < pointWithSmallestY.y:
+                pointWithSmallestY = point
+        return pointWithSmallestY
