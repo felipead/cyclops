@@ -830,3 +830,72 @@ class ConvexQuadrilateralTest(TestCase):
         assert reversedQuadrilateral.bottomRightCorner == c
         assert reversedQuadrilateral.topRightCorner == d
         assert reversedQuadrilateral.topLeftCorner == a
+
+    def testScaleSquareBy200Percent(self):
+        scaleFactor = 2
+        square = ConvexQuadrilateral([(0, 0), (2, 0), (2, 2), (0, 2)])
+
+        scaledSquare = square.scaledBy(scaleFactor)
+        assert scaledSquare == ConvexQuadrilateral([(-1,-1), (3,-1), (3,3), (-1,3)])
+
+    def testScaleSquareBy150Percent(self):
+        scaleFactor = 1.5
+        square = ConvexQuadrilateral([(0, 0), (2, 0), (2, 2), (0, 2)])
+
+        scaledSquare = square.scaledBy(scaleFactor)
+        assert scaledSquare == ConvexQuadrilateral([(-0.5,-0.5), (2.5,-0.5), (2.5,2.5), (-0.5,2.5)])
+
+    def testScaleSquareBy100Percent(self):
+        scaleFactor = 1
+        square = ConvexQuadrilateral([(0, 0), (2, 0), (2, 2), (0, 2)])
+
+        scaledSquare = square.scaledBy(scaleFactor)
+        assert scaledSquare == square
+
+    def testScaleSquareBy50Percent(self):
+        scaleFactor = 0.5
+        square = ConvexQuadrilateral([(0, 0), (4, 0), (4, 4), (0, 4)])
+        
+        scaledSquare = square.scaledBy(scaleFactor)
+        assert scaledSquare == ConvexQuadrilateral([(1,1), (1,3), (3,3), (3,1)])
+
+    def testScaleLozengeBy200Percent(self):
+        scaleFactor = 2
+        lozenge = ConvexQuadrilateral([(-2,0),(0,-1),(2,0),(0,1)])
+        scaledLozenge = lozenge.scaledBy(scaleFactor)
+        assert scaledLozenge == ConvexQuadrilateral([(-4,0),(0,-2),(4,0),(0,2)])
+
+    def testScaleLozengeBy25Percent(self):
+        scaleFactor = 0.25
+        lozenge = ConvexQuadrilateral([(-4,0),(0,-2),(4,0),(0,2)])
+        scaledLozenge = lozenge.scaledBy(scaleFactor)
+        assert scaledLozenge == ConvexQuadrilateral([(-1,0),(0,-0.5),(1,0),(0,0.5)])
+
+    def testCanNotScaleQuadrilateralByZero(self):
+        scaleFactor = 0
+        square = ConvexQuadrilateral([(0, 0), (4, 0), (4, 4), (0, 4)])
+        
+        exceptionThrown = False
+        try:
+            scaledSquare = square.scaledBy(scaleFactor)
+        except Exception:
+            exceptionThrown = True
+
+        assert exceptionThrown
+
+    def testCanNotScaleQuadrilateralByNegativeValue(self):
+        scaleFactor = -1
+        square = ConvexQuadrilateral([(0, 0), (4, 0), (4, 4), (0, 4)])
+        
+        exceptionThrown = False
+        try:
+            scaledSquare = square.scaledBy(scaleFactor)
+        except Exception:
+            exceptionThrown = True
+
+        assert exceptionThrown
+
+    def testAsListOfTuples(self):
+        quadrilateral = ConvexQuadrilateral([(0, 0), (4, 0), (4, 4), (0, 4)])
+        listOfTuples = quadrilateral.asListOfTuples()
+        assert quadrilateral == ConvexQuadrilateral(listOfTuples)

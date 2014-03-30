@@ -107,8 +107,8 @@ class VectorTest(TestCase):
         assert hash(Vector((7,8,9))) == hash(Vector((7,8,9)))
 
     def testToString(self):
-        assert str(Vector((3,2,5))) == str((3,2,5))
-        assert str(Vector((3,2))) == str((3,2,0))
+        assert str(Vector((3,2,5))) == "Vector" + str((3,2,5))
+        assert str(Vector((3,2))) == "Vector" + str((3,2))
 
     def testIterable(self):
         (x,y,z) = (3,5,7)
@@ -530,3 +530,82 @@ class VectorTest(TestCase):
         assert v.angleBetween(counterclockwise) == radians
         assert counterclockwise.isClockwiseDistanceFrom(v)
         assert counterclockwise.norm == v.norm == a
+
+    def testMultipliedByPositiveScalarWithZeroAsTail(self):
+        head = (4, 32.3, 5.6, 0, 7)
+        scalar = 5.3
+
+        multipliedVector = Vector(head).multipliedByScalar(scalar)
+
+        for i in xrange(len(head)):
+            assert multipliedVector[i] == multipliedVector.head[i] == scalar * head[i]
+
+        assert multipliedVector.tail == Point((0,))
+
+    def testMultipliedByPositiveScalarWithNonZeroAsTail(self):
+        head = (4, 32.3, 5)
+        tail = (5, -2, 3.5)
+        scalar = 5
+
+        vector = Vector(head, tail)
+        multipliedVector = vector.multipliedByScalar(scalar)
+
+        for i in xrange(len(head)):
+            assert multipliedVector[i] == scalar * vector[i]
+        
+        assert multipliedVector.tail == tail
+
+    def testMultipliedByNegativeScalarWithZeroAsTail(self):
+        head = (4, 32.3, 5.6, 0, 7)
+        scalar = -5.3
+
+        vector = Vector(head)
+        multipliedVector = vector.multipliedByScalar(scalar)
+
+        for i in xrange(len(head)):
+            assert multipliedVector[i] == multipliedVector.head[i] == scalar * head[i]
+
+        assert multipliedVector.tail == Point((0,))
+        assert MathUtil.equalWithinError(multipliedVector.angleBetween(vector), math.pi, 0.0000001)
+
+    def testMultipliedByPositiveScalarWithNonZeroAsTail(self):
+        head = (4, 32.3, 5)
+        tail = (5, -2, 3.5)
+        scalar = 5
+
+        vector = Vector(head, tail)
+        multipliedVector = vector.multipliedByScalar(scalar)
+
+        for i in xrange(len(head)):
+            assert multipliedVector[i] == scalar * vector[i]
+        
+        assert multipliedVector.tail == tail
+
+    def testMultipliedByNegativeScalarWithNonZeroAsTail(self):
+        head = (4, 32.3, 5)
+        tail = (5, -2, 3.5)
+        scalar = -10.9
+
+        vector = Vector(head, tail)
+        multipliedVector = vector.multipliedByScalar(scalar)
+
+        for i in xrange(len(head)):
+            assert multipliedVector[i] == scalar * vector[i]
+        
+        assert multipliedVector.tail == tail
+        assert MathUtil.equalWithinError(multipliedVector.angleBetween(vector), math.pi, 0.0000001)
+
+    def testMultipliedByZero(self):
+        head = (4, 32.3, 5)
+        tail = (5, -2, 3.5)
+        scalar = 0
+
+        vector = Vector(head, tail)
+        multipliedVector = vector.multipliedByScalar(scalar)
+
+        for i in xrange(len(head)):
+            assert multipliedVector[i] == scalar * vector[i]
+        
+
+        assert multipliedVector.tail == tail
+        assert multipliedVector.head == multipliedVector.tail

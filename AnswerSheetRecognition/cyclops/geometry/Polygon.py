@@ -4,6 +4,7 @@ from ..util.MathUtil import *
 from ..util.Angles import *
 
 from Vector import *
+from Point import *
 
 """
 A polygon can be defined as a geometric object "consisting of a number of points (called vertices) 
@@ -23,7 +24,9 @@ class Polygon(object):
         
         points = []
         for vertex in vertexes:
-            points.append(Point(vertex))
+            if not isinstance(vertex,Point):
+                vertex = Point(vertex)
+            points.append(vertex)
         self._vertexes = tuple(points)
 
         self._interiorAngles = None
@@ -116,6 +119,11 @@ class Polygon(object):
 
         return self._isConvex
 
+    def asListOfTuples(self):
+        l = []
+        for v in self.vertexes:
+            l.append(v.asTuple())
+        return l
 
     def __getitem__(self, index):
         return self._vertexes[index]
@@ -127,7 +135,7 @@ class Polygon(object):
         return repr(self)
 
     def __repr__(self):
-        return repr(self._vertexes)
+        return "Polygon" + repr(self._vertexes)
 
     def __hash__(self):
         return hash(self._vertexes)

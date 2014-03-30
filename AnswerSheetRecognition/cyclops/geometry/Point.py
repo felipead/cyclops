@@ -59,11 +59,14 @@ class Point(tuple):
         except TypeError:
             return False
 
+    def asTuple(self):
+        return tuple(self)
+
     def __hash__(self):
         hashCode = 0
         for x in self:
             if x != 0:
-                hashCode ^= hash(x)
+                hashCode ^= 5167 * hash(x)
         return 7907 * hashCode
 
     def __getitem__(self, index):
@@ -71,6 +74,12 @@ class Point(tuple):
             return super(Point,self).__getitem__(index)
         else:
             return 0
+
+    def __repr__(self):
+        return "Point" + super(Point,self).__repr__()
+
+    def __str__(self):
+        return repr(self)
 
     def __len__(self):
         originalLength = super(Point,self).__len__()

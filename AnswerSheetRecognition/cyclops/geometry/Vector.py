@@ -24,12 +24,24 @@ Vectors are read-only objects.
 """
 class Vector:
 
-    def __init__(self, head, tail=(0,)):
-        self._head = Point(head)
-        self._tail = Point(tail)
-        self._coordinates = Point((self._head[0] - self._tail[0], \
-                                   self._head[1] - self._tail[1], \
-                                   self._head[2] - self._tail[2]))
+    def __init__(self, head, tail=Point((0,))):
+        if not isinstance(head,Point):
+            head = Point(head)
+        if not isinstance(tail,Point):
+            tail = Point(tail)
+
+        self._head = head
+        self._tail = tail
+
+        length = len(self._head)
+        if len(self._tail) > length:
+            length = len(self._tail)
+
+        coordinates = []
+        for i in xrange(length):
+            coordinates.append(self._head[i] - self._tail[i])
+        self._coordinates = Point(coordinates)
+
         self._norm = None
 
     @property
@@ -208,11 +220,19 @@ class Vector:
     def isCounterclockwiseDistanceFrom(self, anotherVector):
         return self.crossProduct(anotherVector).z >= 0
 
+
+    def multipliedByScalar(self, scalar):
+        newHead = []
+        for i in xrange(len(self)):
+            newHead.append(scalar * self.coordinates[i] + self.tail[i])
+        return Vector(newHead, self.tail)
+
+
     def __len__(self):
         return len(self._coordinates)
 
     def __iter__(self):
-        pass
+        return iter(self._coordinates)
 
     def __getitem__(self, index):
         return self._coordinates[index]
@@ -232,7 +252,7 @@ class Vector:
         return repr(self)
 
     def __repr__(self):
-        return repr(self._coordinates)
+        return "Vector" + repr(self._coordinates.asTuple())
 
     def __iter__(self):
         return iter(self.coordinates)

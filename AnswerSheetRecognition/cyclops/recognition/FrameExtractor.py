@@ -14,38 +14,43 @@ from ..util.PerspectiveUtil import *
 
 class FrameExtractor:
 
+    __ANSWER_SHEET_QUADRILATERAL_SCALE = 1.15
+
+
     def __init__(self, sizeRelaxationRatio=1.10, angleRelaxationInRadians=0.3):
         self._sizeRelaxationRatio = sizeRelaxationRatio
         self._angleRelaxationInRadians = angleRelaxationInRadians
         self._frameAlignmentMatcher = FrameAlignmentPatternMatcher()
         self._frameOrientationMatcher = FrameOrientationPatternMatcher()
 
-    def extractFrames(self, picture):
 
+    def extractFrames(self, picture):
         frameOrientationMatches = self._frameOrientationMatcher.match(picture, 1)
         frameAlignmentMatches = self._frameAlignmentMatcher.match(picture, 3)
 
-        bestAnswerSheetQuadrilateral = None
         answerSheetQuadrilaterals = self._findAnswerSheetQuadrilaterals(frameOrientationMatches, frameAlignmentMatches)
+        bestAnswerSheetQuadrilateral = None
         if answerSheetQuadrilaterals != []:
             bestAnswerSheetQuadrilateral = self._chooseQuadrilateralThatBestResemblesSquare(answerSheetQuadrilaterals)
 
         answerSheetFrame = None
         if bestAnswerSheetQuadrilateral != None:
-            projectedSquare = bestAnswerSheetQuadrilateral.projectToSquare()
-            projectedPicture = PerspectiveUtil.projectQuadrilateralInsidePictureToSquarePicture(picture, bestAnswerSheetQuadrilateral)
+            answerSheetFrame = self.__extractAnswerSheetFrame(picture, bestAnswerSheetQuadrilateral)
 
-            answerSheetFrame = Frame()
-            answerSheetFrame.originalQuadrilateral = bestAnswerSheetQuadrilateral
-            answerSheetFrame.alignedQuadrilateral = projectedSquare
-            answerSheetFrame.alignedPicture = projectedPicture
+        return self.__buildResult(frameOrientationMatches, frameAlignmentMatches, answerSheetQuadrilaterals, answerSheetFrame)
 
+
+    def __buildResult(self, frameOrientationMatches, frameAlignmentMatches, answerSheetQuadrilaterals, answerSheetFrame):
         result = FrameExtractionResult()
         result.frameOrientationMatches = frameOrientationMatches
         result.frameAlignmentMatches = frameAlignmentMatches
-        result.answerSheetFrame = answerSheetFrame
-
+        if answerSheetFrame != None:
+            result.answerSheetMatchFrame = answerSheetFrame
+            answerSheetMismatchQuadrilaterals = answerSheetQuadrilaterals
+            answerSheetMismatchQuadrilaterals.remove(answerSheetFrame.originalQuadrilateral)
+            result.answerSheetMismatchQuadrilaterals = answerSheetMismatchQuadrilaterals
         return result
+
 
     def _findAnswerSheetQuadrilaterals(self, frameOrientationMatches, frameAlignmentMatches):
         otherPoints = []
@@ -59,24 +64,20 @@ class FrameExtractor:
 
         return list(quadrilaterals)
 
-    def _chooseQuadrilateralThatBestResemblesSquare(self, frames):
-        # TODO
-        return frames[0]
-
     def _findConvexQuadrilateralsWithRoughlyEqualSizesAndAngles(self, basePoint, otherPoints):
         convexQuadrilaterals = set()
 
         for firstPoint in otherPoints:
-            baseDistance = self.__getDistance(firstPoint, basePoint)
+            baseDistance = MathUtil.distanceBetweenPoints(firstPoint, basePoint)
             for secondPoint in otherPoints:
                 if secondPoint == firstPoint:
                     continue                    
-                if self.__areDistancesRoughlyEqual(self.__getDistance(firstPoint, secondPoint), baseDistance):
+                if self.__areDistancesRoughlyEqual(MathUtil.distanceBetweenPoints(firstPoint, secondPoint), baseDistance):
                     for thirdPoint in otherPoints:
                         if thirdPoint == firstPoint or thirdPoint == secondPoint:
                             continue    
-                        if self.__areDistancesRoughlyEqual(self.__getDistance(secondPoint, thirdPoint), baseDistance):
-                            if self.__areDistancesRoughlyEqual(self.__getDistance(thirdPoint, basePoint), baseDistance):
+                        if self.__areDistancesRoughlyEqual(MathUtil.distanceBetweenPoints(secondPoint, thirdPoint), baseDistance):
+                            if self.__areDistancesRoughlyEqual(MathUtil.distanceBetweenPoints(thirdPoint, basePoint), baseDistance):
                                 points = (basePoint, firstPoint, secondPoint, thirdPoint)
                                 quadrilateral = self.__getConvexQuadrilateralWithRoughlyRightInteriorAngles(points)
                                 if quadrilateral != None:
@@ -95,6 +96,28 @@ class FrameExtractor:
     def __areDistancesRoughlyEqual(self, distance1, distance2):
         return MathUtil.equalWithinRatio(distance1, distance2, self._sizeRelaxationRatio)
 
+
+    def _chooseQuadrilateralThatBestResemblesSquare(self, frames):
+        # TODO
+        return frames[0]
+
+    def __extractAnswerSheetFrame(self, picture, quadrilateral):
+        scaledQuadrilateral = quadrilateral.scaledBy(self.__ANSWER_SHEET_QUADRILATERAL_SCALE)
+        if scaledQuadrilateral.isClockwise:
+            counterclockwiseScaledQuadrilateral = scaledQuadrilateral.mirrored()
+        else:
+            counterclockwiseScaledQuadrilateral = scaledQuadrilateral
+
+        projectedAnswerSheetPicture = self.__projectCounterclockwiseQuadrilateralToFrame(picture, counterclockwiseScaledQuadrilateral)
+
+        frame = Frame()
+        frame.originalQuadrilateral = quadrilateral
+        frame.scaledQuadrilateral = scaledQuadrilateral
+        frame.projectedPicture = projectedAnswerSheetPicture
+        return frame
+
     @staticmethod
-    def __getDistance(point1, point2):
-        return MathUtil.distanceBetweenPoints(point1, point2)
+    def __projectCounterclockwiseQuadrilateralToFrame(picture, counterclockwiseQuadrilateral):
+        projectionSize = int(counterclockwiseQuadrilateral.largestSideLength)
+        projectionSquare = ConvexQuadrilateral([(projectionSize-1, projectionSize-1), (0, projectionSize-1), (0, 0), (projectionSize-1, 0)])
+        return PerspectiveUtil.projectQuadrilateralToSquarePicture(picture, counterclockwiseQuadrilateral, projectionSquare)

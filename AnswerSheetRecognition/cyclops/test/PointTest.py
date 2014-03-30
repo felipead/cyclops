@@ -93,4 +93,7 @@ class PointTest(TestCase):
     def testLengthOfThreeDimensionPointIsThree(self):
         assert len(Point((2,3,4))) == len(Point((2,3,4,0))) == len(Point((2,3,4,0))) == 3
 
-
+    def testAsTuple(self):
+        t = Point((5,4,2)).asTuple()
+        assert t == (5,4,2)
+        assert not isinstance(t, Point)

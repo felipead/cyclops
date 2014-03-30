@@ -81,5 +81,8 @@ class ConvexPolygon(Polygon):
     def __hash__(self):
         hashValue = 0
         for v in self._vertexes:
-             hashValue ^= hash(v)
+             hashValue ^= 13 * hash(v)
         return 7193 * hashValue
+
+    def __repr__(self):
+        return "ConvexPolygon" + repr(self._vertexes)

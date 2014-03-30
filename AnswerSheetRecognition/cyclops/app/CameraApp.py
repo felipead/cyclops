@@ -26,7 +26,7 @@ def execute():
             mainPicture = flip(mainPicture, 1);
             imshow(MAIN_PICTURE_WINDOW_NAME, mainPicture)
             if answerSheetPicture != None:
-                answerSheetPicture = flip(answerSheetPicture, 1);
+                #answerSheetPicture = flip(answerSheetPicture, 1);
                 imshow(ANSWER_SHEET_PICTURE_WINDOW_NAME, answerSheetPicture)
         
         mainPicture = readCamera(camera)

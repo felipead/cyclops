@@ -26,6 +26,7 @@ class ConvexQuadrilateral(ConvexPolygon):
         
         self._largestSideLength = None
         self._reversedContour = None
+        self._mirroredVertexes = None
 
         self._bottomLeftCorner = None
         self._topLeftCorner = None
@@ -61,6 +62,12 @@ class ConvexQuadrilateral(ConvexPolygon):
         if self._topRightCorner is None:
             self.__findCorners()
         return self._topRightCorner
+
+    @property
+    def mirroredVertexes(self):
+        if self._mirroredVertexes == None:
+            self._mirroredVertexes = (self._vertexes[0], self._vertexes[3], self._vertexes[2], self._vertexes[1])
+        return self._mirroredVertexes
 
     @property
     def reversedContour(self):
@@ -142,6 +149,26 @@ class ConvexQuadrilateral(ConvexPolygon):
             rotatedVertexes.append(rotatedPoint)
         return ConvexQuadrilateral(rotatedVertexes)
 
+    def mirrored(self):
+        return ConvexQuadrilateral(self.mirroredVertexes)
+
+    """
+    Scale this quadrilateral uniformly by a percentage factor. Factor is such that:
+        1 is 100%
+        2 is 200%
+        0.5 is 50%
+        ...
+    """
+    def scaledBy(self, scaleFactor):
+        if scaleFactor <= 0:
+            raise Exception("Scale factor must be greater than zero.")
+        center = self.centroid
+        newVertexes = []
+        for vertex in self.vertexes:
+            scaled = Vector(vertex, center).multipliedByScalar(scaleFactor)
+            newVertexes.append(scaled.head)
+        return ConvexQuadrilateral(newVertexes)
+
     """
     Project this quadrilateral to a square with sides equal to the largest side of this polygon.
     Useful for perspective correction.
@@ -218,7 +245,7 @@ class ConvexQuadrilateral(ConvexPolygon):
                 top.append(middle[1])
 
         # If this quadrilateral has a vertex that is too far from the others (for instance, a 
-        # deformed trapezoid), then its centroid will be near that vertex. When that happens,
+        # unbalaced trapezoid), then its centroid will be near that vertex. When that happens,
         # the remaining 3 vertexes are so distant from the centroid that we might capture
         # more than two bottom or top points. Here we fix this, moving a possible extra bottom
         # point to the list of top points, and vice versa.
@@ -246,7 +273,6 @@ class ConvexQuadrilateral(ConvexPolygon):
             self._bottomLeftCorner = bottom[1]
             self._bottomRightCorner = bottom[0]
 
-
     @staticmethod
     def __findPointWithBiggestY(points):
         pointWithBiggestY = points[0]
@@ -262,3 +288,6 @@ class ConvexQuadrilateral(ConvexPolygon):
             if point.y < pointWithSmallestY.y:
                 pointWithSmallestY = point
         return pointWithSmallestY
+
+    def __repr__(self):
+        return "ConvexQuadrilateral" + repr(self._vertexes)
