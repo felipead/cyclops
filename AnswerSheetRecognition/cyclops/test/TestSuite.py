@@ -1,7 +1,7 @@
 import unittest
 from unittest import *
 
-from FrameExtractorTest import *
+from AnswerSheetFrameExtractorTest import *
 from PatternFactoryTest import *
 from PatternMatchTest import *
 from MathUtilTest import *
@@ -24,7 +24,7 @@ ALL_TESTS = (
     makeSuite(SquareTest),
     makeSuite(PatternFactoryTest),
     makeSuite(PatternMatchTest),
-    makeSuite(FrameExtractorTest)
+    makeSuite(AnswerSheetFrameExtractorTest)
 )
 
 
