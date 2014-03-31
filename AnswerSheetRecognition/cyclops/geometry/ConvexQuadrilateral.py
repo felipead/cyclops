@@ -149,6 +149,18 @@ class ConvexQuadrilateral(ConvexPolygon):
             rotatedVertexes.append(rotatedPoint)
         return ConvexQuadrilateral(rotatedVertexes)
 
+    def asClockwise(self):
+        if self.isClockwise:
+            return self
+        else:
+            return self.mirrored()
+
+    def asCounterclockwise(self):
+        if self.isClockwise:
+            return self.mirrored()
+        else:
+            return self
+
     def mirrored(self):
         return ConvexQuadrilateral(self.mirroredVertexes)
 

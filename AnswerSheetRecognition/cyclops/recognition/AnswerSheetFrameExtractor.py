@@ -103,21 +103,15 @@ class AnswerSheetFrameExtractor:
 
     def __extractAnswerSheetFrame(self, picture, quadrilateral):
         scaledQuadrilateral = quadrilateral.scaledBy(self.__ANSWER_SHEET_QUADRILATERAL_SCALE)
-        if scaledQuadrilateral.isClockwise:
-            counterclockwiseScaledQuadrilateral = scaledQuadrilateral.mirrored()
-        else:
-            counterclockwiseScaledQuadrilateral = scaledQuadrilateral
+        counterclockwiseQuadrilateral = scaledQuadrilateral.asCounterclockwise()
 
-        projectedAnswerSheetPicture = self.__projectCounterclockwiseQuadrilateralToFrame(picture, counterclockwiseScaledQuadrilateral)
+        projectionSize = int(counterclockwiseQuadrilateral.largestSideLength)
+        projectionSquare = ConvexQuadrilateral([(projectionSize-1, projectionSize-1), (0, projectionSize-1), (0, 0), (projectionSize-1, 0)])
 
+        projectedAnswerSheetPicture = PerspectiveUtil.projectQuadrilateralToSquarePicture(picture, counterclockwiseQuadrilateral, projectionSquare)
+        
         frame = Frame()
         frame.originalQuadrilateral = quadrilateral
         frame.scaledQuadrilateral = scaledQuadrilateral
         frame.projectedPicture = projectedAnswerSheetPicture
         return frame
-
-    @staticmethod
-    def __projectCounterclockwiseQuadrilateralToFrame(picture, counterclockwiseQuadrilateral):
-        projectionSize = int(counterclockwiseQuadrilateral.largestSideLength)
-        projectionSquare = ConvexQuadrilateral([(projectionSize-1, projectionSize-1), (0, projectionSize-1), (0, 0), (projectionSize-1, 0)])
-        return PerspectiveUtil.projectQuadrilateralToSquarePicture(picture, counterclockwiseQuadrilateral, projectionSquare)

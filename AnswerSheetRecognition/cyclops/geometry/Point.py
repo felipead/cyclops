@@ -59,8 +59,11 @@ class Point(tuple):
         except TypeError:
             return False
 
-    def asTuple(self):
-        return tuple(self)
+    def as2dTuple(self):
+        return tuple((self[0], self[1]))
+
+    def as3dTuple(self):
+        return tuple((self[0], self[1], self[2]))   
 
     def __hash__(self):
         hashCode = 0
@@ -76,7 +79,7 @@ class Point(tuple):
             return 0
 
     def __repr__(self):
-        return "Point" + super(Point,self).__repr__()
+        return super(Point,self).__repr__()
 
     def __str__(self):
         return repr(self)

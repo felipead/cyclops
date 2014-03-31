@@ -204,6 +204,12 @@ class Vector:
         return Vector(head, self.tail)
 
     """
+    Gets a 180˚ orientation agnostic rotation of this vector.
+    """
+    def rotationBy180Degrees(self):
+        return self.clockwiseRotationBy90Degrees().clockwiseRotationBy90Degrees()
+
+    """
     True if this vector has a clockwise angular distance from another vector. This
     means that the shortest angular distance that makes this vector parallel to another
     vector is rotating this vector clockwise by an angle between 0˚ and 180˚ (inclusive).
@@ -252,7 +258,7 @@ class Vector:
         return repr(self)
 
     def __repr__(self):
-        return "Vector" + repr(self._coordinates.asTuple())
+        return "Vector" + repr(self._coordinates)
 
     def __iter__(self):
         return iter(self.coordinates)

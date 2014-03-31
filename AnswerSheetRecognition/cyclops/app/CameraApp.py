@@ -1,9 +1,11 @@
 from cv2 import namedWindow, imshow, flip, waitKey, VideoCapture
 
 from ..recognition.AnswerSheetRecognizer import *
+from ..recognition.AnswerSheetRecognitionResult import *
 
 MAIN_PICTURE_WINDOW_NAME = "main"
 ANSWER_SHEET_PICTURE_WINDOW_NAME = "answer sheet"
+QR_CODE_PICTURE_WINDOW_NAME = "qr code"
 
 def readCamera(camera):
     _, picture = camera.read()
@@ -13,6 +15,7 @@ def readCamera(camera):
 def execute():
     namedWindow(MAIN_PICTURE_WINDOW_NAME)
     namedWindow(ANSWER_SHEET_PICTURE_WINDOW_NAME)
+    namedWindow(QR_CODE_PICTURE_WINDOW_NAME)
     camera = VideoCapture(0)
 
     mainPicture = readCamera(camera)
@@ -21,13 +24,13 @@ def execute():
 
         if mainPicture != None:
             recognizer = AnswerSheetRecognizer()
-            answerSheetPicture = recognizer.recognize(mainPicture)
+            recognitionResult = recognizer.recognize(mainPicture)
 
             mainPicture = flip(mainPicture, 1);
             imshow(MAIN_PICTURE_WINDOW_NAME, mainPicture)
-            if answerSheetPicture != None:
-                #answerSheetPicture = flip(answerSheetPicture, 1);
-                imshow(ANSWER_SHEET_PICTURE_WINDOW_NAME, answerSheetPicture)
+            if recognitionResult.answerSheetFrame != None:
+                imshow(ANSWER_SHEET_PICTURE_WINDOW_NAME, recognitionResult.answerSheetFrame.projectedPicture)
+                imshow(QR_CODE_PICTURE_WINDOW_NAME, recognitionResult.qrCodeFrame.projectedPicture)
         
         mainPicture = readCamera(camera)
 

@@ -894,8 +894,52 @@ class ConvexQuadrilateralTest(TestCase):
             exceptionThrown = True
 
         assert exceptionThrown
+        
 
-    def testAsListOfTuples(self):
-        quadrilateral = ConvexQuadrilateral([(0, 0), (4, 0), (4, 4), (0, 4)])
-        listOfTuples = quadrilateral.asListOfTuples()
-        assert quadrilateral == ConvexQuadrilateral(listOfTuples)
+    def testClockwiseAsClockwise(self):
+        a = (0,0)
+        b = (0,4)
+        c = (4,4)
+        d = (4,0)
+        quadrilateral = ConvexQuadrilateral([a, b, c, d])
+        clockwise = quadrilateral.asClockwise()
+        assert clockwise[0] == a
+        assert clockwise[1] == b
+        assert clockwise[2] == c
+        assert clockwise[3] == d
+
+    def testCounterclockwiseAsClockwise(self):
+        a = (0,0)
+        b = (4,0)
+        c = (4,4)
+        d = (0,4)
+        quadrilateral = ConvexQuadrilateral([a, b, c, d])
+        clockwise = quadrilateral.asClockwise()
+        assert clockwise[0] == a
+        assert clockwise[1] == d
+        assert clockwise[2] == c
+        assert clockwise[3] == b
+
+    def testClockwiseAsCounterclockwise(self):
+        a = (0,0)
+        b = (0,4)
+        c = (4,4)
+        d = (4,0)
+        quadrilateral = ConvexQuadrilateral([a, b, c, d])
+        counterclockwise = quadrilateral.asCounterclockwise()
+        assert counterclockwise[0] == a
+        assert counterclockwise[1] == d
+        assert counterclockwise[2] == c
+        assert counterclockwise[3] == b
+
+    def testCounterclockwiseAsCounterclockwise(self):
+        a = (0,0)
+        b = (4,0)
+        c = (4,4)
+        d = (0,4)
+        quadrilateral = ConvexQuadrilateral([a, b, c, d])
+        counterclockwise = quadrilateral.asCounterclockwise()
+        assert counterclockwise[0] == a
+        assert counterclockwise[1] == b
+        assert counterclockwise[2] == c
+        assert counterclockwise[3] == d

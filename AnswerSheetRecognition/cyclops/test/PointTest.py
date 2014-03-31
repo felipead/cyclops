@@ -93,7 +93,26 @@ class PointTest(TestCase):
     def testLengthOfThreeDimensionPointIsThree(self):
         assert len(Point((2,3,4))) == len(Point((2,3,4,0))) == len(Point((2,3,4,0))) == 3
 
-    def testAsTuple(self):
-        t = Point((5,4,2)).asTuple()
-        assert t == (5,4,2)
+    def testPointAs2dTuple(self):
+        t = Point((5,0)).as2dTuple()
+        assert t == (5,0)
         assert not isinstance(t, Point)
+        assert isinstance(t, tuple)
+
+    def testPointInsidePointAs2dTuple(self):
+        t = Point(Point((5,4,0))).as2dTuple()
+        assert t == (5,4)
+        assert not isinstance(t, Point)
+        assert isinstance(t, tuple)
+
+    def testPointAs3dTuple(self):
+        t = Point((5,4,0)).as3dTuple()
+        assert t == (5,4,0)
+        assert not isinstance(t, Point)
+        assert isinstance(t, tuple)
+
+    def testPointInsidePointAs3dTuple(self):
+        t = Point(Point((5,4,0))).as3dTuple()
+        assert t == (5,4,0)
+        assert not isinstance(t, Point)
+        assert isinstance(t, tuple)
