@@ -2,6 +2,7 @@ from AnswerSheetFrameExtractor import *
 from QrCodeFrameExtractor import *
 from AnswerSheetRecognitionResult import *
 from Frame import *
+from QrCodeDecoder import *
 
 from ..util.DrawingUtil import *
 
@@ -10,6 +11,7 @@ class AnswerSheetRecognizer:
     def __init__(self):
         self._answerSheetFrameExtractor = AnswerSheetFrameExtractor()
         self._qrCodeFrameExtractor = QrCodeFrameExtractor()
+        self._qrCodeDecoder = QrCodeDecoder();
 
     def recognize(self, mainPicture):
         answerSheetFrameExtractionResult = self._answerSheetFrameExtractor.extract(mainPicture)
@@ -34,6 +36,11 @@ class AnswerSheetRecognizer:
 
         if qrCodeFrame != None:
             DrawingUtil.drawQuadrilateralLines(mainPicture, qrCodeFrame.originalQuadrilateral, DrawingUtil.COLOR_RED, 1)
+            qrCodeValue = self._qrCodeDecoder.decode(qrCodeFrame)
+            if qrCodeValue != None:
+                print qrCodeValue
+            else:
+                print "unable to capture qr code"
 
         result = AnswerSheetRecognitionResult()
         result.answerSheetFrame = answerSheetFrame
