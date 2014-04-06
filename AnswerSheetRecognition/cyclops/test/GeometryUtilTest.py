@@ -77,96 +77,92 @@ class GeometryUtilTest(TestCase):
         square = GeometryUtil.createSquareCounterclockwiseFromTwoPoints(bottomRight, topRight)
         assert square == ConvexQuadrilateral([bottomRight, topRight, topLeft, bottomLeft])
 
-# FIXME!!!
+    def testCreateSquareCounterclockwiseFromTopToBottomUsingPointsNotParallelToAxis(self):
+        a = 2
+        bottomLeft = (0,a)
+        bottomRight = (a,0)
+        topRight = (2*a,a)
+        topLeft = (a,2*a)
 
-    # def testCreateSquareCounterclockwiseFromTopToBottomUsingPointsNotParallelToAxis(self):
-    #     a = 2
-    #     bottomLeft = (0,a)
-    #     bottomRight = (a,0)
-    #     topRight = (2*a,a)
-    #     topLeft = (a,2*a)
+        square = GeometryUtil.createSquareCounterclockwiseFromTwoPoints(topRight, topLeft)
+        assert square == ConvexQuadrilateral([topRight, topLeft, bottomLeft, bottomRight])
 
-    #     square = GeometryUtil.createSquareCounterclockwiseFromTwoPoints(topRight, topLeft)
-    #     assert square == ConvexQuadrilateral([topRight, topLeft, bottomLeft, bottomRight])
+    def testCreateSquareClockwiseFromTopToBottomUsingPointsParallelToAxis(self):
+        a = 7.3
+        bottomLeft = (0,0)
+        bottomRight = (a,0)
+        topRight = (a,a)
+        topLeft = (0,a)
 
-    # def testCreateSquareClockwiseFromTopToBottomUsingPointsParallelToAxis(self):
-    #     a = 7.3
-    #     bottomLeft = (0,0)
-    #     bottomRight = (a,0)
-    #     topRight = (a,a)
-    #     topLeft = (0,a)
+        square = GeometryUtil.createSquareClockwiseFromTwoPoints(topLeft, topRight)
+        assert square == ConvexQuadrilateral([topLeft, topRight, bottomRight, bottomLeft])
 
-    #     square = GeometryUtil.createSquareClockwiseFromTwoPoints(topLeft, topRight)
-    #     assert square == ConvexQuadrilateral([topLeft, topRight, bottomRight, bottomLeft])
+    def testCreateSquareClockwiseFromLeftToRightUsingPointsParallelToAxis(self):
+        a = 7.3
+        bottomLeft = (0,0)
+        bottomRight = (a,0)
+        topRight = (a,a)
+        topLeft = (0,a)
 
-    # def testCreateSquareClockwiseFromLeftToRightUsingPointsParallelToAxis(self):
-    #     a = 7.3
-    #     bottomLeft = (0,0)
-    #     bottomRight = (a,0)
-    #     topRight = (a,a)
-    #     topLeft = (0,a)
+        square = GeometryUtil.createSquareClockwiseFromTwoPoints(bottomLeft, topLeft)
+        assert square == ConvexQuadrilateral([bottomLeft, topLeft, topRight, bottomRight])
 
-    #     square = GeometryUtil.createSquareClockwiseFromTwoPoints(topLeft, bottomLeft)
-    #     assert square == ConvexQuadrilateral([bottomLeft, topLeft, bottomRight, topRight])
+    def testCreateSquareClockwiseFromRightToLeftUsingPointsParallelToAxis(self):
+        a = 7.3
+        bottomLeft = (0,0)
+        bottomRight = (a,0)
+        topRight = (a,a)
+        topLeft = (0,a)
 
-    # def testCreateSquareClockwiseFromRightToLeftUsingPointsParallelToAxis(self):
-    #     a = 7.3
-    #     bottomLeft = (0,0)
-    #     bottomRight = (a,0)
-    #     topRight = (a,a)
-    #     topLeft = (0,a)
+        square = GeometryUtil.createSquareClockwiseFromTwoPoints(topRight, bottomRight)
+        assert square == ConvexQuadrilateral([topRight, bottomRight, bottomLeft, topLeft])
 
-    #     square = GeometryUtil.createSquareClockwiseFromTwoPoints(bottomRight, topRight)
-    #     assert square == ConvexQuadrilateral([bottomRight, topRight, topLeft, bottomLeft])
+    def testCreateSquareClockwiseFromBottomToTopUsingPointsParallelToAxis(self):
+        a = 7.3
+        bottomLeft = (0,0)
+        bottomRight = (a,0)
+        topRight = (a,a)
+        topLeft = (0,a)
 
-    # def testCreateSquareClockwiseFromBottomToTopUsingPointsParallelToAxis(self):
-    #     a = 7.3
-    #     bottomLeft = (0,0)
-    #     bottomRight = (a,0)
-    #     topRight = (a,a)
-    #     topLeft = (0,a)
+        square = GeometryUtil.createSquareClockwiseFromTwoPoints(bottomRight, bottomLeft)
+        assert square == ConvexQuadrilateral([bottomRight, bottomLeft, topLeft, topRight])
 
-    #     square = GeometryUtil.createSquareClockwiseFromTwoPoints(bottomRight, bottomLeft)
-    #     assert square == ConvexQuadrilateral([bottomLeft, bottomRight, topRight, topLeft])
+    def testCreateSquareClockwiseFromBottomToTopUsingPointsNotParallelToAxis(self):
+        a = 2
+        bottomLeft = (0,a)
+        bottomRight = (a,0)
+        topRight = (2*a,a)
+        topLeft = (a,2*a)
 
+        square = GeometryUtil.createSquareClockwiseFromTwoPoints(bottomRight, bottomLeft)
+        assert square == ConvexQuadrilateral([bottomRight, bottomLeft, topLeft, topRight])
 
-    # def testCreateSquareClockwiseFromBottomToTopUsingPointsNotParallelToAxis(self):
-    #     a = 2
-    #     bottomLeft = (0,a)
-    #     bottomRight = (a,0)
-    #     topRight = (2*a,a)
-    #     topLeft = (a,2*a)
+    def testCreateSquareClockwiseFromLeftToRightUsingPointsNotParallelToAxis(self):
+        a = 2
+        bottomLeft = (0,a)
+        bottomRight = (a,0)
+        topRight = (2*a,a)
+        topLeft = (a,2*a)
 
-    #     square = GeometryUtil.createSquareClockwiseFromTwoPoints(bottomLeft, bottomRight)
-    #     assert square == ConvexQuadrilateral([bottomLeft, bottomRight, topRight, topLeft])
+        square = GeometryUtil.createSquareClockwiseFromTwoPoints(bottomLeft, topLeft)
+        assert square == ConvexQuadrilateral([bottomLeft, topLeft, topRight, bottomRight])
 
-    # def testCreateSquareClockwiseFromLeftToRightUsingPointsNotParallelToAxis(self):
-    #     a = 2
-    #     bottomLeft = (0,a)
-    #     bottomRight = (a,0)
-    #     topRight = (2*a,a)
-    #     topLeft = (a,2*a)
+    def testCreateSquareClockwiseFromRightToLeftUsingPointsNotParallelToAxis(self):
+        a = 2
+        bottomLeft = (0,a)
+        bottomRight = (a,0)
+        topRight = (2*a,a)
+        topLeft = (a,2*a)
 
-    #     square = GeometryUtil.createSquareClockwiseFromTwoPoints(topLeft, bottomLeft)
-    #     assert square == ConvexQuadrilateral([topLeft, bottomLeft, bottomRight, topRight])
+        square = GeometryUtil.createSquareClockwiseFromTwoPoints(topRight, bottomRight)
+        assert square == ConvexQuadrilateral([topRight, bottomRight, bottomLeft, topLeft])
 
-    # def testCreateSquareClockwiseFromRightToLeftUsingPointsNotParallelToAxis(self):
-    #     a = 2
-    #     bottomLeft = (0,a)
-    #     bottomRight = (a,0)
-    #     topRight = (2*a,a)
-    #     topLeft = (a,2*a)
+    def testCreateSquareClockwiseFromTopToBottomUsingPointsNotParallelToAxis(self):
+        a = 2
+        bottomLeft = (0,a)
+        bottomRight = (a,0)
+        topRight = (2*a,a)
+        topLeft = (a,2*a)
 
-    #     square = GeometryUtil.createSquareClockwiseFromTwoPoints(bottomRight, topRight)
-    #     assert square == ConvexQuadrilateral([bottomRight, topRight, topLeft, bottomLeft])
-
-    # def testCreateSquareClockwiseFromTopToBottomUsingPointsNotParallelToAxis(self):
-    #     a = 2
-    #     bottomLeft = (0,a)
-    #     bottomRight = (a,0)
-    #     topRight = (2*a,a)
-    #     topLeft = (a,2*a)
-
-    #     square = GeometryUtil.createSquareClockwiseFromTwoPoints(topRight, topLeft)
-    #     assert square == ConvexQuadrilateral([topRight, topLeft, bottomLeft, bottomRight])
-
+        square = GeometryUtil.createSquareClockwiseFromTwoPoints(topLeft, topRight)
+        assert square == ConvexQuadrilateral([topLeft, topRight, bottomRight, bottomLeft])

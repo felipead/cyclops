@@ -5,9 +5,9 @@ from ..geometry.ConvexQuadrilateral import *
 class GeometryUtil:
 
     @staticmethod
-    def createSquareClockwiseFromTwoPoints(topLeftPoint, topRightPoint):
+    def createSquareClockwiseFromTwoPoints(point1, point2):
 
-        topRightToTopLeft = Vector(topLeftPoint, topRightPoint)
+        topRightToTopLeft = Vector(point1, point2)
 
         topRightToBottomRight = topRightToTopLeft.counterclockwiseRotationBy90Degrees()
         topLeftToBottomLeft = reversed(topRightToTopLeft).clockwiseRotationBy90Degrees()
@@ -20,9 +20,9 @@ class GeometryUtil:
         return ConvexQuadrilateral((topLeft, topRight, bottomRight, bottomLeft))
 
     @staticmethod
-    def createSquareCounterclockwiseFromTwoPoints(bottomLeftPoint, bottomRightPoint):
+    def createSquareCounterclockwiseFromTwoPoints(point1, point2):
 
-        bottomRightToBottomLeft = Vector(bottomLeftPoint, bottomRightPoint)
+        bottomRightToBottomLeft = Vector(point1, point2)
 
         bottomRightToTopRight = bottomRightToBottomLeft.clockwiseRotationBy90Degrees()
         bottomLeftToTopLeft = reversed(bottomRightToBottomLeft).counterclockwiseRotationBy90Degrees()
