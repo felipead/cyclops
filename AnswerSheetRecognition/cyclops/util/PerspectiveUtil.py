@@ -1,4 +1,4 @@
-from cv2 import getPerspectiveTransform, warpPerspective
+import cv2 as cv
 import numpy as np
 
 from ..geometry.ConvexQuadrilateral import *
@@ -10,10 +10,10 @@ class PerspectiveUtil:
         sourcePoints = np.array(PerspectiveUtil.__asListOf2dTuples(quadrilateralToBeProjected), np.float32)
         targetPoints = np.array(PerspectiveUtil.__asListOf2dTuples(squareToProject), np.float32)
 
-        transformMatrix = getPerspectiveTransform(sourcePoints, targetPoints)
+        transformMatrix = cv.getPerspectiveTransform(sourcePoints, targetPoints)
         
         size = int(squareToProject.largestSideLength)
-        return warpPerspective(picture, transformMatrix, (size,size))
+        return cv.warpPerspective(picture, transformMatrix, (size,size))
 
     @staticmethod
     def __asListOf2dTuples(quadrilateral):
