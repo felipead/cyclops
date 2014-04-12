@@ -1,6 +1,6 @@
 import math
 
-from AnswerSheetFrameExtractionResult import *
+from AnswerFrameExtractionResult import *
 from Frame import *
 
 from ..pattern.FrameAlignmentPatternMatcher import *
@@ -12,7 +12,7 @@ from ..geometry.Square import *
 from ..util.MathUtil import *
 from ..util.PerspectiveUtil import *
 
-class AnswerSheetFrameExtractor:
+class AnswerFrameExtractor:
 
     __ANSWER_SHEET_QUADRILATERAL_SCALE = 1.15
 
@@ -20,45 +20,45 @@ class AnswerSheetFrameExtractor:
     def __init__(self, sizeRelaxationRatio=1.10, angleRelaxationInRadians=0.3):
         self._sizeRelaxationRatio = sizeRelaxationRatio
         self._angleRelaxationInRadians = angleRelaxationInRadians
-        self._frameAlignmentMatcher = FrameAlignmentPatternMatcher()
-        self._frameOrientationMatcher = FrameOrientationPatternMatcher()
+        self._frameAlignmentPatternMatcher = FrameAlignmentPatternMatcher()
+        self._frameOrientationPatternMatcher = FrameOrientationPatternMatcher()
 
 
     def extract(self, picture):
-        frameOrientationMatches = self._frameOrientationMatcher.match(picture, 1)
-        frameAlignmentMatches = self._frameAlignmentMatcher.match(picture, 3)
+        frameOrientationPatternMatches = self._frameOrientationPatternMatcher.match(picture, 1)
+        frameAlignmentPatternMatches = self._frameAlignmentPatternMatcher.match(picture, 3)
 
-        answerSheetQuadrilaterals = self._findAnswerSheetQuadrilaterals(frameOrientationMatches, frameAlignmentMatches)
-        bestAnswerSheetQuadrilateral = None
-        if answerSheetQuadrilaterals != []:
-            bestAnswerSheetQuadrilateral = self._chooseQuadrilateralThatBestResemblesSquare(answerSheetQuadrilaterals)
+        answerFrameQuadrilaterals = self._findAnswerFrameQuadrilaterals(frameOrientationPatternMatches, frameAlignmentPatternMatches)
+        bestAnswerFrameQuadrilateral = None
+        if answerFrameQuadrilaterals != []:
+            bestAnswerFrameQuadrilateral = self._chooseQuadrilateralThatBestResemblesSquare(answerFrameQuadrilaterals)
 
-        answerSheetFrame = None
-        if bestAnswerSheetQuadrilateral != None:
-            answerSheetFrame = self.__extractAnswerSheetFrame(picture, bestAnswerSheetQuadrilateral)
+        answerFrame = None
+        if bestAnswerFrameQuadrilateral != None:
+            answerFrame = self.__extractAnswerFrame(picture, bestAnswerFrameQuadrilateral)
 
-        return self.__buildResult(frameOrientationMatches, frameAlignmentMatches, answerSheetQuadrilaterals, answerSheetFrame)
+        return self.__buildResult(answerFrame, answerFrameQuadrilaterals, frameOrientationPatternMatches, frameAlignmentPatternMatches)
 
 
-    def __buildResult(self, frameOrientationMatches, frameAlignmentMatches, answerSheetQuadrilaterals, answerSheetFrame):
-        result = AnswerSheetFrameExtractionResult()
-        result.frameOrientationMatches = frameOrientationMatches
-        result.frameAlignmentMatches = frameAlignmentMatches
-        if answerSheetFrame != None:
-            result.answerSheetMatchFrame = answerSheetFrame
-            answerSheetMismatchQuadrilaterals = answerSheetQuadrilaterals
-            answerSheetMismatchQuadrilaterals.remove(answerSheetFrame.originalQuadrilateral)
-            result.answerSheetMismatchQuadrilaterals = answerSheetMismatchQuadrilaterals
+    def __buildResult(self, answerFrame, answerFrameQuadrilaterals, frameOrientationPatternMatches, frameAlignmentPatternMatches):
+        result = AnswerFrameExtractionResult()
+        result.frameOrientationPatternMatches = frameOrientationPatternMatches
+        result.frameAlignmentPatternMatches = frameAlignmentPatternMatches
+        if answerFrame != None:
+            result.answerFrame = answerFrame
+            answerFrameMismatches = answerFrameQuadrilaterals
+            answerFrameMismatches.remove(answerFrame.originalQuadrilateral)
+            result.answerFrameMismatches = answerFrameMismatches
         return result
 
 
-    def _findAnswerSheetQuadrilaterals(self, frameOrientationMatches, frameAlignmentMatches):
+    def _findAnswerFrameQuadrilaterals(self, frameOrientationPatternMatches, frameAlignmentPatternMatches):
         otherPoints = []
-        for frameAlignmentMatch in frameAlignmentMatches:
+        for frameAlignmentMatch in frameAlignmentPatternMatches:
             otherPoints.append(frameAlignmentMatch.center)
 
         quadrilaterals = set()
-        for frameOrientationMatch in frameOrientationMatches:
+        for frameOrientationMatch in frameOrientationPatternMatches:
             basePoint = frameOrientationMatch.center
             quadrilaterals.update(self._findConvexQuadrilateralsWithRoughlyEqualSizesAndAngles(basePoint, otherPoints))
 
@@ -101,17 +101,18 @@ class AnswerSheetFrameExtractor:
         # TODO
         return frames[0]
 
-    def __extractAnswerSheetFrame(self, picture, quadrilateral):
+    def __extractAnswerFrame(self, picture, quadrilateral):
         scaledQuadrilateral = quadrilateral.scaledBy(self.__ANSWER_SHEET_QUADRILATERAL_SCALE)
         counterclockwiseQuadrilateral = scaledQuadrilateral.asCounterclockwise()
 
         projectionSize = int(counterclockwiseQuadrilateral.largestSideLength)
         projectionSquare = ConvexQuadrilateral([(projectionSize-1, projectionSize-1), (0, projectionSize-1), (0, 0), (projectionSize-1, 0)])
 
-        projectedAnswerSheetPicture = PerspectiveUtil.projectQuadrilateralToSquarePicture(picture, counterclockwiseQuadrilateral, projectionSquare)
+        projectedAnswerFramePicture = PerspectiveUtil.projectQuadrilateralToSquarePicture(picture, counterclockwiseQuadrilateral, projectionSquare)
         
         frame = Frame()
         frame.originalQuadrilateral = quadrilateral
         frame.scaledQuadrilateral = scaledQuadrilateral
-        frame.projectedPicture = projectedAnswerSheetPicture
+        frame.originalPicture = picture
+        frame.projectedPicture = projectedAnswerFramePicture
         return frame

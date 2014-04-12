@@ -1,7 +1,8 @@
 from subprocess import check_output, CalledProcessError
 import os
-
 from cv2 import imwrite
+
+from QrCodeData import *
 
 class QrCodeDecoder:
 
@@ -15,12 +16,14 @@ class QrCodeDecoder:
     def decode(self, qrCodeFrame):
         qrCodePictureFile = self.__savePicture(qrCodeFrame.projectedPicture)
         try:
-            output = None
+            qrCodeData = None
             with open(os.devnull, 'w') as nullOut:
                 subprocessArguments = [self.__ZBAR_EXECUTABLE, self.__ZBAR_RAW_OUTPUT_OPTION, qrCodePictureFile]
-                rawOutput = check_output(subprocessArguments, stderr=nullOut)
-                output = self.__extractQrCodeValue(rawOutput)
-            return output
+                processOutput = check_output(subprocessArguments, stderr=nullOut)
+                qrCodeString = self._extractQrCodeString(processOutput)
+                if qrCodeString != None:
+                    qrCodeData = self._extractQrCodeData(qrCodeString)
+            return qrCodeData
         except CalledProcessError:
             return None
 
@@ -28,6 +31,14 @@ class QrCodeDecoder:
         imwrite(self.__QR_CODE_FILENAME, picture)
         return self.__QR_CODE_FILENAME
 
-    def __extractQrCodeValue(self, output):
+    def _extractQrCodeString(self, output):
         lines = output.split('\n')
         return lines[0]
+
+    def _extractQrCodeData(self, qrCodeString):
+        qrCode = QrCodeData()
+        qrCode.rawString = qrCodeString
+        # TODO: remove hard-coded values, parse string
+        qrCode.numberOfQuestions = 20
+        qrCode.numberOfAnswerChoices = 5
+        return qrCode

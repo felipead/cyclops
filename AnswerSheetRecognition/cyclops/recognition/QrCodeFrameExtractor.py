@@ -7,26 +7,30 @@ from Frame import *
 
 class QrCodeFrameExtractor:
 
-    def extract(self, picture, answerSheetFrame):
-        answerSheetQuadrilateral = answerSheetFrame.originalQuadrilateral.scaledBy(1.15)
-        qrCodeQuadrilateral = self._extractQrCodeQuadrilateral(answerSheetQuadrilateral)
-        qrCodeProjection = self._projectQuadrilateralToSquarePicture(picture, qrCodeQuadrilateral)
+    __LEFT_SCALE = 0.33
+    __RIGHT_SCALE = 0.11
+    __ANSWER_FRAME_QUADRILATERAL_SCALE = 1.15
+
+    def extract(self, answerFrame):
+        answerFrameQuadrilateral = answerFrame.originalQuadrilateral.scaledBy(self.__ANSWER_FRAME_QUADRILATERAL_SCALE)
+        qrCodeQuadrilateral = self._extractQrCodeQuadrilateral(answerFrameQuadrilateral)
+        qrCodeProjection = self._projectQuadrilateralToSquarePicture(answerFrame.originalPicture, qrCodeQuadrilateral)
 
         frame = Frame()
         frame.originalQuadrilateral = qrCodeQuadrilateral
+        frame.originalPicture = answerFrame.originalPicture
         frame.projectedPicture = qrCodeProjection
         return frame
 
-    @staticmethod
-    def _extractQrCodeQuadrilateral(answerSheetQuadrilateral):
-        answerSheetQuadrilateral = answerSheetQuadrilateral.asClockwise()
+    def _extractQrCodeQuadrilateral(self, answerFrameQuadrilateral):
+        answerFrameQuadrilateral = answerFrameQuadrilateral.asClockwise()
 
-        right = answerSheetQuadrilateral[1]
-        left = answerSheetQuadrilateral[2]
+        right = answerFrameQuadrilateral[1]
+        left = answerFrameQuadrilateral[2]
         rightToLeft = Vector(left, right)
 
-        scaledLeft = rightToLeft.multipliedByScalar(0.33).head
-        scaledRight = rightToLeft.rotationBy180Degrees().multipliedByScalar(0.11).head
+        scaledLeft = rightToLeft.multipliedByScalar(self.__LEFT_SCALE).head
+        scaledRight = rightToLeft.rotationBy180Degrees().multipliedByScalar(self.__RIGHT_SCALE).head
 
         qrCodeQuadrilateral = GeometryUtil.createSquareClockwiseFromTwoPoints(scaledLeft, scaledRight)
         return qrCodeQuadrilateral

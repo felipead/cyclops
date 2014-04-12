@@ -1,5 +1,6 @@
 class AnswerSheetRecognitionResult:
 
     def __init__(self):
-        self.answerSheetFrame = None
+        self.answerFrame = None
         self.qrCodeFrame = None
+        self.qrCodeData = None
