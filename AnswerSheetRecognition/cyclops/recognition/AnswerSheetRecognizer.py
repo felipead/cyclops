@@ -19,6 +19,9 @@ class AnswerSheetRecognizer:
         if extraction.answerFrame != None:
             qrCodeFrame = self._qrCodeFrameExtractor.extract(extraction.answerFrame)
             qrCodeData = self._qrCodeDecoder.decode(qrCodeFrame)
+
+            if qrCodeData != None:
+                self._answerFrameRecognizer.recognize(extraction.answerFrame, qrCodeData.numberOfQuestions, qrCodeData.numberOfAnswerChoices)
             
             result.answerFrame = extraction.answerFrame
             result.qrCodeFrame = qrCodeFrame
