@@ -25,6 +25,7 @@ class ConvexQuadrilateral(ConvexPolygon):
             raise Exception("Quadrilateral must have 4 vertexes.")
         
         self._largestSideLength = None
+        self._shortestSideLength = None
         self._reversedContour = None
         self._mirroredVertexes = None
 
@@ -38,6 +39,12 @@ class ConvexQuadrilateral(ConvexPolygon):
         if self._largestSideLength is None:
             self._largestSideLength = self.__findLargestSideVector().norm
         return self._largestSideLength
+
+    @property
+    def shortestSideLength(self):
+        if self._shortestSideLength is None:
+            self._shortestSideLength = self.__findShortestSideVector().norm
+        return self._shortestSideLength
 
     @property
     def bottomLeftCorner(self):
@@ -228,6 +235,18 @@ class ConvexQuadrilateral(ConvexPolygon):
                 largestSideLength = sideLength
 
         return largestSide
+
+    def __findShortestSideVector(self):
+        shortestSide = None
+        shortestSideLength = float("inf")
+
+        for side in self.contour:
+            sideLength = side.norm
+            if sideLength < shortestSideLength:
+                shortestSide = side
+                shortestSideLength = sideLength
+
+        return shortestSide
 
     def __findCorners(self):
         top = []

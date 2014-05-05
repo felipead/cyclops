@@ -57,14 +57,21 @@ class ConvexPolygon(Polygon):
 
         return self._centroid
 
+    """
+    The area of this convex polygon. Always a positive value, regardless of the polygon's orientation.
+    http://mathworld.wolfram.com/PolygonArea.html
+    """
     @property
     def area(self):
         if self._area is None:
-            summation = 0 
-            for i in xrange(len(self)-1):
-                summation += (self[i].x * self[i+1].y) - (self[i+1].x * self[i].y)
+            n = len(self)
+            summation = 0
+            for i in xrange(n):
+                v1 = self[i % n]
+                v2 = self[(i+1) % n]
+                summation += v1.x * v2.y - v2.x * v1.y
             self._area = summation/float(2)
-        return self._area
+        return abs(self._area)
 
     def __eq__(self, other):
         if not isinstance(other,ConvexPolygon):
