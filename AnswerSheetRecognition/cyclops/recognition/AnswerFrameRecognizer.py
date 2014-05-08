@@ -1,92 +1,143 @@
 from AnswerFrameRecognitionResult import *
 
 from ..geometry.ConvexQuadrilateral import *
+from ..geometry.ConvexPolygon import *
 from ..util.DrawingUtil import *
 from ..util.PerspectiveUtil import *
-from ..geometry.ConvexPolygon import *
+from ..util.ImageProcessingUtil import *
 
 import cv2;
-import cv;
 
 class AnswerFrameRecognizer:
 
-    def recognize(self, answerFrame, numberOfQuestions, numberOfAnswerChoices):
+    VERTICAL_PADDING_WIDTH_PERCENTAGE = 0.15
+    HORIZONTAL_PADDING_HEIGHT_PERCENTAGE = 0.05
+    STRIPE_WIDTH_PERCENTAGE_FROM_COLUMN_WIDTH = 0.15
+
+    # FIXME: Resolution Dependence
+    STRIPE_IMAGE_EROSION_FACTOR = 1
+    STRIPE_IMAGE_DILATATION_FACTOR = 1
+    STRIPE_MARK_CONTOUR_RELAXATION_FACTOR = 0.07
+
+    STRIPE_MARK_MINIMUM_AREA_PERCENTAGE = 0.005
+    STRIPE_MARK_MAXIMUM_AREA_PERCENTAGE = 0.04
+    STRIPE_MARK_MAXIMUM_DEVIATION_FROM_STRIPE_LINE_PERCENTAGE = 1.08
+
+
+    def recognize(self, answerFrame, qrCodeData):
         picture = answerFrame.projectedPicture
         width, height = picture.shape[:2]
         
-        # FIXME: MAGIC NUMBERS
-        verticalPadding = int(height * 0.15)
-        horizontalPadding = int(width * 0.05)
+        verticalPadding = int(height * self.VERTICAL_PADDING_WIDTH_PERCENTAGE)
+        horizontalPadding = int(width * self.HORIZONTAL_PADDING_HEIGHT_PERCENTAGE)
         half = int(width/2)
 
-        leftSide = ConvexQuadrilateral([(horizontalPadding, verticalPadding), (half-horizontalPadding, verticalPadding), (half-horizontalPadding, height-verticalPadding), (horizontalPadding, height-verticalPadding)])
-        rightSide = ConvexQuadrilateral([(half+horizontalPadding, verticalPadding), (width-horizontalPadding, verticalPadding), (width-horizontalPadding, height-verticalPadding), (half+horizontalPadding, height-verticalPadding)])
+        leftColumn = ConvexQuadrilateral([(horizontalPadding, verticalPadding),\
+                                        (half-horizontalPadding, verticalPadding),\
+                                        (half-horizontalPadding, height-verticalPadding),\
+                                        (horizontalPadding, height-verticalPadding)])
 
-        self._recognizeSide(picture, leftSide)
-        self._recognizeSide(picture, rightSide)
+        rightColumn = ConvexQuadrilateral([(half+horizontalPadding, verticalPadding),\
+                                         (width-horizontalPadding, verticalPadding),\
+                                         (width-horizontalPadding, height-verticalPadding),
+                                         (half+horizontalPadding, height-verticalPadding)])
 
-        # FIXME
-        return None
+        self._recognizeColumn(picture, leftColumn, qrCodeData)
+        self._recognizeColumn(picture, rightColumn, qrCodeData)
 
-    def _recognizeSide(self, picture, sideQuadrilateral):
-        leftStripeQuadrilateral = self._getLeftStripe(sideQuadrilateral)
-        rightStripeQuadrilateral = self._getRightStripe(sideQuadrilateral)
 
-        DrawingUtil.drawQuadrilateralLines(picture, leftStripeQuadrilateral, DrawingUtil.COLOR_RED, 1)
-        DrawingUtil.drawQuadrilateralLines(picture, rightStripeQuadrilateral, DrawingUtil.COLOR_RED, 1)
+    def _recognizeColumn(self, picture, column, qrCodeData):
+        leftStripe = self._getLeftStripe(column)
+        rightStripe = self._getRightStripe(column)
 
-        leftStripeMarks = self._findStripeMarks(picture, leftStripeQuadrilateral)
-        rightStripeMarks = self._findStripeMarks(picture, rightStripeQuadrilateral)
+        leftStripeMarks = self._findStripeMarks(picture, leftStripe)
+        rightStripeMarks = self._findStripeMarks(picture, rightStripe)
 
+        ##################
+        ## FIXME: DEBUG ##
+        ##################
+        DrawingUtil.drawQuadrilateralLines(picture, leftStripe, DrawingUtil.COLOR_RED, 1)
+        DrawingUtil.drawQuadrilateralLines(picture, rightStripe, DrawingUtil.COLOR_RED, 1)
         for mark in leftStripeMarks + rightStripeMarks:
             DrawingUtil.drawFilledCircle(picture, mark.centroid, 2, DrawingUtil.COLOR_RED)
 
-        # FIXME: MAGIC NUMBER
-        if len(leftStripeMarks) == len(rightStripeMarks) == 10:
-            for i in xrange(10):
+        if len(leftStripeMarks) == len(rightStripeMarks) == qrCodeData.numberOfQuestionsPerColumn:
+            for i in xrange(qrCodeData.numberOfQuestionsPerColumn):
                 leftStripeMark = leftStripeMarks[i]
                 rightStripeMark = rightStripeMarks[i]
                 DrawingUtil.drawLine(picture, leftStripeMark.centroid, rightStripeMark.centroid, DrawingUtil.COLOR_GREEN)
              
 
-    def _findStripeMarks(self, picture, stripeQuadrilateral):
-        stripePicture = self._extractStripePicture(picture, stripeQuadrilateral)
-        contours, _ = cv2.findContours(stripePicture, cv.CV_RETR_EXTERNAL, cv.CV_CHAIN_APPROX_SIMPLE, offset=stripeQuadrilateral.bottomLeftCorner)
+    def _getLeftStripe(self, column):
+        bottom = column.bottomLeftCorner.y
+        left = column.bottomLeftCorner.x
+        top = column.topLeftCorner.y
 
-        stripeArea = stripeQuadrilateral.area
-        # FIXME: MAGIC NUMBERS
-        minimumArea = stripeArea * 0.006
-        maximumArea = stripeArea * 0.020
+        width = column.bottomRightCorner.x - left
+        right = left + int(width * self.STRIPE_WIDTH_PERCENTAGE_FROM_COLUMN_WIDTH)
 
-        stripeMarks = []
+        return ConvexQuadrilateral([(left,bottom), (right, bottom), (right, top), (left, top)])
+
+
+    def _getRightStripe(self, column):
+        bottom = column.bottomRightCorner.y
+        right = column.bottomRightCorner.x
+        top = column.topRightCorner.y
+
+        width = right - column.bottomLeftCorner.x
+        left = right - int(width * self.STRIPE_WIDTH_PERCENTAGE_FROM_COLUMN_WIDTH)
+
+        return ConvexQuadrilateral([(left,bottom), (right, bottom), (right, top), (left, top)])
+
+
+    def _findStripeMarks(self, picture, stripe):
+        stripePicture = ImageProcessingUtil.extractRectangleFromImage(picture, stripe)
+        stripePicture = self._preprocessStripePicture(stripePicture)
+
+        minimumStripeMarkArea = stripe.area * self.STRIPE_MARK_MINIMUM_AREA_PERCENTAGE
+        maximumStripeMarkArea = stripe.area * self.STRIPE_MARK_MAXIMUM_AREA_PERCENTAGE
+        discoveredStripeMarks = []
+
+        contours, _ = cv2.findContours(stripePicture, \
+            cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE, offset=stripe.bottomLeftCorner)
+
         for contour in contours:
-            # FIXME: MAGIC NUMBER
-            relaxedContour = 0.07 * cv2.arcLength(contour,True)
+            relaxedContour = self.STRIPE_MARK_CONTOUR_RELAXATION_FACTOR * cv2.arcLength(contour, True)
             approximatedContour = cv2.approxPolyDP(contour, relaxedContour, True)
 
             if cv2.isContourConvex(approximatedContour):
-                stripeMark = self._getConvexPolygon(approximatedContour)
-                area = stripeMark.area
-                numberOfSides = len(stripeMark)
+                numberOfContourVertexes = len(approximatedContour)
 
-                if numberOfSides in (3,4,5):
-                    if area >= minimumArea and area <= maximumArea:
-                        stripeMarks.append(stripeMark)
-
+                ##################
+                ## FIXME: DEBUG ##
+                ##################
                 color = None
-                if numberOfSides == 3:
+                if numberOfContourVertexes == 3:
                     color = DrawingUtil.COLOR_BLUE
-                elif numberOfSides == 4:
+                elif numberOfContourVertexes == 4:
                    color = DrawingUtil.COLOR_GREEN
-                elif numberOfSides == 5:
+                elif numberOfContourVertexes == 5:
                     color = DrawingUtil.COLOR_YELLOW
                 else:
                     color = DrawingUtil.COLOR_WHITE
                 DrawingUtil.drawContour(picture, approximatedContour, color)
+                
+                if numberOfContourVertexes in (3, 4, 5):
+                    stripeMark = self._getConvexPolygon(approximatedContour)
+                    if stripeMark.area >= minimumStripeMarkArea and stripeMark.area <= maximumStripeMarkArea:
+                        discoveredStripeMarks.append(stripeMark)
 
-        filteredStripeMarks = self._filterDeviantStripeMarks(stripeMarks)
-        filteredStripeMarks.sort(lambda mark1, mark2: cmp(mark1.centroid.y, mark2.centroid.y))
-        return filteredStripeMarks
+        validStripeMarks = self._filterDeviantStripeMarks(discoveredStripeMarks)
+        self._sortStripeMarksFromTopToBottom(validStripeMarks)
+        return validStripeMarks
+
+
+    def _preprocessStripePicture(self, stripePicture):
+        stripePicture = ImageProcessingUtil.convertToInvertedBinaryWithOptimalThreshold(stripePicture)
+        stripePicture = ImageProcessingUtil.applyRectangularErosion(stripePicture, self.STRIPE_IMAGE_EROSION_FACTOR)
+        stripePicture = ImageProcessingUtil.applyRectangularDilatation(stripePicture, self.STRIPE_IMAGE_DILATATION_FACTOR)
+        return stripePicture
+
 
     def _filterDeviantStripeMarks(self, stripeMarks):
         if len(stripeMarks) == 0:
@@ -96,57 +147,18 @@ class AnswerFrameRecognizer:
         for stripeMark in stripeMarks:
             summation += stripeMark.centroid.x
         averageX = summation/len(stripeMarks)
-        
+
         filteredStripeMarks = []
         for stripeMark in stripeMarks:
-            # FIXME: MAGIC NUMBER
-            if MathUtil.equalWithinRatio(stripeMark.centroid.x, averageX, 1.10):
+            if MathUtil.equalWithinRatio(stripeMark.centroid.x, averageX, self.STRIPE_MARK_MAXIMUM_DEVIATION_FROM_STRIPE_LINE_PERCENTAGE):
                 filteredStripeMarks.append(stripeMark)
 
         return filteredStripeMarks
 
-    def _extractStripePicture(self, picture, stripe):
-        left = stripe.bottomLeftCorner.x
-        right = stripe.bottomRightCorner.x
-        bottom = stripe.bottomRightCorner.y
-        top = stripe.topRightCorner.y
 
-        width = right - left
-        height = top - bottom
+    def _sortStripeMarksFromTopToBottom(self, stripeMarks):
+        stripeMarks.sort(lambda stripeMark1, stripeMark2: cmp(stripeMark1.centroid.y, stripeMark2.centroid.y))
 
-        projectedStripe = ConvexQuadrilateral([(0, 0), (width, 0), (width, height), (0, height)])
-
-        picture = PerspectiveUtil.projectQuadrilateralToRectanglePicture(picture, stripe, projectedStripe, width, height)
-        return self._binarizeImage(picture)
-
-    def _getLeftStripe(self, quadrilateral):
-        bottom = quadrilateral.bottomLeftCorner.y
-        left = quadrilateral.bottomLeftCorner.x
-        top = quadrilateral.topLeftCorner.y
-
-        width = quadrilateral.bottomRightCorner.x - left
-        # FIXME: MAGIC NUMBER
-        right = left + int(width * 0.15)
-
-        return ConvexQuadrilateral([(left,bottom), (right, bottom), (right, top), (left, top)])
-
-
-    def _getRightStripe(self, quadrilateral):
-        bottom = quadrilateral.bottomRightCorner.y
-        right = quadrilateral.bottomRightCorner.x
-        top = quadrilateral.topRightCorner.y
-
-        width = right - quadrilateral.bottomLeftCorner.x
-        # FIXME: MAGIC NUMBER
-        left = right - int(width * 0.15)
-
-        return ConvexQuadrilateral([(left,bottom), (right, bottom), (right, top), (left, top)])
-
-    @staticmethod
-    def _binarizeImage(image):
-        gray = cv2.cvtColor(image, cv.CV_BGR2GRAY)
-        _, binary = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
-        return binary
 
     @staticmethod
     def _getConvexPolygon(contour):
@@ -154,4 +166,3 @@ class AnswerFrameRecognizer:
         for element in contour:
             vertexes.append(element[0])
         return ConvexPolygon(vertexes)
-

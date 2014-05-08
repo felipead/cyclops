@@ -5,6 +5,7 @@ class QrCodeData:
         self.answerSheetId = None
         self.numberOfQuestions = None
         self.numberOfAnswerChoices = None
+        self.numberOfQuestionsPerColumn = None
 
     def __str__(self):
         return self.rawString

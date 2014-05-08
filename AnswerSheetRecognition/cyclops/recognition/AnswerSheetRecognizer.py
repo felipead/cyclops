@@ -21,19 +21,19 @@ class AnswerSheetRecognizer:
             qrCodeData = self._qrCodeDecoder.decode(qrCodeFrame)
 
             if qrCodeData != None:
-                self._answerFrameRecognizer.recognize(extraction.answerFrame, qrCodeData.numberOfQuestions, qrCodeData.numberOfAnswerChoices)
+                self._answerFrameRecognizer.recognize(extraction.answerFrame, qrCodeData)
             
             result.answerFrame = extraction.answerFrame
             result.qrCodeFrame = qrCodeFrame
             result.qrCodeData = qrCodeData
 
-        # FIXME: TEMPORARY DEBUG INFO
-        # for match in answerFrameExtraction.frameOrientationPatternMatches:
-        #     DrawingUtil.drawRectangle(mainPicture, match.location, match.size, DrawingUtil.COLOR_BLUE, 1)
-        # for match in answerFrameExtraction.frameAlignmentPatternMatches:
-        #     DrawingUtil.drawRectangle(mainPicture, match.location, match.size, DrawingUtil.COLOR_GREEN, 1)
-        # if extraction.answerFrameMismatches != None:
-        #     for answerFrameMismatch in extraction.answerFrameMismatches:
-        #         DrawingUtil.drawQuadrilateralLines(picture, answerFrameMismatch, DrawingUtil.COLOR_WHITE, 1)
+        # FIXME: DEBUG INFO
+        for match in extraction.frameOrientationPatternMatches:
+            DrawingUtil.drawRectangle(picture, match.location, match.size, DrawingUtil.COLOR_BLUE, 1)
+        for match in extraction.frameAlignmentPatternMatches:
+            DrawingUtil.drawRectangle(picture, match.location, match.size, DrawingUtil.COLOR_GREEN, 1)
+        if extraction.answerFrameMismatches != None:
+            for answerFrameMismatch in extraction.answerFrameMismatches:
+                DrawingUtil.drawQuadrilateralLines(picture, answerFrameMismatch, DrawingUtil.COLOR_WHITE, 1)
 
         return result

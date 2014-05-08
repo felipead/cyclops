@@ -41,4 +41,5 @@ class QrCodeDecoder:
         # TODO: remove hard-coded values, parse string
         qrCode.numberOfQuestions = 20
         qrCode.numberOfAnswerChoices = 5
+        qrCode.numberOfQuestionsPerColumn = 10
         return qrCode
