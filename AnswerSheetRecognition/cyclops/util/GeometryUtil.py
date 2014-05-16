@@ -33,3 +33,18 @@ class GeometryUtil:
         topRight = bottomRightToTopRight.head
 
         return ConvexQuadrilateral((bottomLeft, bottomRight, topRight, topLeft))
+
+    # FIXME: add unit tests
+    @staticmethod
+    def createRectangleFromTwoPoints(leftPoint, rightPoint, widthScaleRatio):
+        leftToRight = Vector(rightPoint, leftPoint)
+        rightToLeft = reversed(leftToRight)
+
+        topLeft = leftToRight.counterclockwiseRotationBy90Degrees().multipliedByScalar(widthScaleRatio).head
+        bottomLeft = leftToRight.clockwiseRotationBy90Degrees().multipliedByScalar(widthScaleRatio).head
+
+        topRight = rightToLeft.clockwiseRotationBy90Degrees().multipliedByScalar(widthScaleRatio).head
+        bottomRight = rightToLeft.counterclockwiseRotationBy90Degrees().multipliedByScalar(widthScaleRatio).head
+
+        return ConvexQuadrilateral((topLeft, topRight, bottomRight, bottomLeft))
+
