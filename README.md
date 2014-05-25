@@ -24,7 +24,6 @@ We recommend using the Homebrew package manager.
     curl https://raw.github.com/fonnesbeck/ScipySuperpack/master/install_superpack.sh > install_superpack.sh
     sh install_superpack.sh
 
-
 -   Download and extract OpenCV 2.4+. Change to the extracted opencv directory and type:
 
     mkdir release cd release cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D BUILD_NEW_PYTHON_SUPPORT=ON -D BUILD_EXAMPLES=ON ..
