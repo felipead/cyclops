@@ -11,7 +11,7 @@ Exam grade recognition module - Python implementation
 
 # Mac OS X Environment Setup
 
-We recommend using the Homebrew package manager.
+We recommend using the [Homebrew](http://brew.sh) package manager.
 
 ## Installing OpenCV with Python Support
 
@@ -39,6 +39,10 @@ We recommend using the Homebrew package manager.
         python import cv2
 
     If you didn't get any errors after importing the cv2 package it means everything is OK.
+
+## Installing numpy
+
+    [sudo] pip install numpy
 
 ## Installing ZBar
 
