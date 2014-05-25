@@ -1,15 +1,19 @@
-Requirements:
-=============
+Cyclops - Python
+================
 
+Exam grade recognition module - Python implementation
+
+# Requirements
 - Python 2.7 (not compatible with Python 3)
 - OpenCV 2 with Python bindings
 - numpy
 - zbar
 
-Mac OS X Environment Setup:
-==========================
+# Mac OS X Environment Setup
 
-### Installing OpenCV with Python Support
+We recommend using the Homebrew package manager.
+
+## Installing OpenCV with Python Support
 
 -   Install XCode command tools: Open XCode -> Preferences -> Downloads -> Components -> Command Line Tools
 
@@ -36,7 +40,7 @@ Mac OS X Environment Setup:
 
 -   If you didn't get any errors after importing the cv2 package it means everything is OK.
 
-### Installing ZBar
+## Installing ZBar
 
 Zbar can be installed using Homebrew:
 
