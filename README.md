@@ -19,7 +19,7 @@ We recommend using the [Homebrew](http://brew.sh) package manager.
 
 -   Install CMake. On Homebrew: brew install cmake
 
--   Install [ScipySuperpack](https://github.com/fonnesbeck/ScipySuperpack): 
+-   Install numpy. You can install it through [pip](http://pip.readthedocs.org) or through the [ScipySuperpack](https://github.com/fonnesbeck/ScipySuperpack):
 
         curl https://raw.github.com/fonnesbeck/ScipySuperpack/master/install_superpack.sh > install_superpack.sh
         sh install_superpack.sh
@@ -39,10 +39,6 @@ We recommend using the [Homebrew](http://brew.sh) package manager.
         python import cv2
 
     If you didn't get any errors after importing the cv2 package it means everything is OK.
-
-## Installing numpy
-
-    [sudo] pip install numpy
 
 ## Installing ZBar
 
