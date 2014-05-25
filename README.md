@@ -5,9 +5,9 @@ Exam grade recognition module - Python implementation
 
 # Requirements
 - Python 2.7 (not compatible with Python 3)
-- OpenCV 2 with Python bindings
-- numpy
-- zbar
+- [OpenCV](http://opencv.org) 2 with Python bindings
+- [numpy](http://opencv.org)
+- [zbar](http://zbar.sourceforge.net)
 
 # Mac OS X Environment Setup
 
