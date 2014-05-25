@@ -38,7 +38,7 @@ We recommend using the Homebrew package manager.
 
         python import cv2
 
--   If you didn't get any errors after importing the cv2 package it means everything is OK.
+    If you didn't get any errors after importing the cv2 package it means everything is OK.
 
 ## Installing ZBar
 
