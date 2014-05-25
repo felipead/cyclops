@@ -8,7 +8,6 @@ from ..pattern.FrameOrientationPatternMatcher import *
 
 from ..geometry.Vector import *
 from ..geometry.ConvexQuadrilateral import *
-from ..geometry.Square import *
 from ..util.MathUtil import *
 from ..util.PerspectiveUtil import *
 

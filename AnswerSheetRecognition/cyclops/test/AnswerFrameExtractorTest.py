@@ -5,7 +5,6 @@ from ..util.MathUtil import *
 from ..geometry.ConvexQuadrilateral import *
 from ..pattern.PatternMatch import *
 
-import math
 
 class AnswerFrameExtractorTest(TestCase):
 

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from ..util.MathUtil import *
-from ..util.Angles import *
 
 from Vector import *
 from Point import *

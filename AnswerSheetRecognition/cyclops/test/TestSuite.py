@@ -11,7 +11,6 @@ from VectorTest import *
 from PolygonTest import *
 from ConvexPolygonTest import *
 from ConvexQuadrilateralTest import *
-from SquareTest import *
 from GeometryUtilTest import *
 
 ALL_TESTS = (
@@ -22,7 +21,6 @@ ALL_TESTS = (
     makeSuite(PolygonTest),
     makeSuite(ConvexPolygonTest),
     makeSuite(ConvexQuadrilateralTest),
-    makeSuite(SquareTest),
     makeSuite(PatternFactoryTest),
     makeSuite(PatternMatchTest),
     makeSuite(AnswerFrameExtractorTest),
