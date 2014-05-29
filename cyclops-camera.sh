@@ -1,1 +1,1 @@
-python -m cyclops.app.CameraApp $@
+/usr/bin/env python2.7 -m cyclops.app.CameraApp $@
