@@ -4,8 +4,8 @@ Cyclops - Python
 Exam grade recognition module - Python implementation
 
 # Requirements
-- Python 2.7+ (not compatible with Python 3)
-- [OpenCV](http://opencv.org) 2 with Python bindings
+- Python 2.7 (not compatible with Python 3)
+- [OpenCV](http://opencv.org) 2.4+ with Python bindings
 - [numpy](http://opencv.org)
 - [zbar](http://zbar.sourceforge.net)
 
@@ -24,7 +24,7 @@ We recommend using the [Homebrew](http://brew.sh) package manager.
         curl https://raw.github.com/fonnesbeck/ScipySuperpack/master/install_superpack.sh > install_superpack.sh
         sh install_superpack.sh
 
--   Download and extract OpenCV 2.4+. Change to the extracted opencv directory and type:
+-   Download and extract OpenCV 2. Change to the extracted opencv directory and type:
 
         mkdir release cd release cmake -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D BUILD_NEW_PYTHON_SUPPORT=ON -D BUILD_EXAMPLES=ON ..
         make -j8
