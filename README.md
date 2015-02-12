@@ -1,7 +1,9 @@
 Cyclops
 =======
 
-Exam grade recognition module. Still a prototype under active development. Please don't mind the mess.
+Answer sheet optical recognition proof of concept using Python and OpenCV. I've written some custom Computer Vision and Linear Algebra algorithms.
+
+Still a prototype under heavy development. Please don't mind the mess.
 
 # Requirements
 
@@ -10,7 +12,9 @@ Exam grade recognition module. Still a prototype under active development. Pleas
 - [numpy](http://opencv.org)
 - [zbar](http://zbar.sourceforge.net)
 
-# Mac OS X Environment Setup
+# Setup
+
+Only OS X is supported at the moment.
 
 ## Installing OpenCV with Python support
 
@@ -44,3 +48,15 @@ Zbar can be installed using Homebrew:
         brew install zbar
 
 This will install the **zbarimg** command.
+
+# Running The Prototype
+
+Run the `cyclops.sh` script passing as argument one of the images from the `Samples` folder.
+
+There's a real-time interactive camera mode that can be activated using `cyclops-camera.sh`. You can print an answer sheet and show it to the camera on your computer. Works best if the paper is displayed horizontally.
+
+# Running Automated Tests
+
+Run the `unit-test.sh` script to run the suite of automated unit tests.
+
+You can run a quick sanity integration test to check the health of the algorithms through the script `sanity-test.sh`.
