@@ -1,0 +1,10 @@
+{
+	"folders":
+	[
+		{
+			"path": "cyclops",
+			"folder_exclude_patterns": ["Samples", "Patterns"],
+			"file_exclude_patterns": [".gitignore", "*.sublime-workspace", "__init__.py", "*.pyc"]
+		}
+	]
+}
