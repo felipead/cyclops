@@ -1,7 +1,9 @@
 Cyclops
 =======
 
-Exam grade recognition module. Still a prototype under active development. Please don't mind the mess.
+Answer sheet optical recognition module using Python, OpenCV and custom Computer Vision and Linear Algebra algorithms.
+
+Still a prototype under heavy development. Please don't mind the mess.
 
 # Requirements
 
