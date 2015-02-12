@@ -1,7 +1,7 @@
 Cyclops
 =======
 
-Answer sheet optical recognition module using Python, OpenCV and custom Computer Vision and Linear Algebra algorithms.
+Answer sheet optical recognition proof of concept using Python and OpenCV. I've written some custom Computer Vision and Linear Algebra algorithms.
 
 Still a prototype under heavy development. Please don't mind the mess.
 
