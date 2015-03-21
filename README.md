@@ -21,9 +21,7 @@ Only OS X is supported at the moment.
 We recommend using the [Homebrew](http://brew.sh) package manager:
 
         brew tap homebrew/science
-        brew install python
         brew install opencv
-        brew install zbar
 
 You need to link the OpenCV libraries installed by Homebrew into the Python library directory. At the time of this writing, the current OpenCV version is 2.4.10.1. 
 
