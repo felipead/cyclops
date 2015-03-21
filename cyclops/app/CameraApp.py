@@ -16,7 +16,7 @@ def execute():
 
     picture = readCamera(camera)
     while True:
-        if picture != None:
+        if picture is not None:
             controller.processPicture(picture)
         picture = readCamera(camera)
         if exitKeyPressed():

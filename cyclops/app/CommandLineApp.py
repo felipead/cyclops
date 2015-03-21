@@ -12,7 +12,7 @@ def execute():
         return 1
 
     picture = imread(sys.argv[1])
-    if picture == None:
+    if picture is None:
         print "Invalid picture"
         return 1
 
