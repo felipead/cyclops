@@ -5,6 +5,8 @@ Answer sheet optical recognition proof of concept using Python and OpenCV. I've 
 
 Still a prototype under heavy development. Please don't mind the mess.
 
+![Screenshot 01](Screenshots/01.png)
+
 # Requirements
 
 - Python 2.7 (not compatible with Python 3)
