@@ -16,10 +16,10 @@ class AnswerFrameRecognizer:
     STRIPE_WIDTH_PERCENTAGE_FROM_COLUMN_WIDTH = 0.15
 
     STRIPE_MARK_CONTOUR_RELAXATION_FACTOR = 0.07
-    
+
     STRIPE_MARK_MINIMUM_AREA_PERCENTAGE = 0.005
     STRIPE_MARK_MAXIMUM_AREA_PERCENTAGE = 0.08
-    
+
     STRIPE_MARK_MAXIMUM_DEVIATION_FROM_AVERAGE_X_RATIO = 1.15
     STRIPE_MARK_INTERLAPSING_Y_RATIO = 1.05
 
@@ -33,7 +33,7 @@ class AnswerFrameRecognizer:
 
     STRIPE_PICTURE_GUASSIAN_ADAPTATIVE_THRESHOLD_BLOCK_SIZE = 25
     STRIPE_PICTURE_GUASSIAN_ADAPTATIVE_THRESHOLD_CONSTANT_SUBTRACTED_FROM_MEAN = int(25)
-    
+
     ANSWER_MARK_PICTURE_GUASSIAN_ADAPTATIVE_THRESHOLD_BLOCK_SIZE = 15
     ANSWER_MARK_PICTURE_GUASSIAN_ADAPTATIVE_THRESHOLD_CONSTANT_SUBTRACTED_FROM_MEAN = int(15)
 
@@ -85,7 +85,7 @@ class AnswerFrameRecognizer:
         ##################
 
         if len(leftStripeMarks) == len(rightStripeMarks) == qrCodeData.numberOfQuestionsPerColumn:
-            
+
             # FIXME: WORK IN PROGRESS
             left = leftStripeMarks[0].centroid
             right = rightStripeMarks[0].centroid
@@ -110,7 +110,7 @@ class AnswerFrameRecognizer:
             DrawingUtil.drawQuadrilateralLines(picture, rightStripe, DrawingUtil.COLOR_RED, 1)
             for mark in leftStripeMarks + rightStripeMarks:
                 DrawingUtil.drawFilledCircle(picture, mark.centroid, 4, DrawingUtil.COLOR_RED)
-             
+
 
     def _getLeftStripe(self, column):
         bottom = column.bottomLeftCorner.y
@@ -138,7 +138,7 @@ class AnswerFrameRecognizer:
         maximumStripeMarkArea = stripe.area * self.STRIPE_MARK_MAXIMUM_AREA_PERCENTAGE
         discoveredStripeMarks = []
 
-        contours, _ = cv2.findContours(stripePicture, \
+        _, contours, _ = cv2.findContours(stripePicture, \
             cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE, offset=stripe.bottomLeftCorner)
 
         for contour in contours:
@@ -161,7 +161,7 @@ class AnswerFrameRecognizer:
                 else:
                     color = DrawingUtil.COLOR_WHITE
                 DrawingUtil.drawContour(picture, approximatedContour, color)
-                
+
                 if numberOfContourVertexes in (3, 4, 5):
                     stripeMark = self._getConvexPolygon(approximatedContour)
                     if stripeMark.area >= minimumStripeMarkArea and stripeMark.area <= maximumStripeMarkArea:

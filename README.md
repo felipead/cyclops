@@ -9,37 +9,24 @@ Still a prototype under heavy development. Please don't mind the mess.
 
 # Requirements
 
-- Python 2.7 (not compatible with Python 3)
-- [OpenCV](http://opencv.org) 2.4+ with Python bindings
-- [numpy](http://opencv.org)
+- Python 2.7 (not compatible with Python 3 yet)
+- [OpenCV](http://opencv.org) 3.4+ with Python bindings
+- [numpy](http://www.numpy.org)
 - [zbar](http://zbar.sourceforge.net)
 
 # Setup
 
-Only OS X is supported at the moment.
+These instructions cover macOS only, although it might be possible to setup the application in any Unix compatible environment.
 
 ## Installing OpenCV with Python support
 
 We recommend using the [Homebrew](http://brew.sh) package manager:
 
-        brew tap homebrew/science
-        brew install opencv
+        brew install opencv3
 
-You need to link the OpenCV libraries installed by Homebrew into the Python library directory. At the time of this writing, the current OpenCV version is 2.4.10.1. 
+Follow the "Caveat" instructions from Homebrew in order to link OpenCV with Python.
 
-        cd /Library/Python/2.7/site-packages/
-        sudo ln -s /usr/local/Cellar/opencv/2.4.10.1/lib/python2.7/site-packages/cv.py cv.py
-        sudo ln -s /usr/local/Cellar/opencv/2.4.10.1/lib/python2.7/site-packages/cv2.so cv2.so
-
-Update your PYTHONPATH environment variable:
-
-        echo "export PYTHONPATH=/usr/local/lib/python2.7/site-packages/:$PYTHONPATH" >> ~/.bash_profile
-
-Close and reopen the Terminal. Open the python console and try to import the cv2 package:
-
-        python import cv2
-
-If you didn't get any errors after importing the cv2 package it means everything is OK.
+To check if everything is working, open the python console and try to import the cv2 package. If you didn't get any errors it means everything is probably OK.
 
 ## Installing ZBar
 

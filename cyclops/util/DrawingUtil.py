@@ -1,5 +1,4 @@
 from cv2 import rectangle, circle, polylines, line, drawContours
-from cv import RGB
 
 class DrawingUtil:
 
@@ -13,7 +12,7 @@ class DrawingUtil:
 
     @staticmethod
     def drawContour(image, contour, rgbColor, thickness=1):
-        drawContours(image, [contour], 0, DrawingUtil.__toRgb(rgbColor), thickness)
+        drawContours(image, [contour], 0, rgbColor, thickness)
 
     @staticmethod
     def drawFilledContour(image, contour, rgbColor):
@@ -25,13 +24,13 @@ class DrawingUtil:
         y1 = int(origin[1])
         x2 = x1 + int(size[0])
         y2 = y1 + int(size[1])
-        rectangle(image, (x1,y1), (x2,y2), DrawingUtil.__toRgb(rgbColor), thickness)
+        rectangle(image, (x1,y1), (x2,y2), rgbColor, thickness)
 
     @staticmethod
     def drawCircle(image, center, radius, rgbColor, thickness=1):
         x = int(center[0])
         y = int(center[1])
-        circle(image, (x,y), int(radius), DrawingUtil.__toRgb(rgbColor), thickness)
+        circle(image, (x,y), int(radius), rgbColor, thickness)
 
     @staticmethod
     def drawFilledCircle(image, center, radius, rgbColor):
@@ -43,7 +42,7 @@ class DrawingUtil:
         y1 = int(point1[1])
         x2 = int(point2[0])
         y2 = int(point2[1])
-        line(image, (x1,y1), (x2,y2), DrawingUtil.__toRgb(rgbColor), thickness)
+        line(image, (x1,y1), (x2,y2), rgbColor, thickness)
 
     @staticmethod
     def drawQuadrilateralLines(image, vertexes, rgbColor, thickness=1):
@@ -53,7 +52,3 @@ class DrawingUtil:
         DrawingUtil.drawLine(image, vertexes[1], vertexes[2], rgbColor, thickness)
         DrawingUtil.drawLine(image, vertexes[2], vertexes[3], rgbColor, thickness)
         DrawingUtil.drawLine(image, vertexes[3], vertexes[0], rgbColor, thickness)
-
-    @staticmethod
-    def __toRgb(triple):
-        return RGB(triple[0],triple[1],triple[2])
