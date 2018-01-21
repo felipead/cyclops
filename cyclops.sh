@@ -1,1 +1,3 @@
-/usr/bin/env python3 -m cyclops.app.CommandLineApp $@
+#!/bin/bash
+
+pipenv run python -m cyclops.app.CommandLineApp $@

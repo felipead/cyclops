@@ -1,1 +1,3 @@
-/usr/bin/env python3 -m cyclops.test.TestSuite
+#!/bin/bash
+
+pipenv run python -m cyclops.test.TestSuite

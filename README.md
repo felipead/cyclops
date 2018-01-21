@@ -10,33 +10,58 @@ Still a prototype under heavy development. Please don't mind the mess.
 # Requirements
 
 - Python 3.6+
+- [Pipenv](https://pypi.python.org/pypi/pipenv)
 - [OpenCV](http://opencv.org) 3.4+ with Python bindings
-- [numpy](http://www.numpy.org)
 - [zbar](http://zbar.sourceforge.net)
 
 # Setup
 
 These instructions cover macOS only, although it might be possible to setup the application in any Unix compatible environment.
 
-## Installing OpenCV with Python support
+For macOS, we recommend using the [Homebrew](http://brew.sh) package manager.
 
-We recommend using the [Homebrew](http://brew.sh) package manager:
+## Installing OpenCV with Python bindings
 
-        brew install opencv3
+```sh
+$ brew install opencv3
+```
 
 Follow the "Caveat" instructions from Homebrew in order to link OpenCV with Python.
 
-To check if everything is working, open the python console and try to import the cv2 package. If you didn't get any errors it means everything is probably OK.
+To check if everything is working, open the Python console and try to import the `cv2` package. If you didn't get any errors it means everything is probably OK.
 
 ## Installing ZBar
 
 Zbar can be installed using Homebrew:
 
-        brew install zbar
+```sh
+$ brew install zbar
+```
 
-This will install the **zbarimg** command.
+This will install the `zbarimg` command.
 
-# Running The Prototype
+## Creating the virtual environment
+
+If you don't have pipenv installed, you can get it from Homebrew:
+
+```sh
+$ brew install pipenv
+```
+
+Create a new Python 3 virtual environment with bindings to system packages:
+
+```sh
+$ pipenv --three --site-packages
+```
+
+Install runtime and development dependencies:
+
+```sh
+$ pipenv install
+$ pipenv install -d
+```
+
+# Running the Application
 
 Run the `cyclops.sh` script passing as argument one of the images from the `Samples` folder.
 
