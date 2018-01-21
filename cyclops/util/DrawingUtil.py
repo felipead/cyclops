@@ -47,7 +47,7 @@ class DrawingUtil:
     @staticmethod
     def drawQuadrilateralLines(image, vertexes, rgbColor, thickness=1):
         if len(vertexes) != 4:
-            raise Exception("Quadrilateral must have exactly four vertexes.")
+            raise Exception('Quadrilateral must have exactly four vertexes.')
         DrawingUtil.drawLine(image, vertexes[0], vertexes[1], rgbColor, thickness)
         DrawingUtil.drawLine(image, vertexes[1], vertexes[2], rgbColor, thickness)
         DrawingUtil.drawLine(image, vertexes[2], vertexes[3], rgbColor, thickness)

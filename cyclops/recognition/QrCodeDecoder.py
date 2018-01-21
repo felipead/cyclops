@@ -6,9 +6,9 @@ from .QrCodeData import *
 
 class QrCodeDecoder:
 
-    __QR_CODE_FILENAME = "./qrcode.png"
-    __ZBAR_EXECUTABLE = "zbarimg"
-    __ZBAR_RAW_OUTPUT_OPTION = "--raw"
+    __QR_CODE_FILENAME = './qrcode.png'
+    __ZBAR_EXECUTABLE = 'zbarimg'
+    __ZBAR_RAW_OUTPUT_OPTION = '--raw'
 
     def __init__(self):
         pass

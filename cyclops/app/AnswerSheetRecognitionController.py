@@ -6,9 +6,9 @@ from ..util.ImageProcessingUtil import *
 
 class AnswerSheetRecognitionController:
 
-    _MAIN_PICTURE_WINDOW_NAME = "main"
-    _ANSWER_SHEET_PICTURE_WINDOW_NAME = "answer sheet"
-    _QR_CODE_PICTURE_WINDOW_NAME = "qr code"
+    _MAIN_PICTURE_WINDOW_NAME = 'main'
+    _ANSWER_SHEET_PICTURE_WINDOW_NAME = 'answer sheet'
+    _QR_CODE_PICTURE_WINDOW_NAME = 'qr code'
     _BLANK_IMAGE = ImageProcessingUtil.createBlankImage(1,1)
 
     def __init__(self):
@@ -29,7 +29,7 @@ class AnswerSheetRecognitionController:
             if result.qrCodeData != None:
                 print(result.qrCodeData)
             else:
-                print("unable to capture qr code!")
+                print('unable to capture qr code!')
 
         picture = cv2.flip(picture, 1);
 

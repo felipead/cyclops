@@ -42,8 +42,8 @@ class AnswerFrameRecognizer:
 
     def __init__(self):
         # FIXME: WORK IN PROGRESS!!!!
-        cv2.namedWindow("answerMark1")
-        cv2.namedWindow("answerMark2")
+        cv2.namedWindow('answerMark1')
+        cv2.namedWindow('answerMark2')
 
 
     def recognize(self, answerFrame, qrCodeData):
@@ -98,7 +98,7 @@ class AnswerFrameRecognizer:
                 index = 1
             else:
                 index = 2
-            cv2.imshow("answerMark" + str(index), self._preprocessAnswerMarkPicture(answerMarkPicture))
+            cv2.imshow('answerMark' + str(index), self._preprocessAnswerMarkPicture(answerMarkPicture))
             # END: WORK IN PROGRESS
 
             for i in range(qrCodeData.numberOfQuestionsPerColumn):

@@ -2,27 +2,27 @@
 
 from .Polygon import *
 
-"""
+'''
 A planar polygon is convex if it contains all the line segments connecting any pair of its
 points. Thus, for example, a regular pentagon is convex, while an indented pentagon is not.
 A planar polygon that is not convex is said to be a concave polygon.
 http://mathworld.wolfram.com/ConvexPolygon.html
-"""
+'''
 class ConvexPolygon(Polygon):
 
     def __init__(self, vertexes):
         super(ConvexPolygon, self).__init__(vertexes)
         if not self.isConvex:
-            raise Exception("Polygon must be convex.")
+            raise Exception('Polygon must be convex.')
         self._isClockwise = None
         self._centroid = None
         self._area = None
 
-    """
+    '''
     Determine if a polygon is clockwise oriented, i.e., it's vertexes are ordered to form
     a clockwise path along the polygon contour. Since this is a convex polygon, if the polygon
     is not clockwise it must be counterclockwise oriented.
-    """
+    '''
     @property
     def isClockwise(self):
         if self._isClockwise is None:
@@ -35,15 +35,15 @@ class ConvexPolygon(Polygon):
 
         return self._isClockwise
 
-    """
+    '''
     The centroid or geometric center of a two-dimensional region is, informally, the point at which
     a cardboard cut-out of the region could be perfectly balanced on the tip of a pencil (assuming
     uniform density and a uniform gravitational field). Formally, the centroid of a plane figure or
-    two-dimensional shape is the arithmetic mean ("average") position of all the points in the shape.
+    two-dimensional shape is the arithmetic mean ('average') position of all the points in the shape.
     The definition extends to any object in n-dimensional space: its centroid is the mean position
     of all the points in all of the coordinate directions.
     http://en.wikipedia.org/wiki/Centroid
-    """
+    '''
     @property
     def centroid(self):
         if self._centroid is None:
@@ -57,10 +57,10 @@ class ConvexPolygon(Polygon):
 
         return self._centroid
 
-    """
+    '''
     The area of this convex polygon. Always a positive value, regardless of the polygon's orientation.
     http://mathworld.wolfram.com/PolygonArea.html
-    """
+    '''
     @property
     def area(self):
         if self._area is None:
@@ -92,4 +92,4 @@ class ConvexPolygon(Polygon):
         return 7193 * hashValue
 
     def __repr__(self):
-        return "ConvexPolygon" + repr(self._vertexes)
+        return 'ConvexPolygon' + repr(self._vertexes)

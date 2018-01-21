@@ -107,8 +107,8 @@ class VectorTest(TestCase):
         assert hash(Vector((7,8,9))) == hash(Vector((7,8,9)))
 
     def testToString(self):
-        assert str(Vector((3,2,5))) == "Vector" + str((3,2,5))
-        assert str(Vector((3,2))) == "Vector" + str((3,2))
+        assert str(Vector((3,2,5))) == 'Vector' + str((3,2,5))
+        assert str(Vector((3,2))) == 'Vector' + str((3,2))
 
     def testIterable(self):
         (x,y,z) = (3,5,7)

@@ -4,9 +4,9 @@ from cv2 import imread
 
 class PatternFactory:
 
-    PATTERN_FOLDER = "Patterns"
-    PATTERN_FILE_EXTENSION = ".png"
-    PATTERN_FILE_NAME_SEPARATOR = "_"
+    PATTERN_FOLDER = 'Patterns'
+    PATTERN_FILE_EXTENSION = '.png'
+    PATTERN_FILE_NAME_SEPARATOR = '_'
 
     @classmethod
     def _getPatternFileName(self, name, size):

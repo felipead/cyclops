@@ -8,12 +8,12 @@ from .AnswerSheetRecognitionController import *
 
 def execute():
     if len(sys.argv) != 2:
-        print("Missing picture file as argument")
+        print('Missing picture file as argument')
         return 1
 
     picture = imread(sys.argv[1])
     if picture is None:
-        print("Invalid picture")
+        print('Invalid picture')
         return 1
 
     picture = flip(picture, 1)
@@ -25,5 +25,5 @@ def execute():
 
     return 0
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     execute()

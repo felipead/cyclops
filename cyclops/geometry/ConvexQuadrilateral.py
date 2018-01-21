@@ -6,7 +6,7 @@ from ..util.MathUtil import *
 
 import math
 
-"""
+'''
 A quadrilateral, sometimes also known as a tetragon or quadrangle (Johnson 1929, p. 61) is a
 four-sided polygon. If not explicitly stated, all four polygon vertices are generally taken to lie
 in a plane. (If the points do not lie in a plane, the quadrilateral is called a skew quadrilateral.)
@@ -14,7 +14,7 @@ There are three topological types of quadrilaterals (Wenninger 1983, p. 50): con
 concave quadrilaterals, and crossed quadrilaterals (or butterflies, or bow-ties).
 http://mathworld.wolfram.com/Quadrilateral.html
 http://en.wikipedia.org/wiki/Quadrilateral
-"""
+'''
 class ConvexQuadrilateral(ConvexPolygon):
 
     __90_DEGREES = math.pi/2
@@ -22,7 +22,7 @@ class ConvexQuadrilateral(ConvexPolygon):
     def __init__(self, vertexes):
         super(ConvexQuadrilateral, self).__init__(vertexes)
         if len(vertexes) != 4:
-            raise Exception("Quadrilateral must have 4 vertexes.")
+            raise Exception('Quadrilateral must have 4 vertexes.')
 
         self._largestSideLength = None
         self._shortestSideLength = None
@@ -102,19 +102,19 @@ class ConvexQuadrilateral(ConvexPolygon):
         return MathUtil.equalWithinRatio(size1, size2, relaxationRatio) and MathUtil.equalWithinRatio(size1, size3, relaxationRatio) \
             and MathUtil.equalWithinRatio(size1, size4, relaxationRatio)
 
-    """
+    '''
     Gets a new quadrilateral rotated clockwise by a certain angle (in radians) along
     this quadrilateral center.
     This method may suffer from floating point precision loss.
-    """
+    '''
     def clockwiseRotationBy(self, angleInRadians):
         return self.counterclockwiseRotationBy(-angleInRadians)
 
-    """
+    '''
     Gets a new quadrilateral rotated counterclockwise by a certain angle (in radians)
     along this quadrilateral center.
     This method may suffer from floating point precision loss.
-    """
+    '''
     def counterclockwiseRotationBy(self, angleInRadians):
         cos = math.cos(angleInRadians)
         sin = math.sin(angleInRadians)
@@ -128,10 +128,10 @@ class ConvexQuadrilateral(ConvexPolygon):
             rotatedVertexes.append(rotatedPoint)
         return ConvexQuadrilateral(rotatedVertexes)
 
-    """
+    '''
     Gets a new quadrilateral rotated 90˚ clockwise along this quadrilateral center.
     This method does not suffer from floating point precision loss.
-    """
+    '''
     def clockwiseRotationBy90Degrees(self):
         center = self.centroid
         rotatedVertexes = []
@@ -142,10 +142,10 @@ class ConvexQuadrilateral(ConvexPolygon):
             rotatedVertexes.append(rotatedPoint)
         return ConvexQuadrilateral(rotatedVertexes)
 
-    """
+    '''
     Gets a new quadrilateral rotated 90˚ counterclockwise along this quadrilateral center.
     This method does not suffer from floating point precision loss.
-    """
+    '''
     def counterclockwiseRotationBy90Degrees(self):
         center = self.centroid
         rotatedVertexes = []
@@ -171,16 +171,16 @@ class ConvexQuadrilateral(ConvexPolygon):
     def mirrored(self):
         return ConvexQuadrilateral(self.mirroredVertexes)
 
-    """
+    '''
     Scale this quadrilateral uniformly by a percentage factor. Factor is such that:
         1 is 100%
         2 is 200%
         0.5 is 50%
         ...
-    """
+    '''
     def scaledBy(self, scaleFactor):
         if scaleFactor <= 0:
-            raise Exception("Scale factor must be greater than zero.")
+            raise Exception('Scale factor must be greater than zero.')
         center = self.centroid
         newVertexes = []
         for vertex in self.vertexes:
@@ -188,7 +188,7 @@ class ConvexQuadrilateral(ConvexPolygon):
             newVertexes.append(scaled.head)
         return ConvexQuadrilateral(newVertexes)
 
-    """
+    '''
     Project this quadrilateral to a square with sides equal to the largest side of this polygon.
     Useful for perspective correction.
 
@@ -198,7 +198,7 @@ class ConvexQuadrilateral(ConvexPolygon):
 
     If this quadrilateral is a rectangle or another shape not representing a square, then
     the resulting projection will be a deformed rectangle or shape projected over a square, respectively.
-    """
+    '''
     def projectToSquare(self):
         vectorAB = self.__findLargestSideVector()
         vectorBA = vectorAB.reflection()
@@ -238,7 +238,7 @@ class ConvexQuadrilateral(ConvexPolygon):
 
     def __findShortestSideVector(self):
         shortestSide = None
-        shortestSideLength = float("inf")
+        shortestSideLength = float('inf')
 
         for side in self.contour:
             sideLength = side.norm
@@ -321,4 +321,4 @@ class ConvexQuadrilateral(ConvexPolygon):
         return pointWithSmallestY
 
     def __repr__(self):
-        return "ConvexQuadrilateral" + repr(self._vertexes)
+        return 'ConvexQuadrilateral' + repr(self._vertexes)

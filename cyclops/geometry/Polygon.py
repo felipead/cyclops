@@ -5,21 +5,21 @@ from ..util.MathUtil import *
 from .Vector import *
 from .Point import *
 
-"""
-A polygon can be defined as a geometric object "consisting of a number of points (called vertices)
+'''
+A polygon can be defined as a geometric object 'consisting of a number of points (called vertices)
 and an equal number of line segments (called sides), namely a cyclically ordered set of points in
 a plane, with no three successive points collinear, together with the line segments joining
-consecutive pairs of the points. In other words, a polygon is closed broken line lying in a plane"
+consecutive pairs of the points. In other words, a polygon is closed broken line lying in a plane'
 (Coxeter and Greitzer 1967, p. 51).
 http://mathworld.wolfram.com/Polygon.html
 
 Polygons are read-only objects.
-"""
+'''
 class Polygon(object):
 
     def __init__(self, vertexes):
         if len(vertexes) < 3:
-            raise Exception("Polygon can not have less than 3 vertexes.")
+            raise Exception('Polygon can not have less than 3 vertexes.')
 
         points = []
         for vertex in vertexes:
@@ -50,9 +50,9 @@ class Polygon(object):
 
         return self._sides
 
-    """
+    '''
     The ordered list of vectors that, when connected, draw this polygon.
-    """
+    '''
     @property
     def contour(self):
         if self._contour is None:
@@ -63,9 +63,9 @@ class Polygon(object):
 
         return self._contour
 
-    """
+    '''
     The list of interior angles in the same order as the list of vertexes.
-    """
+    '''
     @property
     def interiorAngles(self):
         if self._interiorAngles is None:
@@ -81,7 +81,7 @@ class Polygon(object):
 
         return self._interiorAngles
 
-    """
+    '''
     A planar polygon is convex if it contains all the line segments connecting any pair of its
     points. Thus, for example, a regular pentagon is convex, while an indented pentagon is not.
     A planar polygon that is not convex is said to be a concave polygon.
@@ -93,7 +93,7 @@ class Polygon(object):
 
     has the same sign for all i, where (a^⊥ · b) denotes the perpendicular dot product.
     http://mathworld.wolfram.com/ConvexPolygon.html
-    """
+    '''
     @property
     def isConvex(self):
         if self._isConvex is None:
@@ -128,7 +128,7 @@ class Polygon(object):
         return repr(self)
 
     def __repr__(self):
-        return "Polygon" + repr(self._vertexes)
+        return 'Polygon' + repr(self._vertexes)
 
     def __hash__(self):
         return hash(self._vertexes)

@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-"""
+'''
 Represents a dimension agnostic point in the Euclidean space.
 
 Points are read-only objects.
-"""
+'''
 class Point(tuple):
 
     def __new__(cls, coordinates=(0,)):
@@ -31,13 +31,13 @@ class Point(tuple):
         else:
             return 0
 
-    """
+    '''
     Dimension agnostic equality check. For instance:
         Point(1,2) == Point(1,2,0) == Point(1,2,0,0)
     but:
         Point(1,2) != Point(1,2,3) != Point(1,2,3,5)
     .
-    """
+    '''
     def __eq__(self, other):
         try:
             if len(self) >= len(other):
