@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 
-'''
-Represents a dimension agnostic point in the Euclidean space.
 
-Points are read-only objects.
-'''
 class Point(tuple):
+    '''
+    Represents a dimension agnostic point in the Euclidean space.
+
+    Points are read-only objects.
+    '''
 
     def __new__(cls, coordinates=(0,)):
         return super().__new__(cls, coordinates)
@@ -22,14 +23,14 @@ class Point(tuple):
     def z(self):
         return self[2] if len(self) > 2 else 0
 
-    '''
-    Dimension agnostic equality check. For instance:
-        Point(1,2) == Point(1,2,0) == Point(1,2,0,0)
-    but:
-        Point(1,2) != Point(1,2,3) != Point(1,2,3,5)
-    .
-    '''
     def __eq__(self, other):
+        '''
+        Dimension agnostic equality check. For instance:
+            Point(1,2) == Point(1,2,0) == Point(1,2,0,0)
+        but:
+            Point(1,2) != Point(1,2,3) != Point(1,2,3,5)
+        .
+        '''
         try:
             if len(self) >= len(other):
                 largest_dimension_point = self

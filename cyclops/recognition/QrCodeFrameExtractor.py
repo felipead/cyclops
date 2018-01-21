@@ -5,6 +5,7 @@ from ..util.PerspectiveUtil import *
 
 from .Frame import *
 
+
 class QrCodeFrameExtractor:
 
     __LEFT_SCALE = 0.33
@@ -39,6 +40,6 @@ class QrCodeFrameExtractor:
     def _project_quadrilateral_to_square_picture(picture, quadrilateral):
         counterclockwise_quadrilateral = quadrilateral.as_counterclockwise()
         projection_size = int(counterclockwise_quadrilateral.largest_side_length)
-        projection_square = ConvexQuadrilateral([(0, projection_size-1), (0, 0), (projection_size-1, 0), (projection_size-1, projection_size-1)])
+        projection_square = ConvexQuadrilateral([(0, projection_size - 1), (0, 0), (projection_size - 1, 0), (projection_size - 1, projection_size - 1)])
 
         return PerspectiveUtil.project_quadrilateral_to_square_picture(picture, counterclockwise_quadrilateral, projection_square)

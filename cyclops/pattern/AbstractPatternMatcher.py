@@ -6,6 +6,7 @@ from .PatternFactory import *
 from .PatternMatch import *
 from ..util.ImageProcessingUtil import *
 
+
 class AbstractPatternMatcher:
 
     __metaclass__ = ABCMeta
@@ -37,7 +38,7 @@ class AbstractPatternMatcher:
             matches.append(PatternMatch(max_location, pattern_size))
 
             h, w = result.shape[:2]
-            mask = np.zeros((h+2, w+2), np.uint8)
-            cv2.floodFill(result, mask, max_location, (0, 0, 0), loDiff=(.1,.1,.1), upDiff=(1.,1.,1.))
+            mask = np.zeros((h + 2, w + 2), np.uint8)
+            cv2.floodFill(result, mask, max_location, (0, 0, 0), loDiff=(.1, .1, .1), upDiff=(1., 1., 1.))
 
         return matches

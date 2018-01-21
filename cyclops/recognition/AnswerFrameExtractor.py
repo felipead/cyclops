@@ -11,17 +11,16 @@ from ..geometry.ConvexQuadrilateral import *
 from ..util.MathUtil import *
 from ..util.PerspectiveUtil import *
 
+
 class AnswerFrameExtractor:
 
     __ANSWER_SHEET_QUADRILATERAL_SCALE = 1.15
-
 
     def __init__(self, size_relaxation_ratio=1.10, angle_relaxation_radians=0.3):
         self._size_relaxation_ratio = size_relaxation_ratio
         self._angle_relaxation_radians = angle_relaxation_radians
         self._frame_alignment_matcher = FrameAlignmentPatternMatcher()
         self._frame_orientation_matcher = FrameOrientationPatternMatcher()
-
 
     def extract(self, picture):
         frame_orientation_matches = self._frame_orientation_matcher.match(picture, 1)
@@ -33,23 +32,21 @@ class AnswerFrameExtractor:
             best_answer_frame_quadrilateral = self._choose_quadrilateral_that_best_resembles_square(answer_frame_quadrilaterals)
 
         answer_frame = None
-        if best_answer_frame_quadrilateral != None:
+        if best_answer_frame_quadrilateral is not None:
             answer_frame = self.__extract_answer_frame(picture, best_answer_frame_quadrilateral)
 
         return self.__build_result(answer_frame, answer_frame_quadrilaterals, frame_orientation_matches, frame_alignment_matches)
-
 
     def __build_result(self, answer_frame, answer_frame_quadrilaterals, frame_orientation_matches, frame_alignment_matches):
         result = AnswerFrameExtractionResult()
         result.frame_orientation_matches = frame_orientation_matches
         result.frame_alignment_matches = frame_alignment_matches
-        if answer_frame != None:
+        if answer_frame is not None:
             result.answer_frame = answer_frame
             answer_frame_mismatches = answer_frame_quadrilaterals
             answer_frame_mismatches.remove(answer_frame.original_quadrilateral)
             result.answer_frame_mismatches = answer_frame_mismatches
         return result
-
 
     def _find_answer_frame_quadrilaterals(self, frame_orientation_matches, frame_alignment_matches):
         other_points = []
@@ -79,7 +76,7 @@ class AnswerFrameExtractor:
                             if self.__are_distances_roughly_equal(MathUtil.distance_between_points(third_point, base_point), base_distance):
                                 points = (base_point, first_point, second_point, third_point)
                                 quadrilateral = self.__get_convex_quadrilateral_with_roughly_right_interior_angles(points)
-                                if quadrilateral != None:
+                                if quadrilateral is not None:
                                     convex_quadrilaterals.add(quadrilateral)
 
         return convex_quadrilaterals
@@ -104,7 +101,7 @@ class AnswerFrameExtractor:
         counterclockwise_quadrilateral = scaled_quadrilateral.as_counterclockwise()
 
         projection_size = int(counterclockwise_quadrilateral.largest_side_length)
-        projection_square = ConvexQuadrilateral([(projection_size-1, projection_size-1), (0, projection_size-1), (0, 0), (projection_size-1, 0)])
+        projection_square = ConvexQuadrilateral([(projection_size - 1, projection_size - 1), (0, projection_size - 1), (0, 0), (projection_size - 1, 0)])
 
         projected_answer_frame_picture = PerspectiveUtil.project_quadrilateral_to_square_picture(picture, counterclockwise_quadrilateral, projection_square)
 

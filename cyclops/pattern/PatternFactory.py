@@ -1,6 +1,7 @@
 import os
 import cv2
 
+
 class PatternFactory:
 
     PATTERN_FOLDER = 'Patterns'
@@ -15,4 +16,3 @@ class PatternFactory:
     def get_pattern(self, name, size):
         path = os.path.join(PatternFactory.PATTERN_FOLDER, self._get_pattern_filename(name, size))
         return cv2.imread(path)
-

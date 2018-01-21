@@ -2,8 +2,9 @@ from ..pattern.PatternMatch import *
 
 
 def test_get_center():
-    match = PatternMatch(location=(10,50), size=(10,20))
-    assert match.center == (15,60)
+    match = PatternMatch(location=(10, 50), size=(10, 20))
+    assert match.center == (15, 60)
+
 
 def test_from_center():
     center = (100, 200)

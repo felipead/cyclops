@@ -2,6 +2,7 @@ from ..geometry.Vector import *
 
 from ..geometry.ConvexQuadrilateral import *
 
+
 class GeometryUtil:
 
     @staticmethod
@@ -47,4 +48,3 @@ class GeometryUtil:
         bottom_right = right_to_left.counterclockwise_rotation_by_90_degrees().multiplied_by_scalar(width_scale_ratio).head
 
         return ConvexQuadrilateral((top_left, top_right, bottom_right, bottom_left))
-

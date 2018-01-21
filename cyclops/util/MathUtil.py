@@ -1,12 +1,13 @@
 from math import sqrt
 
+
 class MathUtil:
 
     @staticmethod
     def distance_between_points(a, b):
-        dx = a[0]-b[0]
-        dy = a[1]-b[1]
-        return sqrt( dx**2 + dy**2 )
+        dx = a[0] - b[0]
+        dy = a[1] - b[1]
+        return sqrt(dx**2 + dy**2)
 
     @staticmethod
     def equal_within_error(a, b, error):
@@ -27,7 +28,7 @@ class MathUtil:
         if smallest == 0:
             return largest == 0
 
-        ratio = float(largest)/float(smallest)
+        ratio = float(largest) / float(smallest)
 
         return (ratio <= cut_ratio)
 

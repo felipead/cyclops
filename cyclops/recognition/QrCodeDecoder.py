@@ -4,6 +4,7 @@ import cv2
 
 from .QrCodeData import *
 
+
 class QrCodeDecoder:
 
     __QR_CODE_FILENAME = './qrcode.png'
@@ -21,7 +22,7 @@ class QrCodeDecoder:
                 process_arguments = [self.__ZBAR_EXECUTABLE, self.__ZBAR_RAW_OUTPUT_OPTION, picture_file]
                 process_output = check_output(process_arguments, stderr=null_out)
                 qr_code_string = self._extract_qr_code_string(process_output)
-                if qr_code_string != None:
+                if qr_code_string is not None:
                     qr_code_data = self._extract_qr_code_data(qr_code_string)
             return qr_code_data
         except CalledProcessError:

@@ -2,12 +2,15 @@ import cv2
 
 from .AnswerSheetRecognitionController import *
 
+
 def read_camera(camera):
     _, picture = camera.read()
     return picture
 
+
 def exit_key_pressed():
     return cv2.waitKey(1) & 0xFF == ord('q')
+
 
 def execute():
     camera = cv2.VideoCapture(0)
@@ -21,6 +24,7 @@ def execute():
         picture = read_camera(camera)
         if exit_key_pressed():
             break
+
 
 if __name__ == '__main__':
     execute()

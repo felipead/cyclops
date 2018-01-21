@@ -5,17 +5,18 @@ from ..util.MathUtil import *
 from .Vector import *
 from .Point import *
 
-'''
-A polygon can be defined as a geometric object 'consisting of a number of points (called vertices)
-and an equal number of line segments (called sides), namely a cyclically ordered set of points in
-a plane, with no three successive points collinear, together with the line segments joining
-consecutive pairs of the points. In other words, a polygon is closed broken line lying in a plane'
-(Coxeter and Greitzer 1967, p. 51).
-http://mathworld.wolfram.com/Polygon.html
 
-Polygons are read-only objects.
-'''
 class Polygon:
+    '''
+    A polygon can be defined as a geometric object 'consisting of a number of points (called vertices)
+    and an equal number of line segments (called sides), namely a cyclically ordered set of points in
+    a plane, with no three successive points collinear, together with the line segments joining
+    consecutive pairs of the points. In other words, a polygon is closed broken line lying in a plane'
+    (Coxeter and Greitzer 1967, p. 51).
+    http://mathworld.wolfram.com/Polygon.html
+
+    Polygons are read-only objects.
+    '''
 
     def __init__(self, vertexes):
         if len(vertexes) < 3:
@@ -23,7 +24,7 @@ class Polygon:
 
         points = []
         for vertex in vertexes:
-            if not isinstance(vertex,Point):
+            if not isinstance(vertex, Point):
                 vertex = Point(vertex)
             points.append(vertex)
         self._vertexes = tuple(points)
@@ -45,16 +46,16 @@ class Polygon:
             for i in range(n):
                 v1 = self.vertexes[i]
                 v2 = self.vertexes[(i + 1) % n]
-                sides.append((v1,v2))
+                sides.append((v1, v2))
             self._sides = tuple(sides)
 
         return self._sides
 
-    '''
-    The ordered list of vectors that, when connected, draw this polygon.
-    '''
     @property
     def contour(self):
+        '''
+        The ordered list of vectors that, when connected, draw this polygon.
+        '''
         if self._contour is None:
             contour = []
             for side in self.sides:
@@ -63,11 +64,11 @@ class Polygon:
 
         return self._contour
 
-    '''
-    The list of interior angles in the same order as the list of vertexes.
-    '''
     @property
     def interior_angles(self):
+        '''
+        The list of interior angles in the same order as the list of vertexes.
+        '''
         if self._interior_angles is None:
             n = len(self.vertexes)
             angles = []
@@ -75,40 +76,40 @@ class Polygon:
                 v1 = self.vertexes[i]
                 v2 = self.vertexes[(i - 1) % n]
                 v3 = self.vertexes[(i + 1) % n]
-                angle = Vector(v1,v2).angle_between(Vector(v1,v3))
+                angle = Vector(v1, v2).angle_between(Vector(v1, v3))
                 angles.append(angle)
             self._interior_angles = tuple(angles)
 
         return self._interior_angles
 
-    '''
-    A planar polygon is convex if it contains all the line segments connecting any pair of its
-    points. Thus, for example, a regular pentagon is convex, while an indented pentagon is not.
-    A planar polygon that is not convex is said to be a concave polygon.
-
-    The polygon is convex if and only if all turns from one edge vector to the next have the
-    same sense. Therefore, a simple polygon is convex iff
-
-        v_i^⊥ · v_(i+1)
-
-    has the same sign for all i, where (a^⊥ · b) denotes the perpendicular dot product.
-    http://mathworld.wolfram.com/ConvexPolygon.html
-    '''
     @property
     def is_convex(self):
+        '''
+        A planar polygon is convex if it contains all the line segments connecting any pair of its
+        points. Thus, for example, a regular pentagon is convex, while an indented pentagon is not.
+        A planar polygon that is not convex is said to be a concave polygon.
+
+        The polygon is convex if and only if all turns from one edge vector to the next have the
+        same sense. Therefore, a simple polygon is convex iff
+
+            v_i^⊥ · v_(i+1)
+
+        has the same sign for all i, where (a^⊥ · b) denotes the perpendicular dot product.
+        http://mathworld.wolfram.com/ConvexPolygon.html
+        '''
         if self._is_convex is None:
             contour = self.contour
             n = len(contour)
             previous_sign = None
             for i in range(n):
                 v1 = contour[i]
-                v2 = contour[(i+1) % n]
+                v2 = contour[(i + 1) % n]
                 sign = MathUtil.sign(v1.perpendicular_dot_product(v2))
 
                 if sign == 0:
                     self._is_convex = False
                     break
-                if previous_sign != None:
+                if previous_sign is not None:
                     if sign != previous_sign:
                         self._is_convex = False
                         break
@@ -145,5 +146,5 @@ class Polygon:
 
         return False
 
-    def __ne__(self,other):
+    def __ne__(self, other):
         return not self.__eq__(other)

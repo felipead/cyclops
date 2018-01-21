@@ -4,30 +4,31 @@ import math
 
 from ..geometry.Point import *
 
-'''
-A vector is formally defined as an element of a vector space. In the commonly encountered vector
-space R^n (i.e., Euclidean n-space), a vector is given by n coordinates and can be specified as
-(A_1,A_2,...,A_n). Vectors are sometimes referred to by the number of coordinates they have,
-so a 2-dimensional vector (x_1,x_2) is often called a two-vector, an n-dimensional vector is often
-called an n-vector, and so on.
 
-A vector from a point A to a point B is denoted AB^→, and a vector v may be denoted  v^→, or more
-commonly, v. The point A is often called the 'tail' of the vector, and B is called the vector's
-'head.'
-
-http://mathworld.wolfram.com/Vector.html
-
-The vector represented by this class is dimension agnostic, although certain operations are only
-supported for 2D or 3D dimensions.
-
-Vectors are read-only objects.
-'''
 class Vector:
+    '''
+    A vector is formally defined as an element of a vector space. In the commonly encountered vector
+    space R^n (i.e., Euclidean n-space), a vector is given by n coordinates and can be specified as
+    (A_1,A_2,...,A_n). Vectors are sometimes referred to by the number of coordinates they have,
+    so a 2-dimensional vector (x_1,x_2) is often called a two-vector, an n-dimensional vector is often
+    called an n-vector, and so on.
+
+    A vector from a point A to a point B is denoted AB^→, and a vector v may be denoted  v^→, or more
+    commonly, v. The point A is often called the 'tail' of the vector, and B is called the vector's
+    'head.'
+
+    http://mathworld.wolfram.com/Vector.html
+
+    The vector represented by this class is dimension agnostic, although certain operations are only
+    supported for 2D or 3D dimensions.
+
+    Vectors are read-only objects.
+    '''
 
     def __init__(self, head, tail=Point((0,))):
-        if not isinstance(head,Point):
+        if not isinstance(head, Point):
             head = Point(head)
-        if not isinstance(tail,Point):
+        if not isinstance(tail, Point):
             tail = Point(tail)
 
         self._head = head
@@ -94,10 +95,11 @@ class Vector:
     so that their tails coincide.
     http://mathworld.wolfram.com/DotProduct.html
     '''
+
     def dot_product(self, other):
         dot_product = 0
-        for (i,j) in zip(self,other):
-            dot_product += i*j
+        for (i, j) in zip(self, other):
+            dot_product += i * j
         return dot_product
 
     '''
@@ -107,13 +109,14 @@ class Vector:
     in computer graphics coordinates).
     http://mathworld.wolfram.com/PerpDotProduct.html
     '''
+
     def perpendicular_dot_product(self, other):
         if self.z != 0 or other.z != 0:
             raise NotImplementedError('Perpendicular dot product for 3D vectors is not implemented.')
         a = self
         b = other
         theta = a.angle_between(b)
-        return a.x*b.y - a.y*b.x
+        return a.x * b.y - a.y * b.x
 
     '''
     In mathematics, the cross product or vector product is a binary operation on two vectors in
@@ -129,16 +132,18 @@ class Vector:
     containing a and b in the direction given by the right-hand rule.
     http://en.wikipedia.org/wiki/Cross_product
     '''
+
     def cross_product(self, other):
         u = self
         v = other
-        return Vector((u[1]*v[2] - u[2]*v[1],\
-                       u[2]*v[0] - u[0]*v[2],\
-                       u[0]*v[1] - u[1]*v[0]))
+        return Vector((u[1] * v[2] - u[2] * v[1],
+                       u[2] * v[0] - u[0] * v[2],
+                       u[0] * v[1] - u[1] * v[0]))
 
     '''
     Inner (shortest) angle between two vectors. Orientation agnostic.
     '''
+
     def angle_between(self, other):
         v = self
         w = other
@@ -157,10 +162,10 @@ class Vector:
 
         return math.acos(cos)
 
-
     '''
     Gets the reflection of this vector. Like in a mirror, the reflection of a vector AB is BA.
     '''
+
     def reflection(self):
         return Vector(self.tail, self.head)
 
@@ -168,6 +173,7 @@ class Vector:
     Gets a clockwise rotation of this vector, in radians.
     http://en.wikipedia.org/wiki/Rotation_matrix
     '''
+
     def clockwise_rotation_by(self, radians):
         return self.counterclockwise_rotation_by(-radians)
 
@@ -175,6 +181,7 @@ class Vector:
     Gets a counterclockwise rotation of this vector, in radians.
     http://en.wikipedia.org/wiki/Rotation_matrix
     '''
+
     def counterclockwise_rotation_by(self, radians):
         if self.z != 0:
             raise NotImplementedError('Rotation for 3D vectors is not implemented.')
@@ -186,6 +193,7 @@ class Vector:
     '''
     Gets a 90˚ counterclockwise rotation of this vector (left turn).
     '''
+
     def counterclockwise_rotation_by_90_degrees(self):
         if self.z != 0:
             raise NotImplementedError('Rotation for 3D vectors is not implemented.')
@@ -196,6 +204,7 @@ class Vector:
     '''
     Gets a 90˚ clockwise rotation of this vector (right turn).
     '''
+
     def clockwise_rotation_by_90_degrees(self):
         if self.z != 0:
             raise NotImplementedError('Rotation for 3D vectors is not implemented.')
@@ -206,6 +215,7 @@ class Vector:
     '''
     Gets a 180˚ orientation agnostic rotation of this vector.
     '''
+
     def rotation_by_180_degrees(self):
         return self.clockwise_rotation_by_90_degrees().clockwise_rotation_by_90_degrees()
 
@@ -214,6 +224,7 @@ class Vector:
     means that the shortest angular distance that makes this vector parallel to another
     vector is rotating this vector clockwise by an angle between 0˚ and 180˚ (inclusive).
     '''
+
     def is_clockwise_distance_from(self, other):
         return self.cross_product(other).z <= 0
 
@@ -223,16 +234,15 @@ class Vector:
     vector is rotating this vector counterclockwise by an angle between 0˚ and 180˚
     (inclusive).
     '''
+
     def is_counterclockwise_distance_from(self, other):
         return self.cross_product(other).z >= 0
-
 
     def multiplied_by_scalar(self, scalar):
         new_head = []
         for i in range(len(self)):
             new_head.append(scalar * self.coordinates[i] + self.tail[i])
         return Vector(new_head, self.tail)
-
 
     def __len__(self):
         return len(self._coordinates)
@@ -244,7 +254,7 @@ class Vector:
         return self._coordinates[index]
 
     def __eq__(self, other):
-        if not isinstance(other,Vector):
+        if not isinstance(other, Vector):
             return False
         return self._coordinates == other._coordinates
 
