@@ -31,7 +31,7 @@ class AnswerSheetRecognitionController:
             else:
                 print('unable to capture qr code!')
 
-        picture = cv2.flip(picture, 1);
+        picture = cv2.flip(picture, 1)
 
         cv2.imshow(self._MAIN_PICTURE_WINDOW_NAME, picture)
         if result.answer_frame != None:

@@ -122,8 +122,8 @@ class ConvexQuadrilateral(ConvexPolygon):
 
         rotated_vertexes = []
         for v in self.vertexes:
-            rotated_x = (v.x - center.x) * cos  -  (v.y - center.y) * sin + center.x;
-            rotated_y = (v.x - center.x) * sin  +  (v.y - center.y) * cos + center.y;
+            rotated_x = (v.x - center.x) * cos  -  (v.y - center.y) * sin + center.x
+            rotated_y = (v.x - center.x) * sin  +  (v.y - center.y) * cos + center.y
             rotated_point = Point((rotated_x, rotated_y))
             rotated_vertexes.append(rotated_point)
         return ConvexQuadrilateral(rotated_vertexes)
@@ -136,8 +136,8 @@ class ConvexQuadrilateral(ConvexPolygon):
         center = self.centroid
         rotated_vertexes = []
         for v in self.vertexes:
-            rotated_x =   (v.y - center.y) + center.x;
-            rotated_y = - (v.x - center.x) + center.y;
+            rotated_x =   (v.y - center.y) + center.x
+            rotated_y = - (v.x - center.x) + center.y
             rotated_point = Point((rotated_x, rotated_y))
             rotated_vertexes.append(rotated_point)
         return ConvexQuadrilateral(rotated_vertexes)
@@ -150,8 +150,8 @@ class ConvexQuadrilateral(ConvexPolygon):
         center = self.centroid
         rotated_vertexes = []
         for v in self.vertexes:
-            rotated_x = - (v.y - center.y) + center.x;
-            rotated_y =   (v.x - center.x) + center.y;
+            rotated_x = - (v.y - center.y) + center.x
+            rotated_y =   (v.x - center.x) + center.y
             rotated_point = Point((rotated_x, rotated_y))
             rotated_vertexes.append(rotated_point)
         return ConvexQuadrilateral(rotated_vertexes)
