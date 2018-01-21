@@ -21,8 +21,7 @@ def execute():
     controller.init()
     controller.processPicture(picture)
 
-    raw_input("Press Enter to exit...")
-    return 0        
+    return 0
 
 if __name__ == "__main__":
     execute()
