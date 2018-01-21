@@ -1,25 +1,25 @@
-from cv2 import waitKey, VideoCapture
+import cv2
 
 from .AnswerSheetRecognitionController import *
 
-def readCamera(camera):
+def read_camera(camera):
     _, picture = camera.read()
     return picture
 
-def exitKeyPressed():
-    return waitKey(1) & 0xFF == ord('q')
+def exit_key_pressed():
+    return cv2.waitKey(1) & 0xFF == ord('q')
 
 def execute():
-    camera = VideoCapture(0)
+    camera = cv2.VideoCapture(0)
     controller = AnswerSheetRecognitionController()
     controller.init()
 
-    picture = readCamera(camera)
+    picture = read_camera(camera)
     while True:
         if picture is not None:
-            controller.processPicture(picture)
-        picture = readCamera(camera)
-        if exitKeyPressed():
+            controller.process_picture(picture)
+        picture = read_camera(camera)
+        if exit_key_pressed():
             break
 
 if __name__ == '__main__':

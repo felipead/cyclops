@@ -4,23 +4,23 @@ import numpy as np
 from ..geometry.ConvexQuadrilateral import *
 
 class PerspectiveUtil:
-    
-    @staticmethod
-    def projectQuadrilateralToSquarePicture(picture, quadrilateralToBeProjected, squareToProject):
-        size = int(squareToProject.largestSideLength)
-        return PerspectiveUtil.projectQuadrilateralToRectanglePicture(picture, quadrilateralToBeProjected, squareToProject, size, size)
 
     @staticmethod
-    def projectQuadrilateralToRectanglePicture(picture, quadrilateralToBeProjected, rectangleToProject, width, heigth):
-        sourcePoints = np.array(PerspectiveUtil.__asListOf2dTuples(quadrilateralToBeProjected), np.float32)
-        targetPoints = np.array(PerspectiveUtil.__asListOf2dTuples(rectangleToProject), np.float32)
-
-        transformMatrix = cv.getPerspectiveTransform(sourcePoints, targetPoints)
-        return cv.warpPerspective(picture, transformMatrix, (width, heigth))
+    def project_quadrilateral_to_square_picture(picture, quadrilateral_to_be_projected, square_to_project):
+        size = int(square_to_project.largest_side_length)
+        return PerspectiveUtil.project_quadrilateral_to_rectangle_picture(picture, quadrilateral_to_be_projected, square_to_project, size, size)
 
     @staticmethod
-    def __asListOf2dTuples(quadrilateral):
+    def project_quadrilateral_to_rectangle_picture(picture, quadrilateral_to_be_projected, rectangle_to_project, width, heigth):
+        source_points = np.array(PerspectiveUtil.__as_2d_tuples(quadrilateral_to_be_projected), np.float32)
+        target_points = np.array(PerspectiveUtil.__as_2d_tuples(rectangle_to_project), np.float32)
+
+        transform_matrix = cv.getPerspectiveTransform(source_points, target_points)
+        return cv.warpPerspective(picture, transform_matrix, (width, heigth))
+
+    @staticmethod
+    def __as_2d_tuples(quadrilateral):
         l = []
         for v in quadrilateral.vertexes:
-            l.append(v.as2dTuple())
+            l.append(v.as_2d_tuple())
         return l

@@ -12,9 +12,9 @@ class ConvexPolygon(Polygon):
 
     def __init__(self, vertexes):
         super(ConvexPolygon, self).__init__(vertexes)
-        if not self.isConvex:
+        if not self.is_convex:
             raise Exception('Polygon must be convex.')
-        self._isClockwise = None
+        self._is_clockwise = None
         self._centroid = None
         self._area = None
 
@@ -24,16 +24,16 @@ class ConvexPolygon(Polygon):
     is not clockwise it must be counterclockwise oriented.
     '''
     @property
-    def isClockwise(self):
-        if self._isClockwise is None:
+    def is_clockwise(self):
+        if self._is_clockwise is None:
             contour = self.contour
             # since this polygon is guaranteed to be convex, we can pick (in order) any pair
             # of vectors from its oriented contour
             v1 = contour[0]
             v2 = contour[1]
-            self._isClockwise = v1.isClockwiseDistanceFrom(v2)
+            self._is_clockwise = v1.is_clockwise_distance_from(v2)
 
-        return self._isClockwise
+        return self._is_clockwise
 
     '''
     The centroid or geometric center of a two-dimensional region is, informally, the point at which
@@ -47,13 +47,13 @@ class ConvexPolygon(Polygon):
     @property
     def centroid(self):
         if self._centroid is None:
-            xSum = 0
-            ySum = 0
+            x_sum = 0
+            y_sum = 0
             for vertex in self:
-                xSum += vertex.x
-                ySum += vertex.y
+                x_sum += vertex.x
+                y_sum += vertex.y
             n = float(len(self))
-            self._centroid = Point((xSum/n, ySum/n))
+            self._centroid = Point((x_sum/n, y_sum/n))
 
         return self._centroid
 
@@ -77,7 +77,7 @@ class ConvexPolygon(Polygon):
         if not isinstance(other,ConvexPolygon):
             return False
 
-        if self.isClockwise == other.isClockwise:
+        if self.is_clockwise == other.is_clockwise:
             return self.contour == other.contour
         else:
             for (i,j) in zip(self.contour, reversed(other.contour)):
@@ -86,10 +86,10 @@ class ConvexPolygon(Polygon):
             return True
 
     def __hash__(self):
-        hashValue = 0
+        hash_value = 0
         for v in self._vertexes:
-             hashValue ^= 13 * hash(v)
-        return 7193 * hashValue
+             hash_value ^= 13 * hash(v)
+        return 7193 * hash_value
 
     def __repr__(self):
         return 'ConvexPolygon' + repr(self._vertexes)

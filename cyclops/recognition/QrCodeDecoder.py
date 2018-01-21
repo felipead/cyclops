@@ -1,6 +1,6 @@
 from subprocess import check_output, CalledProcessError
 import os
-from cv2 import imwrite
+import cv2
 
 from .QrCodeData import *
 
@@ -13,34 +13,34 @@ class QrCodeDecoder:
     def __init__(self):
         pass
 
-    def decode(self, qrCodeFrame):
-        qrCodePictureFile = self.__savePicture(qrCodeFrame.projectedPicture)
+    def decode(self, qr_code_frame):
+        picture_file = self.__save_picture(qr_code_frame.projected_picture)
         try:
-            qrCodeData = None
-            with open(os.devnull, 'w') as nullOut:
-                subprocessArguments = [self.__ZBAR_EXECUTABLE, self.__ZBAR_RAW_OUTPUT_OPTION, qrCodePictureFile]
-                processOutput = check_output(subprocessArguments, stderr=nullOut)
-                qrCodeString = self._extractQrCodeString(processOutput)
-                if qrCodeString != None:
-                    qrCodeData = self._extractQrCodeData(qrCodeString)
-            return qrCodeData
+            qr_code_data = None
+            with open(os.devnull, 'w') as null_out:
+                process_arguments = [self.__ZBAR_EXECUTABLE, self.__ZBAR_RAW_OUTPUT_OPTION, picture_file]
+                process_output = check_output(process_arguments, stderr=null_out)
+                qr_code_string = self._extract_qr_code_string(process_output)
+                if qr_code_string != None:
+                    qr_code_data = self._extract_qr_code_data(qr_code_string)
+            return qr_code_data
         except CalledProcessError:
             return None
 
-    def __savePicture(self, picture):
-        imwrite(self.__QR_CODE_FILENAME, picture)
+    def __save_picture(self, picture):
+        cv2.imwrite(self.__QR_CODE_FILENAME, picture)
         return self.__QR_CODE_FILENAME
 
-    def _extractQrCodeString(self, binary):
+    def _extract_qr_code_string(self, binary):
         text = binary.decode('utf-8')
         lines = text.split()
         return lines[0]
 
-    def _extractQrCodeData(self, qrCodeString):
-        qrCode = QrCodeData()
-        qrCode.rawString = qrCodeString
+    def _extract_qr_code_data(self, qr_code_string):
+        qr_code = QrCodeData()
+        qr_code.raw_string = qr_code_string
         # TODO: remove hard-coded values, parse string
-        qrCode.numberOfQuestions = 20
-        qrCode.numberOfAnswerChoices = 5
-        qrCode.numberOfQuestionsPerColumn = 10
-        return qrCode
+        qr_code.number_questions = 20
+        qr_code.number_answer_choices = 5
+        qr_code.number_questions_per_column = 10
+        return qr_code

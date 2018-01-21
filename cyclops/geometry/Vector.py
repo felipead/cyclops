@@ -76,10 +76,10 @@ class Vector:
     @property
     def norm(self):
         if self._norm is None:
-            sumOfSquares = 0
+            square_sum = 0
             for i in self.coordinates:
-                sumOfSquares += i**2
-            self._norm = math.sqrt(sumOfSquares)
+                square_sum += i**2
+            self._norm = math.sqrt(square_sum)
 
         return self._norm
 
@@ -94,11 +94,11 @@ class Vector:
     so that their tails coincide.
     http://mathworld.wolfram.com/DotProduct.html
     '''
-    def dotProduct(self, anotherVector):
-        dotProduct = 0
-        for (i,j) in zip(self,anotherVector):
-            dotProduct += i*j
-        return dotProduct
+    def dot_product(self, other):
+        dot_product = 0
+        for (i,j) in zip(self,other):
+            dot_product += i*j
+        return dot_product
 
     '''
     The 'perp dot product' (a^⊥ · b) for a and b vectors in the plane is a modification
@@ -107,12 +107,12 @@ class Vector:
     in computer graphics coordinates).
     http://mathworld.wolfram.com/PerpDotProduct.html
     '''
-    def perpendicularDotProduct(self, anotherVector):
-        if self.z != 0 or anotherVector.z != 0:
+    def perpendicular_dot_product(self, other):
+        if self.z != 0 or other.z != 0:
             raise NotImplementedError('Perpendicular dot product for 3D vectors is not implemented.')
         a = self
-        b = anotherVector
-        theta = a.angleBetween(b)
+        b = other
+        theta = a.angle_between(b)
         return a.x*b.y - a.y*b.x
 
     '''
@@ -129,9 +129,9 @@ class Vector:
     containing a and b in the direction given by the right-hand rule.
     http://en.wikipedia.org/wiki/Cross_product
     '''
-    def crossProduct(self, anotherVector):
+    def cross_product(self, other):
         u = self
-        v = anotherVector
+        v = other
         return Vector((u[1]*v[2] - u[2]*v[1],\
                        u[2]*v[0] - u[0]*v[2],\
                        u[0]*v[1] - u[1]*v[0]))
@@ -139,15 +139,15 @@ class Vector:
     '''
     Inner (shortest) angle between two vectors. Orientation agnostic.
     '''
-    def angleBetween(self, anotherVector):
+    def angle_between(self, other):
         v = self
-        w = anotherVector
+        w = other
 
-        normsProduct = v.norm * w.norm
-        if normsProduct == 0:
+        norms_product = v.norm * w.norm
+        if norms_product == 0:
             return 0
 
-        cos = v.dotProduct(w) / float(normsProduct)
+        cos = v.dot_product(w) / float(norms_product)
 
         # prevent errors caused by floating point rounding
         if cos >= 1.0:
@@ -168,25 +168,25 @@ class Vector:
     Gets a clockwise rotation of this vector, in radians.
     http://en.wikipedia.org/wiki/Rotation_matrix
     '''
-    def clockwiseRotationBy(self, angleInRadians):
-        return self.counterclockwiseRotationBy(-angleInRadians)
+    def clockwise_rotation_by(self, radians):
+        return self.counterclockwise_rotation_by(-radians)
 
     '''
     Gets a counterclockwise rotation of this vector, in radians.
     http://en.wikipedia.org/wiki/Rotation_matrix
     '''
-    def counterclockwiseRotationBy(self, angleInRadians):
+    def counterclockwise_rotation_by(self, radians):
         if self.z != 0:
             raise NotImplementedError('Rotation for 3D vectors is not implemented.')
-        x = self.x * math.cos(angleInRadians) - self.y * math.sin(angleInRadians)
-        y = self.x * math.sin(angleInRadians) + self.y * math.cos(angleInRadians)
+        x = self.x * math.cos(radians) - self.y * math.sin(radians)
+        y = self.x * math.sin(radians) + self.y * math.cos(radians)
         head = (x + self.tail[0], y + self.tail[1])
         return Vector(head, self.tail)
 
     '''
     Gets a 90˚ counterclockwise rotation of this vector (left turn).
     '''
-    def counterclockwiseRotationBy90Degrees(self):
+    def counterclockwise_rotation_by_90_degrees(self):
         if self.z != 0:
             raise NotImplementedError('Rotation for 3D vectors is not implemented.')
         coordinates = (-self.y, self.x)
@@ -196,7 +196,7 @@ class Vector:
     '''
     Gets a 90˚ clockwise rotation of this vector (right turn).
     '''
-    def clockwiseRotationBy90Degrees(self):
+    def clockwise_rotation_by_90_degrees(self):
         if self.z != 0:
             raise NotImplementedError('Rotation for 3D vectors is not implemented.')
         coordinates = (self.y, -self.x)
@@ -206,16 +206,16 @@ class Vector:
     '''
     Gets a 180˚ orientation agnostic rotation of this vector.
     '''
-    def rotationBy180Degrees(self):
-        return self.clockwiseRotationBy90Degrees().clockwiseRotationBy90Degrees()
+    def rotation_by_180_degrees(self):
+        return self.clockwise_rotation_by_90_degrees().clockwise_rotation_by_90_degrees()
 
     '''
     True if this vector has a clockwise angular distance from another vector. This
     means that the shortest angular distance that makes this vector parallel to another
     vector is rotating this vector clockwise by an angle between 0˚ and 180˚ (inclusive).
     '''
-    def isClockwiseDistanceFrom(self, anotherVector):
-        return self.crossProduct(anotherVector).z <= 0
+    def is_clockwise_distance_from(self, other):
+        return self.cross_product(other).z <= 0
 
     '''
     True if this vector has a counterclockwise angular distance from another vector. This
@@ -223,15 +223,15 @@ class Vector:
     vector is rotating this vector counterclockwise by an angle between 0˚ and 180˚
     (inclusive).
     '''
-    def isCounterclockwiseDistanceFrom(self, anotherVector):
-        return self.crossProduct(anotherVector).z >= 0
+    def is_counterclockwise_distance_from(self, other):
+        return self.cross_product(other).z >= 0
 
 
-    def multipliedByScalar(self, scalar):
-        newHead = []
+    def multiplied_by_scalar(self, scalar):
+        new_head = []
         for i in range(len(self)):
-            newHead.append(scalar * self.coordinates[i] + self.tail[i])
-        return Vector(newHead, self.tail)
+            new_head.append(scalar * self.coordinates[i] + self.tail[i])
+        return Vector(new_head, self.tail)
 
 
     def __len__(self):

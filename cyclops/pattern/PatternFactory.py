@@ -1,6 +1,5 @@
 import os
-
-from cv2 import imread
+import cv2
 
 class PatternFactory:
 
@@ -9,11 +8,11 @@ class PatternFactory:
     PATTERN_FILE_NAME_SEPARATOR = '_'
 
     @classmethod
-    def _getPatternFileName(self, name, size):
+    def _get_pattern_filename(self, name, size):
         return name + PatternFactory.PATTERN_FILE_NAME_SEPARATOR + str(size) + PatternFactory.PATTERN_FILE_EXTENSION
 
     @classmethod
-    def getPattern(self, name, size):
-        path = os.path.join(PatternFactory.PATTERN_FOLDER, self._getPatternFileName(name, size))
-        return imread(path)
+    def get_pattern(self, name, size):
+        path = os.path.join(PatternFactory.PATTERN_FOLDER, self._get_pattern_filename(name, size))
+        return cv2.imread(path)
 

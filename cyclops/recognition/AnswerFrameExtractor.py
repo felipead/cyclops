@@ -16,102 +16,101 @@ class AnswerFrameExtractor:
     __ANSWER_SHEET_QUADRILATERAL_SCALE = 1.15
 
 
-    def __init__(self, sizeRelaxationRatio=1.10, angleRelaxationInRadians=0.3):
-        self._sizeRelaxationRatio = sizeRelaxationRatio
-        self._angleRelaxationInRadians = angleRelaxationInRadians
-        self._frameAlignmentPatternMatcher = FrameAlignmentPatternMatcher()
-        self._frameOrientationPatternMatcher = FrameOrientationPatternMatcher()
+    def __init__(self, size_relaxation_ratio=1.10, angle_relaxation_radians=0.3):
+        self._size_relaxation_ratio = size_relaxation_ratio
+        self._angle_relaxation_radians = angle_relaxation_radians
+        self._frame_alignment_matcher = FrameAlignmentPatternMatcher()
+        self._frame_orientation_matcher = FrameOrientationPatternMatcher()
 
 
     def extract(self, picture):
-        frameOrientationPatternMatches = self._frameOrientationPatternMatcher.match(picture, 1)
-        frameAlignmentPatternMatches = self._frameAlignmentPatternMatcher.match(picture, 3)
+        frame_orientation_matches = self._frame_orientation_matcher.match(picture, 1)
+        frame_alignment_matches = self._frame_alignment_matcher.match(picture, 3)
 
-        answerFrameQuadrilaterals = self._findAnswerFrameQuadrilaterals(frameOrientationPatternMatches, frameAlignmentPatternMatches)
-        bestAnswerFrameQuadrilateral = None
-        if answerFrameQuadrilaterals != []:
-            bestAnswerFrameQuadrilateral = self._chooseQuadrilateralThatBestResemblesSquare(answerFrameQuadrilaterals)
+        answer_frame_quadrilaterals = self._find_answer_frame_quadrilaterals(frame_orientation_matches, frame_alignment_matches)
+        best_answer_frame_quadrilateral = None
+        if answer_frame_quadrilaterals != []:
+            best_answer_frame_quadrilateral = self._choose_quadrilateral_that_best_resembles_square(answer_frame_quadrilaterals)
 
-        answerFrame = None
-        if bestAnswerFrameQuadrilateral != None:
-            answerFrame = self.__extractAnswerFrame(picture, bestAnswerFrameQuadrilateral)
+        answer_frame = None
+        if best_answer_frame_quadrilateral != None:
+            answer_frame = self.__extract_answer_frame(picture, best_answer_frame_quadrilateral)
 
-        return self.__buildResult(answerFrame, answerFrameQuadrilaterals, frameOrientationPatternMatches, frameAlignmentPatternMatches)
+        return self.__build_result(answer_frame, answer_frame_quadrilaterals, frame_orientation_matches, frame_alignment_matches)
 
 
-    def __buildResult(self, answerFrame, answerFrameQuadrilaterals, frameOrientationPatternMatches, frameAlignmentPatternMatches):
+    def __build_result(self, answer_frame, answer_frame_quadrilaterals, frame_orientation_matches, frame_alignment_matches):
         result = AnswerFrameExtractionResult()
-        result.frameOrientationPatternMatches = frameOrientationPatternMatches
-        result.frameAlignmentPatternMatches = frameAlignmentPatternMatches
-        if answerFrame != None:
-            result.answerFrame = answerFrame
-            answerFrameMismatches = answerFrameQuadrilaterals
-            answerFrameMismatches.remove(answerFrame.originalQuadrilateral)
-            result.answerFrameMismatches = answerFrameMismatches
+        result.frame_orientation_matches = frame_orientation_matches
+        result.frame_alignment_matches = frame_alignment_matches
+        if answer_frame != None:
+            result.answer_frame = answer_frame
+            answer_frame_mismatches = answer_frame_quadrilaterals
+            answer_frame_mismatches.remove(answer_frame.original_quadrilateral)
+            result.answer_frame_mismatches = answer_frame_mismatches
         return result
 
 
-    def _findAnswerFrameQuadrilaterals(self, frameOrientationPatternMatches, frameAlignmentPatternMatches):
-        otherPoints = []
-        for frameAlignmentMatch in frameAlignmentPatternMatches:
-            otherPoints.append(frameAlignmentMatch.center)
+    def _find_answer_frame_quadrilaterals(self, frame_orientation_matches, frame_alignment_matches):
+        other_points = []
+        for frame_alignment_match in frame_alignment_matches:
+            other_points.append(frame_alignment_match.center)
 
         quadrilaterals = set()
-        for frameOrientationMatch in frameOrientationPatternMatches:
-            basePoint = frameOrientationMatch.center
-            quadrilaterals.update(self._findConvexQuadrilateralsWithRoughlyEqualSizesAndAngles(basePoint, otherPoints))
+        for frame_orientation_match in frame_orientation_matches:
+            base_point = frame_orientation_match.center
+            quadrilaterals.update(self._find_convex_quadrilaterals_with_roughly_equal_sizes_and_angles(base_point, other_points))
 
         return list(quadrilaterals)
 
-    def _findConvexQuadrilateralsWithRoughlyEqualSizesAndAngles(self, basePoint, otherPoints):
-        convexQuadrilaterals = set()
+    def _find_convex_quadrilaterals_with_roughly_equal_sizes_and_angles(self, base_point, other_points):
+        convex_quadrilaterals = set()
 
-        for firstPoint in otherPoints:
-            baseDistance = MathUtil.distanceBetweenPoints(firstPoint, basePoint)
-            for secondPoint in otherPoints:
-                if secondPoint == firstPoint:
+        for first_point in other_points:
+            base_distance = MathUtil.distance_between_points(first_point, base_point)
+            for second_point in other_points:
+                if second_point == first_point:
                     continue
-                if self.__areDistancesRoughlyEqual(MathUtil.distanceBetweenPoints(firstPoint, secondPoint), baseDistance):
-                    for thirdPoint in otherPoints:
-                        if thirdPoint == firstPoint or thirdPoint == secondPoint:
+                if self.__are_distances_roughly_equal(MathUtil.distance_between_points(first_point, second_point), base_distance):
+                    for third_point in other_points:
+                        if third_point == first_point or third_point == second_point:
                             continue
-                        if self.__areDistancesRoughlyEqual(MathUtil.distanceBetweenPoints(secondPoint, thirdPoint), baseDistance):
-                            if self.__areDistancesRoughlyEqual(MathUtil.distanceBetweenPoints(thirdPoint, basePoint), baseDistance):
-                                points = (basePoint, firstPoint, secondPoint, thirdPoint)
-                                quadrilateral = self.__getConvexQuadrilateralWithRoughlyRightInteriorAngles(points)
+                        if self.__are_distances_roughly_equal(MathUtil.distance_between_points(second_point, third_point), base_distance):
+                            if self.__are_distances_roughly_equal(MathUtil.distance_between_points(third_point, base_point), base_distance):
+                                points = (base_point, first_point, second_point, third_point)
+                                quadrilateral = self.__get_convex_quadrilateral_with_roughly_right_interior_angles(points)
                                 if quadrilateral != None:
-                                    convexQuadrilaterals.add(quadrilateral)
+                                    convex_quadrilaterals.add(quadrilateral)
 
-        return convexQuadrilaterals
+        return convex_quadrilaterals
 
-    def __getConvexQuadrilateralWithRoughlyRightInteriorAngles(self, points):
+    def __get_convex_quadrilateral_with_roughly_right_interior_angles(self, points):
         polygon = Polygon(points)
-        if polygon.isConvex:
-            convexQuadrilateral = ConvexQuadrilateral(polygon.vertexes)
-            if convexQuadrilateral.hasRightInteriorAnglesWithRelaxationOf(self._angleRelaxationInRadians):
-                return convexQuadrilateral
+        if polygon.is_convex:
+            convex_quadrilateral = ConvexQuadrilateral(polygon.vertexes)
+            if convex_quadrilateral.has_right_interior_angles_with_relaxation_of(self._angle_relaxation_radians):
+                return convex_quadrilateral
         return None
 
-    def __areDistancesRoughlyEqual(self, distance1, distance2):
-        return MathUtil.equalWithinRatio(distance1, distance2, self._sizeRelaxationRatio)
+    def __are_distances_roughly_equal(self, distance1, distance2):
+        return MathUtil.equal_within_ratio(distance1, distance2, self._size_relaxation_ratio)
 
-
-    def _chooseQuadrilateralThatBestResemblesSquare(self, frames):
+    def _choose_quadrilateral_that_best_resembles_square(self, frames):
         # TODO
         return frames[0]
 
-    def __extractAnswerFrame(self, picture, quadrilateral):
-        scaledQuadrilateral = quadrilateral.scaledBy(self.__ANSWER_SHEET_QUADRILATERAL_SCALE)
-        counterclockwiseQuadrilateral = scaledQuadrilateral.asCounterclockwise()
+    def __extract_answer_frame(self, picture, quadrilateral):
+        scaled_quadrilateral = quadrilateral.scaled_by(self.__ANSWER_SHEET_QUADRILATERAL_SCALE)
+        counterclockwise_quadrilateral = scaled_quadrilateral.as_counterclockwise()
 
-        projectionSize = int(counterclockwiseQuadrilateral.largestSideLength)
-        projectionSquare = ConvexQuadrilateral([(projectionSize-1, projectionSize-1), (0, projectionSize-1), (0, 0), (projectionSize-1, 0)])
+        projection_size = int(counterclockwise_quadrilateral.largest_side_length)
+        projection_square = ConvexQuadrilateral([(projection_size-1, projection_size-1), (0, projection_size-1), (0, 0), (projection_size-1, 0)])
 
-        projectedAnswerFramePicture = PerspectiveUtil.projectQuadrilateralToSquarePicture(picture, counterclockwiseQuadrilateral, projectionSquare)
+        projected_answer_frame_picture = PerspectiveUtil.project_quadrilateral_to_square_picture(picture, counterclockwise_quadrilateral, projection_square)
 
         frame = Frame()
-        frame.originalQuadrilateral = quadrilateral
-        frame.scaledQuadrilateral = scaledQuadrilateral
-        frame.originalPicture = picture
-        frame.projectedPicture = projectedAnswerFramePicture
+        frame.original_quadrilateral = quadrilateral
+        frame.scaled_quadrilateral = scaled_quadrilateral
+        frame.original_picture = picture
+        frame.projected_picture = projected_answer_frame_picture
         return frame

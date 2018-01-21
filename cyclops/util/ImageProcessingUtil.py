@@ -6,127 +6,127 @@ from .PerspectiveUtil import *
 class ImageProcessingUtil:
 
     @staticmethod
-    def __mapToOddNumber(integer):
+    def __to_odd_number(integer):
         return 2 * integer + 1
 
     @staticmethod
-    def applyEllipticalErosion(image, kernelSize):
-        kernelSize = ImageProcessingUtil.__mapToOddNumber(kernelSize)
-        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (kernelSize, kernelSize))
+    def apply_elliptical_erosion(image, kernel_size):
+        kernel_size = ImageProcessingUtil.__to_odd_number(kernel_size)
+        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (kernel_size, kernel_size))
         return cv2.erode(image, kernel)
 
     @staticmethod
-    def applyEllipticalDilatation(image, kernelSize):
-        kernelSize = ImageProcessingUtil.__mapToOddNumber(kernelSize)
-        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (kernelSize, kernelSize))
+    def apply_elliptical_dilatation(image, kernel_size):
+        kernel_size = ImageProcessingUtil.__to_odd_number(kernel_size)
+        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (kernel_size, kernel_size))
         return cv2.dilate(image, kernel)
 
     @staticmethod
-    def applyRectangularDilatation(image, kernelSize):
-        kernelSize = ImageProcessingUtil.__mapToOddNumber(kernelSize)
-        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (kernelSize, kernelSize))
+    def apply_rectangular_dilatation(image, kernel_size):
+        kernel_size = ImageProcessingUtil.__to_odd_number(kernel_size)
+        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (kernel_size, kernel_size))
         return cv2.dilate(image, kernel)
 
     @staticmethod
-    def applyRectangularErosion(image, kernelSize):
-        kernelSize = ImageProcessingUtil.__mapToOddNumber(kernelSize)
-        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (kernelSize, kernelSize))
+    def apply_rectangular_erosion(image, kernel_size):
+        kernel_size = ImageProcessingUtil.__to_odd_number(kernel_size)
+        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (kernel_size, kernel_size))
         return cv2.erode(image, kernel)
 
     @staticmethod
-    def applyMedianBlur(image, apertureSize):
+    def apply_median_blur(image, apertureSize):
         return cv2.medianBlur(image, apertureSize)
 
     @staticmethod
-    def applyBilateralFilter(image, filterSize, sigmaColor, sigmaSpace):
-        return cv2.bilateralFilter(image, filterSize, sigmaColor, sigmaSpace)
+    def apply_bilateral_filter(image, filter_size, sigma_color, sigma_space):
+        return cv2.bilateralFilter(image, filter_size, sigma_color, sigma_space)
 
 
     @staticmethod
-    def convertToGrayscale(image):
+    def convert_to_grayscale(image):
         return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
 
     @staticmethod
-    def convertToBinaryWithGaussianAdaptativeThreshold(image, blockSize, constantSubtractedFromWeightedMean):
-        gray = ImageProcessingUtil.convertToGrayscale(image)
+    def convert_to_binary_with_gaussian_adaptative_threshold(image, block_size, constant_subtracted_from_weighted_mean):
+        gray = ImageProcessingUtil.convert_to_grayscale(image)
         return cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, \
-            ImageProcessingUtil.__mapToOddNumber(blockSize), constantSubtractedFromWeightedMean)
+            ImageProcessingUtil.__to_odd_number(block_size), constant_subtracted_from_weighted_mean)
 
     @staticmethod
-    def convertToInvertedBinaryWithGaussianAdaptativeThreshold(image, blockSize, constantSubtractedFromWeightedMean):
-        gray = ImageProcessingUtil.convertToGrayscale(image)
+    def convert_to_inverted_binary_with_gaussian_adaptative_threshold(image, block_size, constant_subtracted_from_weighted_mean):
+        gray = ImageProcessingUtil.convert_to_grayscale(image)
         return cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, \
-            ImageProcessingUtil.__mapToOddNumber(blockSize), constantSubtractedFromWeightedMean)
+            ImageProcessingUtil.__to_odd_number(block_size), constant_subtracted_from_weighted_mean)
 
     @staticmethod
-    def convertToBinaryWithMeanAdaptativeThreshold(image, blockSize, constantSubtractedFromMean):
-        gray = ImageProcessingUtil.convertToGrayscale(image)
+    def convert_to_binaryWithMeanAdaptativeThreshold(image, block_size, constant_subtracted_from_mean):
+        gray = ImageProcessingUtil.convert_to_grayscale(image)
         return cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, \
-            ImageProcessingUtil.__mapToOddNumber(blockSize), constantSubtractedFromMean)
+            ImageProcessingUtil.__to_odd_number(block_size), constant_subtracted_from_mean)
 
     @staticmethod
-    def convertToInvertedBinaryWithMeanAdaptativeThreshold(image, blockSize, constantSubtractedFromMean):
-        gray = ImageProcessingUtil.convertToGrayscale(image)
+    def convert_to_inverted_binaryWithMeanAdaptativeThreshold(image, block_size, constant_subtracted_from_mean):
+        gray = ImageProcessingUtil.convert_to_grayscale(image)
         return cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, \
-            ImageProcessingUtil.__mapToOddNumber(blockSize), constantSubtractedFromMean)
+            ImageProcessingUtil.__to_odd_number(block_size), constant_subtracted_from_mean)
 
 
     @staticmethod
-    def convertToBinary(image, threshold):
-        gray = ImageProcessingUtil.convertToGrayscale(image)
+    def convert_to_binary(image, threshold):
+        gray = ImageProcessingUtil.convert_to_grayscale(image)
         _, binary = cv2.threshold(gray, threshold, 255, cv2.THRESH_BINARY)
         return binary
 
     @staticmethod
-    def convertToInvertedBinary(image, threshold):
-        gray = ImageProcessingUtil.convertToGrayscale(image)
+    def convert_to_inverted_binary(image, threshold):
+        gray = ImageProcessingUtil.convert_to_grayscale(image)
         _, binary = cv2.threshold(gray, threshold, 255, cv2.THRESH_BINARY_INV)
         return binary
 
 
     @staticmethod
-    def convertToBinaryWithOptimalThreshold(image):
-        gray = ImageProcessingUtil.convertToGrayscale(image)
+    def convert_to_binary_with_optimal_threshold(image):
+        gray = ImageProcessingUtil.convert_to_grayscale(image)
         _, binary = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
         return binary
 
     @staticmethod
-    def convertToInvertedBinaryWithOptimalThreshold(image):
-        gray = ImageProcessingUtil.convertToGrayscale(image)
+    def convert_to_inverted_binary_with_optimal_threshold(image):
+        gray = ImageProcessingUtil.convert_to_grayscale(image)
         _, binary = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
         return binary
 
 
     @staticmethod
-    def extractRectangleFromImage(image, rectangle):
-        left = int(rectangle.bottomLeftCorner.x)
-        right = int(rectangle.bottomRightCorner.x)
-        bottom = int(rectangle.bottomRightCorner.y)
-        top = int(rectangle.topRightCorner.y)
+    def extract_rectangle_from_image(image, rectangle):
+        left = int(rectangle.bottom_left_corner.x)
+        right = int(rectangle.bottom_right_corner.x)
+        bottom = int(rectangle.bottom_right_corner.y)
+        top = int(rectangle.top_right_corner.y)
 
         width = right - left
         height = top - bottom
 
-        projectedRectangle = ConvexQuadrilateral([(0, 0), (width, 0), (width, height), (0, height)])
+        projected_rectangle = ConvexQuadrilateral([(0, 0), (width, 0), (width, height), (0, height)])
 
-        return PerspectiveUtil.projectQuadrilateralToRectanglePicture(image, rectangle, projectedRectangle, width, height)
-
-    @staticmethod
-    def createBlankImage(width, height, colorDepth=np.uint8):
-        return np.zeros((height,width,3), colorDepth)
+        return PerspectiveUtil.project_quadrilateral_to_rectangle_picture(image, rectangle, projected_rectangle, width, height)
 
     @staticmethod
-    def resizeImage(image, width, height):
+    def create_blank_image(width, height, color_depth=np.uint8):
+        return np.zeros((height,width,3), color_depth)
+
+    @staticmethod
+    def resize_image(image, width, height):
         return cv2.resize(image, (width,height))
 
     @staticmethod
-    def getImageSize(image):
+    def get_image_size(image):
         (height, width) = image.shape[:2]
         return (width, height)
 
     @staticmethod
-    def sharpenImageUsingGaussianBlurWeightedDifference(image, originalImageWeight=1.5, bluredImageWeight=0.5, gaussianBlurKernelStandardDeviation=3, gaussianBlurKernelSize=0):
-        bluredImage = cv2.GaussianBlur(image, (gaussianBlurKernelSize, gaussianBlurKernelSize), gaussianBlurKernelStandardDeviation)
-        return cv2.addWeighted(image, originalImageWeight, bluredImage, -bluredImageWeight, 0)
+    def sharpen_image_using_gaussian_blur_weighted_difference(image, original_image_weight=1.5, blured_image_weight=0.5, gaussian_blur_kernel_standard_deviation=3, gaussian_blur_kernel_size=0):
+        blured_image = cv2.GaussianBlur(image, (gaussian_blur_kernel_size, gaussian_blur_kernel_size), gaussian_blur_kernel_standard_deviation)
+        return cv2.addWeighted(image, original_image_weight, blured_image, -blured_image_weight, 0)
 

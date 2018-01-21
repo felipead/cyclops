@@ -6,16 +6,16 @@ from unittest import *
 import math
 
 class PolygonTest(TestCase):
-    
-    def testCanNotCreatePolygonWithLessThan3Vertexes(self):
-        exceptionThrown = False
+
+    def test_can_not_create_polygon_with_less_than3_vertexes(self):
+        exepction_thrown = False
         try:
             Polygon([(1,2),(3,4)])
         except:
-            exceptionThrown = True
-        assert exceptionThrown
+            exepction_thrown = True
+        assert exepction_thrown
 
-    def testCreatePolygonWith3Vertexes(self):
+    def test_create_polygon_with3_vertexes(self):
         v1 = (1,2)
         v2 = (2,3)
         v3 = (3,4)
@@ -25,7 +25,7 @@ class PolygonTest(TestCase):
         assert polygon[2] == polygon.vertexes[2] == v3
         assert len(polygon) == 3
 
-    def testCreatePolygonWith5Vertexes(self):
+    def test_create_polygon_with5_vertexes(self):
         v1 = (1,2)
         v2 = (2,3)
         v3 = (3,4)
@@ -39,7 +39,7 @@ class PolygonTest(TestCase):
         assert polygon[4] == polygon.vertexes[4] == v5
         assert len(polygon) == 5
 
-    def testGetSides(self):
+    def test_get_sides(self):
         v1 = (1,2)
         v2 = (2,3)
         v3 = (3,4)
@@ -47,7 +47,7 @@ class PolygonTest(TestCase):
         polygon = Polygon((v1, v2, v3, v4))
         assert polygon.sides == ((v1,v2),(v2,v3),(v3,v4),(v4,v1))
 
-    def testGetContour(self):
+    def test_get_contour(self):
         v1 = (1,2)
         v2 = (2,3)
         v3 = (3,4)
@@ -56,145 +56,145 @@ class PolygonTest(TestCase):
         polygon = Polygon((v1, v2, v3, v4, v5))
         assert polygon.contour == (Vector(v2,v1),Vector(v3,v2),Vector(v4,v3),Vector(v5,v4),Vector(v1,v5))
 
-    def testSumOfSquareInteriorAnglesIs360Degrees(self):
+    def test_sum_of_square_interior_angles_is360_degrees(self):
         v1 = (0,0)
         v2 = (0,1)
         v3 = (1,1)
         v4 = (1,0)
         quadrilateral = Polygon((v1, v2, v3, v4))
-        interiorAngles = quadrilateral.interiorAngles
-        assert len(interiorAngles) == 4
-        MathUtil.equalWithinError(sum(interiorAngles), 2*math.pi, 0.00000000000001)
+        interior_angles = quadrilateral.interior_angles
+        assert len(interior_angles) == 4
+        MathUtil.equal_within_error(sum(interior_angles), 2*math.pi, 0.00000000000001)
 
-    def testSumOfQuadrilateralInteriorAnglesIs360Degrees(self):
+    def test_sum_of_quadrilateral_interior_angles_is360_degrees(self):
         v1 = (0,0)
         v2 = (7,0)
         v3 = (16,16)
         v4 = (14,3)
         quadrilateral = Polygon((v1, v2, v3, v4))
-        interiorAngles = quadrilateral.interiorAngles
-        assert len(interiorAngles) == 4
-        MathUtil.equalWithinError(sum(interiorAngles), 2*math.pi, 0.00000000000001)
+        interior_angles = quadrilateral.interior_angles
+        assert len(interior_angles) == 4
+        MathUtil.equal_within_error(sum(interior_angles), 2*math.pi, 0.00000000000001)
 
-    def testSquareInteriorAnglesAre90Degrees(self):
+    def test_square_interior_angles_are90_degrees(self):
         v1 = (0,0)
         v2 = (0,1)
         v3 = (1,1)
         v4 = (1,0)
         square = Polygon((v1, v2, v3, v4))
-        interiorAngles = square.interiorAngles
-        for angle in interiorAngles:
+        interior_angles = square.interior_angles
+        for angle in interior_angles:
             assert angle == math.pi/2
 
-    def testSumOfTriangleInteriorAnglesIs180Degrees(self):
+    def test_sum_of_triangle_interior_angles_is180_degrees(self):
         v1 = (0,0)
         v2 = (5,6)
         v3 = (3,3)
         triangle = Polygon((v1, v2, v3))
-        interiorAngles = triangle.interiorAngles
-        assert len(interiorAngles) == 3
-        assert MathUtil.equalWithinError(sum(interiorAngles), math.pi, 0.00000000000001)
+        interior_angles = triangle.interior_angles
+        assert len(interior_angles) == 3
+        assert MathUtil.equal_within_error(sum(interior_angles), math.pi, 0.00000000000001)
 
-    def testRectangleTriangleAnglesAre45And90Degrees(self):
+    def test_rectangle_triangle_angles_are45_and90_degrees(self):
         v1 = (0,0)
         v2 = (15,15)
         v3 = (15,0)
         triangle = Polygon((v1, v2, v3))
-        interiorAngles = triangle.interiorAngles
-        assert MathUtil.equalWithinError(interiorAngles[0], math.pi/4, 0.00000000000001)
-        assert MathUtil.equalWithinError(interiorAngles[1], math.pi/4, 0.00000000000001)
-        assert MathUtil.equalWithinError(interiorAngles[2], math.pi/2, 0.00000000000001)
-        assert len(interiorAngles) == 3
+        interior_angles = triangle.interior_angles
+        assert MathUtil.equal_within_error(interior_angles[0], math.pi/4, 0.00000000000001)
+        assert MathUtil.equal_within_error(interior_angles[1], math.pi/4, 0.00000000000001)
+        assert MathUtil.equal_within_error(interior_angles[2], math.pi/2, 0.00000000000001)
+        assert len(interior_angles) == 3
 
-    def testTriangleIsConvex(self):
+    def test_triangle_is_convex(self):
         v1 = (0,0)
         v2 = (15,15)
         v3 = (15,0)
         triangle = Polygon((v1, v2, v3))
-        assert triangle.isConvex
+        assert triangle.is_convex
 
-    def testDigonIsNotConvex(self):
+    def test_digon_is_not_convex(self):
         v1 = (0,0)
         v2 = (5,0)
         v3 = (7,0)
         digon = Polygon((v1, v2, v3))
-        assert not digon.isConvex
+        assert not digon.is_convex
 
-    def testSquareIsConvex(self):
+    def test_square_is_convex(self):
         v1 = (0,0)
         v2 = (0,15)
         v3 = (15,15)
         v4 = (15,0)
         rectangle = Polygon((v1, v2, v3, v4))
-        assert rectangle.isConvex
+        assert rectangle.is_convex
 
-    def testRectangleIsConvex(self):
+    def test_rectangle_is_convex(self):
         v1 = (0,0)
         v2 = (0,15)
         v3 = (10,15)
         v4 = (10,0)
         rectangle = Polygon((v1, v2, v3, v4))
-        assert rectangle.isConvex
+        assert rectangle.is_convex
 
-    def testTrapezoidIsConvex(self):
+    def test_trapezoid_is_convex(self):
         v1 = (0,0)
         v2 = (7,0)
         v3 = (5,4)
         v4 = (2,4)
         quadrilateral = Polygon((v1, v2, v3, v4))
-        assert quadrilateral.isConvex
+        assert quadrilateral.is_convex
 
-    def testLozengeIsConvex(self):
+    def test_lozenge_is_convex(self):
         v1 = (0,0)
         v2 = (5,0)
         v3 = (8,4)
         v4 = (3,4)
         rectangle = Polygon((v1, v2, v3, v4))
-        assert rectangle.isConvex
+        assert rectangle.is_convex
 
-    def testConvexQuadrilateralIsConvex(self):
+    def test_convex_quadrilateral_is_convex(self):
         v1 = (0,0)
         v2 = (7,0)
         v3 = (7,7)
         v4 = (2,5)
         quadrilateral = Polygon((v1, v2, v3, v4))
-        assert quadrilateral.isConvex
+        assert quadrilateral.is_convex
 
-    def testButterflyQuadrilateralIsNotConvex(self):
+    def test_butterfly_quadrilateral_is_not_convex(self):
         v1 = (0,0)
         v2 = (3,6)
         v3 = (0,6)
         v4 = (4,2)
         quadrilateral = Polygon((v1, v2, v3, v4))
-        assert not quadrilateral.isConvex
+        assert not quadrilateral.is_convex
 
-    def testQuadrilateralWithCollinearVertexesIsNotConvex(self):
+    def test_quadrilateral_with_collinear_vertexes_is_not_convex(self):
         v1 = (0,0)
         v2 = (5,0)
         v3 = (8,0)
         v4 = (-5,6)
         polygon = Polygon((v1, v2, v3, v4))
-        assert not polygon.isConvex
+        assert not polygon.is_convex
 
-    def testConvexPentagonIsConvex(self):
+    def test_convex_pentagon_is_convex(self):
         v1 = (0,0)
         v2 = (4,0)
         v3 = (4,3)
         v4 = (2,5)
         v5 = (0,3)
         pentagon = Polygon((v1,v2,v3,v4,v5))
-        assert pentagon.isConvex
+        assert pentagon.is_convex
 
-    def testConcavePentagonIsNotConvex(self):
+    def test_concave_pentagon_is_not_convex(self):
         v1 = (0,0)
         v2 = (4,0)
         v3 = (4,3)
         v4 = (2,1)
         v5 = (0,3)
         pentagon = Polygon((v1,v2,v3,v4,v5))
-        assert not pentagon.isConvex
+        assert not pentagon.is_convex
 
-    def testConvexOctagonIsConvex(self):
+    def test_convex_octagon_is_convex(self):
         v1 = (0,0)
         v2 = (2,0)
         v3 = (3,2)
@@ -204,9 +204,9 @@ class PolygonTest(TestCase):
         v7 = (-1,4)
         v8 = (-1,2)
         octagon = Polygon((v1, v2, v3, v4, v5, v6, v7, v8))
-        assert octagon.isConvex
+        assert octagon.is_convex
 
-    def testConcaveOctagonIsNotConvex(self):
+    def test_concave_octagon_is_not_convex(self):
         v1 = (0,0)
         v2 = (2,0)
         v3 = (3,2)
@@ -216,20 +216,20 @@ class PolygonTest(TestCase):
         v7 = (-1,4)
         v8 = (-1,2)
         octagon = Polygon((v1, v2, v3, v4, v5, v6, v7, v8))
-        assert not octagon.isConvex
+        assert not octagon.is_convex
 
-    def testPolygonsAreDifferentIfVertexesAreDifferentOrHaveDifferentOrder(self):
+    def test_polygons_are_different_if_vertexes_are_different_or_have_different_order(self):
         assert Polygon([(1,2), (3,4), (5,6)]) != Polygon([(1,2), (99,100), (5,6)])
         assert Polygon([(1,2), (3,4), (5,6)]) != Polygon([(1,2), (5,6), (3,4)])
         assert Polygon([(1,2), (3,4), (5,6)]) != Polygon([(1,2), (3,4), (5,6), (7,8)])
 
-    def testPolygonsAreEqualIfVertexesAreEqualInTheSameOrder(self):
+    def test_polygons_are_equal_if_vertexes_are_equal_in_the_same_order(self):
         assert Polygon([(1,2), (3,4), (5,6)]) == Polygon([(1,2), (3,4), (5,6)]) == Polygon(((1,2), (3,4), (5,6)))
 
-    def testHashCodeIsAFunctionOfVertexes(self):
+    def test_hash_code_is_a_function_of_vertexes(self):
         assert hash(Polygon([(1,2), (3,4), (5,6)])) != hash(Polygon([(1,2), (99,101), (5,6)]))
         assert hash(Polygon([(1,2), (3,4), (5,6)])) != hash(Polygon([(1,2), (5,6), (3,4)]))
-        assert hash(Polygon([(1,2), (3,4), (5,6)])) != hash(Polygon([(1,2), (3,4), (5,6), (7,8)]))   
+        assert hash(Polygon([(1,2), (3,4), (5,6)])) != hash(Polygon([(1,2), (3,4), (5,6), (7,8)]))
 
         assert hash(Polygon([(1,2), (3,4), (5,6)])) == hash(Polygon([(1,2), (3,4), (5,6)])) == hash(Polygon(((1,2), (3,4), (5,6))))
 

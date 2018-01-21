@@ -1,7 +1,7 @@
 class Frame:
 
     def __init__(self):
-        self.originalQuadrilateral = None
-        self.scaledQuadrilateral = None
-        self.originalPicture = None
-        self.projectedPicture = None
+        self.original_quadrilateral = None
+        self.scaled_quadrilateral = None
+        self.original_picture = None
+        self.projected_picture = None

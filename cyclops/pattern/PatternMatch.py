@@ -11,7 +11,7 @@ class PatternMatch:
         return (x, y)
 
     @classmethod
-    def fromCenter(_class, center, size):
+    def from_center(_class, center, size):
         x = center[0] - size[0]/2
         y = center[1] - size[1]/2
         return PatternMatch((x,y), size)

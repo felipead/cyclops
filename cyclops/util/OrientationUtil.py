@@ -1,25 +1,25 @@
 class OrientationUtil:
 
     @staticmethod
-    def findNumberOf90DegreeClockwiseRotationsToOrientQuadrilateral(quadrilateral, bottomRightCorner):
-        if quadrilateral.bottomLeftCorner == bottomRightCorner:
+    def find_number_of_90_degree_clockwise_rotations_to_orient_quadrilateral(quadrilateral, bottom_right_corner):
+        if quadrilateral.bottom_left_corner == bottom_right_corner:
             return 3
-        elif quadrilateral.topLeftCorner == bottomRightCorner:
+        elif quadrilateral.top_left_corner == bottom_right_corner:
             return 2
-        elif quadrilateral.topRightCorner == bottomRightCorner:
+        elif quadrilateral.top_right_corner == bottom_right_corner:
             return 1
-        elif quadrilateral.bottomRightCorner == bottomRightCorner:
+        elif quadrilateral.bottom_right_corner == bottom_right_corner:
             return 0
         else:
             raise Exception()
 
     @staticmethod
-    def rotateQuadrilateralClockwiseBy90Degrees(quadrilateral, numberOfTimesToRotate):
-        for i in range(numberOfTimesToRotate):
-            quadrilateral = quadrilateral.clockwiseRotationBy90Degrees()
+    def rotate_quadrilateral_clockwise_by_90_degrees(quadrilateral, number_of_times_to_rotate):
+        for i in range(number_of_times_to_rotate):
+            quadrilateral = quadrilateral.clockwise_rotation_by_90_degrees()
         return quadrilateral
 
     @staticmethod
-    def orientQuadrilateral(quadrilateral, bottomRightCorner):
-        n = OrientationUtil.findNumberOf90DegreeClockwiseRotationsToOrientQuadrilateral(quadrilateral, bottomRightCorner)
-        return OrientationUtil.rotateQuadrilateralClockwiseBy90Degrees(quadrilateral, n)
+    def orient_quadrilateral(quadrilateral, bottom_right_corner):
+        n = OrientationUtil.find_number_of_90_degree_clockwise_rotations_to_orient_quadrilateral(quadrilateral, bottom_right_corner)
+        return OrientationUtil.rotate_quadrilateral_clockwise_by_90_degrees(quadrilateral, n)

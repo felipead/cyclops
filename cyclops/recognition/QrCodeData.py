@@ -1,11 +1,11 @@
 class QrCodeData:
 
     def __init__(self):
-        self.rawString = None
-        self.answerSheetId = None
-        self.numberOfQuestions = None
-        self.numberOfAnswerChoices = None
-        self.numberOfQuestionsPerColumn = None
+        self.raw_string = None
+        self.answer_sheet_id = None
+        self.number_questions = None
+        self.number_answer_choices = None
+        self.number_questions_per_column = None
 
     def __str__(self):
-        return self.rawString
+        return self.raw_string

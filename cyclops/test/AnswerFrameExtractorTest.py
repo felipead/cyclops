@@ -9,73 +9,73 @@ from ..pattern.PatternMatch import *
 class AnswerFrameExtractorTest(TestCase):
 
     def setUp(self):
-        self.sizeRelaxationRatio = 1.10
-        self.angleRelaxationInRadians = 0.2
-        self.answerFrameExtractor = AnswerFrameExtractor(self.sizeRelaxationRatio, self.angleRelaxationInRadians)
+        self.size_relaxation_ratio = 1.10
+        self.angle_relaxation_radians = 0.2
+        self.exctractor = AnswerFrameExtractor(self.size_relaxation_ratio, self.angle_relaxation_radians)
 
 
-    def testFindConvexQuadrilateralsWithRoughlyEqualSizesAndAngles(self):
-        basePoint=(125, 98)
-        otherPoints=[(135, 327), (359, 333), (364, 99), (552, 210), (285, 169), (362, 99)]
-        quadrilaterals = self.answerFrameExtractor._findConvexQuadrilateralsWithRoughlyEqualSizesAndAngles(basePoint, otherPoints)
+    def test_find_convex_quadrilaterals_with_roughly_equal_sizes_and_angles(self):
+        base_point=(125, 98)
+        other_points=[(135, 327), (359, 333), (364, 99), (552, 210), (285, 169), (362, 99)]
+        quadrilaterals = self.exctractor._find_convex_quadrilaterals_with_roughly_equal_sizes_and_angles(base_point, other_points)
         assert ConvexQuadrilateral([(125, 98), (135, 327), (359, 333), (364, 99)]) in quadrilaterals
         assert ConvexQuadrilateral([(125, 98), (135, 327), (359, 333), (362, 99)]) in quadrilaterals
         for quadrilateral in quadrilaterals:
-            assert quadrilateral.hasRightInteriorAnglesWithRelaxationOf(self.angleRelaxationInRadians)
+            assert quadrilateral.has_right_interior_angles_with_relaxation_of(self.angle_relaxation_radians)
 
 
-    def testFindAnswerFrameQuadrilateralsSample01(self):
-        matchSize = (32,32)
-        frameOrientationPatternMatches = self.buildPatternMatches([(37, 266), (492, 343)], matchSize)
-        frameAlignmentPatternMatches = self.buildPatternMatches([(142, 16), (622, 371), (190, 259), (526, 72), (248, 45), (228, 314)], matchSize)
-        expectedFrames = []
-        expectedFrames.append(ConvexQuadrilateral([(492, 343), (526, 72), (248, 45), (228, 314)]))
-        self.findAnswerFramesQuadrilateralsTestRunner(frameOrientationPatternMatches, frameAlignmentPatternMatches, expectedFrames)
+    def test_find_answer_frame_quadrilaterals_sample01(self):
+        match_size = (32,32)
+        frame_orientation_matches = self.build_pattern_matches([(37, 266), (492, 343)], match_size)
+        frame_alignment_matches = self.build_pattern_matches([(142, 16), (622, 371), (190, 259), (526, 72), (248, 45), (228, 314)], match_size)
+        expected_frames = []
+        expected_frames.append(ConvexQuadrilateral([(492, 343), (526, 72), (248, 45), (228, 314)]))
+        self.find_answer_frames_quadrilaterals_test_runner(frame_orientation_matches, frame_alignment_matches, expected_frames)
 
-    def testFindAnswerFrameQuadrilateralsSample02(self):
-        matchSize = (32,32)
-        frameOrientationPatternMatches = self.buildPatternMatches([(624, 161), (519, 368)], matchSize)
-        frameAlignmentPatternMatches = self.buildPatternMatches([(169, 353), (89, 397), (80, 397), (216, 370), (538, 56), (204, 56)], matchSize)
-        expectedFrames = []
-        expectedFrames.append(ConvexQuadrilateral([(519, 368), (538, 56), (204, 56), (216, 370)]))
-        self.findAnswerFramesQuadrilateralsTestRunner(frameOrientationPatternMatches, frameAlignmentPatternMatches, expectedFrames)
+    def test_find_answer_frame_quadrilaterals_sample02(self):
+        match_size = (32,32)
+        frame_orientation_matches = self.build_pattern_matches([(624, 161), (519, 368)], match_size)
+        frame_alignment_matches = self.build_pattern_matches([(169, 353), (89, 397), (80, 397), (216, 370), (538, 56), (204, 56)], match_size)
+        expected_frames = []
+        expected_frames.append(ConvexQuadrilateral([(519, 368), (538, 56), (204, 56), (216, 370)]))
+        self.find_answer_frames_quadrilaterals_test_runner(frame_orientation_matches, frame_alignment_matches, expected_frames)
 
-    def testFindAnswerFrameQuadrilateralsSample03(self):
-        matchSize = (32,32)
-        frameOrientationPatternMatches = self.buildPatternMatches([(526, 363), (519, 364)], matchSize)
-        frameAlignmentPatternMatches = self.buildPatternMatches([(171, 344), (89, 303), (81, 309), (535, 54), (213, 51), (218, 362)], matchSize)
-        expectedFrames = []
-        expectedFrames.append(ConvexQuadrilateral([(526, 363), (535, 54), (213, 51), (218, 362)]))
-        expectedFrames.append(ConvexQuadrilateral([(519, 364), (535, 54), (213, 51), (218, 362)]))
-        self.findAnswerFramesQuadrilateralsTestRunner(frameOrientationPatternMatches, frameAlignmentPatternMatches, expectedFrames)
+    def test_find_answer_frame_quadrilaterals_sample03(self):
+        match_size = (32,32)
+        frame_orientation_matches = self.build_pattern_matches([(526, 363), (519, 364)], match_size)
+        frame_alignment_matches = self.build_pattern_matches([(171, 344), (89, 303), (81, 309), (535, 54), (213, 51), (218, 362)], match_size)
+        expected_frames = []
+        expected_frames.append(ConvexQuadrilateral([(526, 363), (535, 54), (213, 51), (218, 362)]))
+        expected_frames.append(ConvexQuadrilateral([(519, 364), (535, 54), (213, 51), (218, 362)]))
+        self.find_answer_frames_quadrilaterals_test_runner(frame_orientation_matches, frame_alignment_matches, expected_frames)
 
-    def testFindAnswerFrameQuadrilateralsSample04(self):
-        matchSize = (32,32)
-        frameOrientationPatternMatches = self.buildPatternMatches([(180, 368), (580, 239)], matchSize)
-        frameAlignmentPatternMatches = self.buildPatternMatches([(417, 360), (417, 130), (182, 127), (119, 159), (481, 195), (251, 205)], matchSize)
-        expectedFrames = []
-        expectedFrames.append(ConvexQuadrilateral([(180, 368), (417, 360), (417, 130), (182, 127)]))
-        self.findAnswerFramesQuadrilateralsTestRunner(frameOrientationPatternMatches, frameAlignmentPatternMatches, expectedFrames)
+    def test_find_answer_frame_quadrilaterals_sample04(self):
+        match_size = (32,32)
+        frame_orientation_matches = self.build_pattern_matches([(180, 368), (580, 239)], match_size)
+        frame_alignment_matches = self.build_pattern_matches([(417, 360), (417, 130), (182, 127), (119, 159), (481, 195), (251, 205)], match_size)
+        expected_frames = []
+        expected_frames.append(ConvexQuadrilateral([(180, 368), (417, 360), (417, 130), (182, 127)]))
+        self.find_answer_frames_quadrilaterals_test_runner(frame_orientation_matches, frame_alignment_matches, expected_frames)
 
-    def testFindAnswerFrameQuadrilateralsSample05(self):
-        matchSize = (32,32)
-        frameOrientationPatternMatches = self.buildPatternMatches([(125, 98), (121, 96)], matchSize)
-        frameAlignmentPatternMatches = self.buildPatternMatches([(135, 327), (359, 333), (364, 99), (552, 210), (285, 169), (362, 99)], matchSize)
-        expectedFrames = []
-        expectedFrames.append(ConvexQuadrilateral([(121, 96), (135, 327), (359, 333), (362, 99)]))
-        expectedFrames.append(ConvexQuadrilateral([(121, 96), (135, 327), (359, 333), (364, 99)]))
-        expectedFrames.append(ConvexQuadrilateral([(125, 98), (135, 327), (359, 333), (364, 99)]))
-        expectedFrames.append(ConvexQuadrilateral([(125, 98), (135, 327), (359, 333), (362, 99)]))
-        self.findAnswerFramesQuadrilateralsTestRunner(frameOrientationPatternMatches, frameAlignmentPatternMatches, expectedFrames)
-    
-    def findAnswerFramesQuadrilateralsTestRunner(self, frameOrientationPatternMatches, frameAlignmentPatternMatches, expectedFrames):
-        foundFrames = self.answerFrameExtractor._findAnswerFrameQuadrilaterals(frameOrientationPatternMatches, frameAlignmentPatternMatches)
-        for expectedFrame in expectedFrames:
-            assert expectedFrame in foundFrames
+    def test_find_answer_frame_quadrilaterals_sample05(self):
+        match_size = (32,32)
+        frame_orientation_matches = self.build_pattern_matches([(125, 98), (121, 96)], match_size)
+        frame_alignment_matches = self.build_pattern_matches([(135, 327), (359, 333), (364, 99), (552, 210), (285, 169), (362, 99)], match_size)
+        expected_frames = []
+        expected_frames.append(ConvexQuadrilateral([(121, 96), (135, 327), (359, 333), (362, 99)]))
+        expected_frames.append(ConvexQuadrilateral([(121, 96), (135, 327), (359, 333), (364, 99)]))
+        expected_frames.append(ConvexQuadrilateral([(125, 98), (135, 327), (359, 333), (364, 99)]))
+        expected_frames.append(ConvexQuadrilateral([(125, 98), (135, 327), (359, 333), (362, 99)]))
+        self.find_answer_frames_quadrilaterals_test_runner(frame_orientation_matches, frame_alignment_matches, expected_frames)
 
-    def buildPatternMatches(self, centers, size):
+    def find_answer_frames_quadrilaterals_test_runner(self, frame_orientation_matches, frame_alignment_matches, expected_frames):
+        found_frames = self.exctractor._find_answer_frame_quadrilaterals(frame_orientation_matches, frame_alignment_matches)
+        for frame in expected_frames:
+            assert frame in found_frames
+
+    def build_pattern_matches(self, centers, size):
         matches = []
         for center in centers:
-            matches.append(PatternMatch.fromCenter(center, size))
+            matches.append(PatternMatch.from_center(center, size))
         return matches
 

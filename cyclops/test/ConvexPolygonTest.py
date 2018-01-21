@@ -5,56 +5,56 @@ from unittest import *
 
 class ConvexPolygonTest(TestCase):
 
-    def testCreateConvexPolygon(self):
+    def test_create_convex_polygon(self):
         v1 = (0,0)
         v2 = (0,15)
         v3 = (15,15)
         v4 = (15,0)
         convex = Polygon([v1,v2,v3,v4])
-        assert convex.isConvex
+        assert convex.is_convex
 
-    def testDoNotCreateConcavePolygon(self):
+    def test_do_not_create_concave_polygon(self):
         v1 = (0,0)
         v2 = (4,0)
         v3 = (4,3)
         v4 = (2,1)
         v5 = (0,3)
         concave = Polygon([v1,v2,v3,v4,v5])
-        assert not concave.isConvex
+        assert not concave.is_convex
 
-    def testConvexTriangleWithClockwiseContourIsClockwise(self):
+    def test_convex_triangle_with_clockwise_contour_is_clockwise(self):
         v1 = (0,0)
         v2 = (15,15)
         v3 = (15,0)
         triangle = ConvexPolygon((v1,v2,v3))
-        assert triangle.isClockwise
+        assert triangle.is_clockwise
 
-    def testConvexTriangleWithCounterclockwiseContourIsCounterclockwise(self):
+    def test_convex_triangle_with_counterclockwise_contour_is_counterclockwise(self):
         v1 = (0,0)
         v2 = (15,15)
         v3 = (15,0)
         triangle = ConvexPolygon((v3,v2,v1))
-        assert not triangle.isClockwise
+        assert not triangle.is_clockwise
 
-    def testConvexPentagonWithCounterclockwiseContourIsNotClockwise(self):
+    def test_convex_pentagon_with_counterclockwise_contour_is_not_clockwise(self):
         v1 = (0,0)
         v2 = (4,0)
         v3 = (4,3)
         v4 = (2,5)
         v5 = (0,3)
         pentagon = ConvexPolygon((v1,v2,v3,v4,v5))
-        assert not pentagon.isClockwise
+        assert not pentagon.is_clockwise
 
-    def testConvexPentagonWithClockwiseContourIsClockwise(self):
+    def test_convex_pentagon_with_clockwise_contour_is_clockwise(self):
         v1 = (0,0)
         v2 = (4,0)
         v3 = (4,3)
         v4 = (2,5)
         v5 = (0,3)
         pentagon = ConvexPolygon((v5,v4,v3,v2,v1))
-        assert pentagon.isClockwise
+        assert pentagon.is_clockwise
 
-    def testConvexPolygonIsNotEqualToObjectWithDifferentType(self):
+    def test_convex_polygon_is_not_equal_to_object_with_different_type(self):
         v1 = (0,0)
         v2 = (5,0)
         v3 = (5,5)
@@ -62,7 +62,7 @@ class ConvexPolygonTest(TestCase):
         polygon = ConvexPolygon([v1, v2, v3, v4])
         assert polygon != 5
 
-    def testConvexPolygonsWithSameVertexesInTheSameOrderAreEqual(self):
+    def test_convex_polygons_with_same_vertexes_in_the_same_order_are_equal(self):
         v1 = (0,0)
         v2 = (4,0)
         v3 = (4,3)
@@ -72,17 +72,17 @@ class ConvexPolygonTest(TestCase):
         polygon2 = ConvexPolygon([v1, v2, v3, v4, v5])
         assert polygon1 == polygon2
 
-    def testConvexPolygonsWithSlightlyDifferentVertexesAreNotEqual(self):
+    def test_convex_polygons_with_slightly_different_vertexes_are_not_equal(self):
         polygon1 = ConvexPolygon([(0,0), (5,0), (5,5), (0,5)])
         polygon2 = ConvexPolygon([(0,0), (6,0), (5,5), (0,5)])
         assert polygon1 != polygon2
 
-    def testConvexPolygonsWithVeryDifferentVertexesAreNotEqual(self):
+    def test_convex_polygons_with_very_different_vertexes_are_not_equal(self):
         polygon1 = ConvexPolygon([(0,0), (5,0), (5,5), (0,5)])
         polygon2 = ConvexPolygon([(1,-2), (13,4), (6,8), (-2,4)])
         assert polygon1 != polygon2
 
-    def testConvexPolygonsWithDifferentNumberOfVertexesAreNotEqual(self):
+    def test_convex_polygons_with_different_number_of_vertexes_are_not_equal(self):
         v1 = (0,0)
         v2 = (4,0)
         v3 = (4,3)
@@ -90,13 +90,13 @@ class ConvexPolygonTest(TestCase):
         v5 = (0,3)
         assert v1
 
-    def testConvexTrianglesMirroredOverTheFirstVertexAreEqual(self):
+    def test_convex_triangles_mirrored_over_the_first_vertex_are_equal(self):
         v1 = (0,0)
         v2 = (4,0)
         v3 = (2,3)
         assert ConvexPolygon((v1,v2,v3)) == ConvexPolygon((v1,v3,v2))
 
-    def testConvexQuadrilateralsMirroredOverTheFirstVertexAreEqual(self):
+    def test_convex_quadrilaterals_mirrored_over_the_first_vertex_are_equal(self):
         v1 = (1,-2)
         v2 = (13,4)
         v3 = (6,8)
@@ -105,7 +105,7 @@ class ConvexPolygonTest(TestCase):
         polygon2 = ConvexPolygon([v1, v4, v3, v2])
         assert polygon1 == polygon2
 
-    def testConvexPentagonsMirroredOverTheFirstVertexAreEqual(self):
+    def test_convex_pentagons_mirrored_over_the_first_vertex_are_equal(self):
         v1 = (0,0)
         v2 = (4,0)
         v3 = (4,3)
@@ -113,7 +113,7 @@ class ConvexPolygonTest(TestCase):
         v5 = (0,3)
         assert ConvexPolygon((v1,v2,v3,v4,v5)) == ConvexPolygon((v1,v5,v4,v3,v2))
 
-    def testHashCodeShouldBeDependentOnlyOnVertexesRegardlessOfTheOrder(self):
+    def test_hash_code_should_be_dependent_only_on_vertexes_regardless_of_the_order(self):
         v1 = (1,-2)
         v2 = (13,4)
         v3 = (6,8)
@@ -128,7 +128,7 @@ class ConvexPolygonTest(TestCase):
         polygon6 = ConvexPolygon([(0,-2), (13.5,4.3), v3, (-3, 5)])
         assert hash(polygon1) != hash(polygon4) != hash(polygon5) != hash(polygon6)
 
-    def testAreaOfSquare(self):
+    def test_area_of_square(self):
         a = 6
         v1 = (a,0)
         v2 = (a,a)
@@ -136,7 +136,7 @@ class ConvexPolygonTest(TestCase):
         v4 = (0,0)
         assert ConvexPolygon([v1, v2, v3, v4]).area == a*a
 
-    def testAreaOfRectangle(self):
+    def test_area_of_rectangle(self):
         a = 6
         b = 12
         v1 = (a,0)
@@ -145,7 +145,7 @@ class ConvexPolygonTest(TestCase):
         v4 = (0,0)
         assert ConvexPolygon([v1, v2, v3, v4]).area == a*b
 
-    def testAreaOfEquilateralTriangle(self):
+    def test_area_of_equilateral_triangle(self):
         a = 6
         b = 12
         v1 = (0,0)
@@ -153,7 +153,7 @@ class ConvexPolygonTest(TestCase):
         v3 = (a,b)
         assert ConvexPolygon([v1,v2,v3]).area == a*b*0.5
 
-    def testAreaOfTrapezoid(self):
+    def test_area_of_trapezoid(self):
         a = 12
         b = 6
         height = b
@@ -164,7 +164,7 @@ class ConvexPolygonTest(TestCase):
 
         assert ConvexPolygon([v1,v2,v3,v4]).area == 0.5*(a+b) * b
 
-    def testCentroidOfSquare(self):
+    def test_centroid_of_square(self):
         a = (0,0)
         b = (0,6)
         c = (6,6)
@@ -183,21 +183,21 @@ class ConvexPolygonTest(TestCase):
         d = (13,23)
         assert ConvexPolygon([a,b,c,d]).centroid == Point((13,20))
 
-    def testCentroidOfRectangle(self):
+    def test_centroid_of_rectangle(self):
         a = (0,0)
         b = (0,12)
         c = (6,12)
         d = (6,0)
         assert ConvexPolygon([a,b,c,d]).centroid == Point((3,6))
 
-    def testCentroidOfEquilateralLozenge(self):
+    def test_centroid_of_equilateral_lozenge(self):
         a = (0,0)
         b = (4,-2)
         c = (8,0)
         d = (4,2)
         assert ConvexPolygon([a,b,c,d]).centroid == Point((4,0))
 
-    def testCentroidOfTrapezoid(self):
+    def test_centroid_of_trapezoid(self):
         a = 4
         b = 2
         v1 = (0,0)
@@ -207,7 +207,7 @@ class ConvexPolygonTest(TestCase):
         centroid = ConvexPolygon([v1,v2,v3,v4]).centroid
         assert centroid == (2,1)
 
-    def testCentroidOfEquilateralOctagon(self):
+    def test_centroid_of_equilateral_octagon(self):
         v1 = (0,0)
         v2 = (1,-1)
         v3 = (2,-1)
@@ -219,7 +219,7 @@ class ConvexPolygonTest(TestCase):
         octagon = ConvexPolygon([v1,v2,v3,v4,v5,v6,v7,v8])
         assert octagon.centroid == (1.5,0.5)
 
-    def testCentroidOfIsocelesTriangle(self):
+    def test_centroid_of_isoceles_triangle(self):
         v1 = (0,0)
         v2 = (3,0)
         v3 = (1.5, 3)
@@ -228,7 +228,7 @@ class ConvexPolygonTest(TestCase):
         assert centroid.x == 1.5
         assert centroid.y == 1
 
-    def testCentroidOfDeformedQuadrilateral(self):
+    def test_centroid_of_deformed_quadrilateral(self):
         v1 = (1,5)
         v2 = (2,3)
         v3 = (7,5)

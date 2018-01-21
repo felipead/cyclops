@@ -15,7 +15,7 @@ http://mathworld.wolfram.com/Polygon.html
 
 Polygons are read-only objects.
 '''
-class Polygon(object):
+class Polygon:
 
     def __init__(self, vertexes):
         if len(vertexes) < 3:
@@ -28,10 +28,10 @@ class Polygon(object):
             points.append(vertex)
         self._vertexes = tuple(points)
 
-        self._interiorAngles = None
+        self._interior_angles = None
         self._sides = None
         self._contour = None
-        self._isConvex = None
+        self._is_convex = None
 
     @property
     def vertexes(self):
@@ -67,19 +67,19 @@ class Polygon(object):
     The list of interior angles in the same order as the list of vertexes.
     '''
     @property
-    def interiorAngles(self):
-        if self._interiorAngles is None:
+    def interior_angles(self):
+        if self._interior_angles is None:
             n = len(self.vertexes)
             angles = []
             for i in range(n):
                 v1 = self.vertexes[i]
                 v2 = self.vertexes[(i - 1) % n]
                 v3 = self.vertexes[(i + 1) % n]
-                angle = Vector(v1,v2).angleBetween(Vector(v1,v3))
+                angle = Vector(v1,v2).angle_between(Vector(v1,v3))
                 angles.append(angle)
-            self._interiorAngles = tuple(angles)
+            self._interior_angles = tuple(angles)
 
-        return self._interiorAngles
+        return self._interior_angles
 
     '''
     A planar polygon is convex if it contains all the line segments connecting any pair of its
@@ -95,28 +95,28 @@ class Polygon(object):
     http://mathworld.wolfram.com/ConvexPolygon.html
     '''
     @property
-    def isConvex(self):
-        if self._isConvex is None:
+    def is_convex(self):
+        if self._is_convex is None:
             contour = self.contour
             n = len(contour)
-            previousSign = None
+            previous_sign = None
             for i in range(n):
                 v1 = contour[i]
                 v2 = contour[(i+1) % n]
-                sign = MathUtil.sign(v1.perpendicularDotProduct(v2))
+                sign = MathUtil.sign(v1.perpendicular_dot_product(v2))
 
                 if sign == 0:
-                    self._isConvex = False
+                    self._is_convex = False
                     break
-                if previousSign != None:
-                    if sign != previousSign:
-                        self._isConvex = False
+                if previous_sign != None:
+                    if sign != previous_sign:
+                        self._is_convex = False
                         break
-                previousSign = sign
-            if self._isConvex is None:
-                self._isConvex = True
+                previous_sign = sign
+            if self._is_convex is None:
+                self._is_convex = True
 
-        return self._isConvex
+        return self._is_convex
 
     def __getitem__(self, index):
         return self._vertexes[index]
