@@ -26,13 +26,11 @@ For macOS, we recommend using the [Homebrew](http://brew.sh) package manager.
 $ brew install opencv3
 ```
 
-Follow the "Caveat" instructions from Homebrew in order to link OpenCV with Python.
+It may be necessary to follow the "Caveat" instructions from Homebrew in order to link OpenCV with Python.
 
-To check if everything is working, open the Python console and try to import the `cv2` package. If you didn't get any errors it means everything is probably OK.
+To check if everything is working, open the Python 3 console and try to import the `cv2` package.
 
 ## Installing ZBar
-
-Zbar can be installed using Homebrew:
 
 ```sh
 $ brew install zbar
@@ -40,35 +38,24 @@ $ brew install zbar
 
 This will install the `zbarimg` command.
 
-## Creating the virtual environment
-
-If you don't have pipenv installed, you can get it from Homebrew:
+## Installing Pipenv
 
 ```sh
 $ brew install pipenv
 ```
 
-Create a new Python 3 virtual environment with bindings to system packages:
+## Creating the virtual environment
 
-```sh
-$ pipenv --three --site-packages
-```
-
-Install runtime and development dependencies:
-
-```sh
-$ pipenv install
-$ pipenv install -d
-```
+Run the [`scripts/create-env.sh`](scripts/create-env.sh) script to bootstrap Pipenv and install dependencies.
 
 # Running the Application
 
-Run the `cyclops.sh` script passing as argument one of the images from the `Samples` folder.
+Run the [`cyclops.sh`](cyclops.sh) script passing as argument one of the images from the [`Samples`](Samples) folder.
 
-There's a real-time interactive camera mode that can be activated using `cyclops-camera.sh`. You can print an answer sheet and show it to the camera on your computer. Works best if the paper is displayed horizontally.
+There's a real-time interactive camera mode that can be activated using [`cyclops-camera.sh`](cyclops-camera.sh). You can print an answer sheet and show it to the camera on your computer. Works best if the paper is displayed horizontally.
 
 # Running Automated Tests
 
-Run the `unit-test.sh` script to run the suite of automated unit tests.
+Run the [`scripts/test.sh`](scripts/test.sh) script to run the suite of automated tests.
 
-You can run a quick sanity integration test to check the health of the algorithms through the script `sanity-test.sh`.
+You can run a quick sanity integration test to check the health of the algorithms through the script [`scripts/sanity-check.sh`](scripts/sanity-check.sh).
