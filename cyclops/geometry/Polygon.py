@@ -2,13 +2,13 @@
 
 from ..util.MathUtil import *
 
-from Vector import *
-from Point import *
+from .Vector import *
+from .Point import *
 
 """
-A polygon can be defined as a geometric object "consisting of a number of points (called vertices) 
+A polygon can be defined as a geometric object "consisting of a number of points (called vertices)
 and an equal number of line segments (called sides), namely a cyclically ordered set of points in
-a plane, with no three successive points collinear, together with the line segments joining 
+a plane, with no three successive points collinear, together with the line segments joining
 consecutive pairs of the points. In other words, a polygon is closed broken line lying in a plane"
 (Coxeter and Greitzer 1967, p. 51).
 http://mathworld.wolfram.com/Polygon.html
@@ -20,7 +20,7 @@ class Polygon(object):
     def __init__(self, vertexes):
         if len(vertexes) < 3:
             raise Exception("Polygon can not have less than 3 vertexes.")
-        
+
         points = []
         for vertex in vertexes:
             if not isinstance(vertex,Point):
@@ -42,7 +42,7 @@ class Polygon(object):
         if self._sides is None:
             n = len(self.vertexes)
             sides = []
-            for i in xrange(n):
+            for i in range(n):
                 v1 = self.vertexes[i]
                 v2 = self.vertexes[(i + 1) % n]
                 sides.append((v1,v2))
@@ -60,7 +60,7 @@ class Polygon(object):
             for side in self.sides:
                 contour.append(Vector(side[1], side[0]))
             self._contour = tuple(contour)
-        
+
         return self._contour
 
     """
@@ -71,14 +71,14 @@ class Polygon(object):
         if self._interiorAngles is None:
             n = len(self.vertexes)
             angles = []
-            for i in xrange(n):
+            for i in range(n):
                 v1 = self.vertexes[i]
                 v2 = self.vertexes[(i - 1) % n]
                 v3 = self.vertexes[(i + 1) % n]
                 angle = Vector(v1,v2).angleBetween(Vector(v1,v3))
                 angles.append(angle)
             self._interiorAngles = tuple(angles)
-        
+
         return self._interiorAngles
 
     """
@@ -100,11 +100,11 @@ class Polygon(object):
             contour = self.contour
             n = len(contour)
             previousSign = None
-            for i in xrange(n):
+            for i in range(n):
                 v1 = contour[i]
                 v2 = contour[(i+1) % n]
                 sign = MathUtil.sign(v1.perpendicularDotProduct(v2))
-                
+
                 if sign == 0:
                     self._isConvex = False
                     break

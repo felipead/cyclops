@@ -537,7 +537,7 @@ class VectorTest(TestCase):
 
         multipliedVector = Vector(head).multipliedByScalar(scalar)
 
-        for i in xrange(len(head)):
+        for i in range(len(head)):
             assert multipliedVector[i] == multipliedVector.head[i] == scalar * head[i]
 
         assert multipliedVector.tail == Point((0,))
@@ -550,9 +550,9 @@ class VectorTest(TestCase):
         vector = Vector(head, tail)
         multipliedVector = vector.multipliedByScalar(scalar)
 
-        for i in xrange(len(head)):
+        for i in range(len(head)):
             assert multipliedVector[i] == scalar * vector[i]
-        
+
         assert multipliedVector.tail == tail
 
     def testMultipliedByNegativeScalarWithZeroAsTail(self):
@@ -562,7 +562,7 @@ class VectorTest(TestCase):
         vector = Vector(head)
         multipliedVector = vector.multipliedByScalar(scalar)
 
-        for i in xrange(len(head)):
+        for i in range(len(head)):
             assert multipliedVector[i] == multipliedVector.head[i] == scalar * head[i]
 
         assert multipliedVector.tail == Point((0,))
@@ -576,9 +576,9 @@ class VectorTest(TestCase):
         vector = Vector(head, tail)
         multipliedVector = vector.multipliedByScalar(scalar)
 
-        for i in xrange(len(head)):
+        for i in range(len(head)):
             assert multipliedVector[i] == scalar * vector[i]
-        
+
         assert multipliedVector.tail == tail
 
     def testMultipliedByNegativeScalarWithNonZeroAsTail(self):
@@ -589,9 +589,9 @@ class VectorTest(TestCase):
         vector = Vector(head, tail)
         multipliedVector = vector.multipliedByScalar(scalar)
 
-        for i in xrange(len(head)):
+        for i in range(len(head)):
             assert multipliedVector[i] == scalar * vector[i]
-        
+
         assert multipliedVector.tail == tail
         assert MathUtil.equalWithinError(multipliedVector.angleBetween(vector), math.pi, 0.0000001)
 
@@ -603,9 +603,9 @@ class VectorTest(TestCase):
         vector = Vector(head, tail)
         multipliedVector = vector.multipliedByScalar(scalar)
 
-        for i in xrange(len(head)):
+        for i in range(len(head)):
             assert multipliedVector[i] == scalar * vector[i]
-        
+
 
         assert multipliedVector.tail == tail
         assert multipliedVector.head == multipliedVector.tail

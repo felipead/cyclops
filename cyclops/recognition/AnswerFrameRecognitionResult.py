@@ -1,4 +1,4 @@
-from Answer import *
+from .Answer import *
 
 class AnswerFrameRecognitionResult:
 

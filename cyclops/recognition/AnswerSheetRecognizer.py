@@ -1,11 +1,11 @@
-from AnswerFrameExtractor import *
-from QrCodeFrameExtractor import *
-from AnswerSheetRecognitionResult import *
-from QrCodeDecoder import *
-from AnswerFrameRecognizer import *
+from .AnswerFrameExtractor import *
+from .QrCodeFrameExtractor import *
+from .AnswerSheetRecognitionResult import *
+from .QrCodeDecoder import *
+from .AnswerFrameRecognizer import *
 
 class AnswerSheetRecognizer:
-    
+
     def __init__(self):
         self._answerFrameExtractor = AnswerFrameExtractor()
         self._qrCodeFrameExtractor = QrCodeFrameExtractor()
@@ -22,7 +22,7 @@ class AnswerSheetRecognizer:
 
             if qrCodeData != None:
                 self._answerFrameRecognizer.recognize(extraction.answerFrame, qrCodeData)
-            
+
             result.answerFrame = extraction.answerFrame
             result.qrCodeFrame = qrCodeFrame
             result.qrCodeData = qrCodeData

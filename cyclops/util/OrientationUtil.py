@@ -15,7 +15,7 @@ class OrientationUtil:
 
     @staticmethod
     def rotateQuadrilateralClockwiseBy90Degrees(quadrilateral, numberOfTimesToRotate):
-        for i in xrange(numberOfTimesToRotate):
+        for i in range(numberOfTimesToRotate):
             quadrilateral = quadrilateral.clockwiseRotationBy90Degrees()
         return quadrilateral
 

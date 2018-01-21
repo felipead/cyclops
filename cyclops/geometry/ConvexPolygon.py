@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from Polygon import *
+from .Polygon import *
 
 """
 A planar polygon is convex if it contains all the line segments connecting any pair of its
@@ -9,7 +9,7 @@ A planar polygon that is not convex is said to be a concave polygon.
 http://mathworld.wolfram.com/ConvexPolygon.html
 """
 class ConvexPolygon(Polygon):
-    
+
     def __init__(self, vertexes):
         super(ConvexPolygon, self).__init__(vertexes)
         if not self.isConvex:
@@ -27,7 +27,7 @@ class ConvexPolygon(Polygon):
     def isClockwise(self):
         if self._isClockwise is None:
             contour = self.contour
-            # since this polygon is guaranteed to be convex, we can pick (in order) any pair 
+            # since this polygon is guaranteed to be convex, we can pick (in order) any pair
             # of vectors from its oriented contour
             v1 = contour[0]
             v2 = contour[1]
@@ -36,11 +36,11 @@ class ConvexPolygon(Polygon):
         return self._isClockwise
 
     """
-    The centroid or geometric center of a two-dimensional region is, informally, the point at which 
+    The centroid or geometric center of a two-dimensional region is, informally, the point at which
     a cardboard cut-out of the region could be perfectly balanced on the tip of a pencil (assuming
     uniform density and a uniform gravitational field). Formally, the centroid of a plane figure or
     two-dimensional shape is the arithmetic mean ("average") position of all the points in the shape.
-    The definition extends to any object in n-dimensional space: its centroid is the mean position 
+    The definition extends to any object in n-dimensional space: its centroid is the mean position
     of all the points in all of the coordinate directions.
     http://en.wikipedia.org/wiki/Centroid
     """
@@ -66,7 +66,7 @@ class ConvexPolygon(Polygon):
         if self._area is None:
             n = len(self)
             summation = 0
-            for i in xrange(n):
+            for i in range(n):
                 v1 = self[i % n]
                 v2 = self[(i+1) % n]
                 summation += v1.x * v2.y - v2.x * v1.y

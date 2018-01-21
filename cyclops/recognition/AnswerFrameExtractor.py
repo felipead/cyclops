@@ -1,7 +1,7 @@
 import math
 
-from AnswerFrameExtractionResult import *
-from Frame import *
+from .AnswerFrameExtractionResult import *
+from .Frame import *
 
 from ..pattern.FrameAlignmentPatternMatcher import *
 from ..pattern.FrameOrientationPatternMatcher import *
@@ -70,11 +70,11 @@ class AnswerFrameExtractor:
             baseDistance = MathUtil.distanceBetweenPoints(firstPoint, basePoint)
             for secondPoint in otherPoints:
                 if secondPoint == firstPoint:
-                    continue                    
+                    continue
                 if self.__areDistancesRoughlyEqual(MathUtil.distanceBetweenPoints(firstPoint, secondPoint), baseDistance):
                     for thirdPoint in otherPoints:
                         if thirdPoint == firstPoint or thirdPoint == secondPoint:
-                            continue    
+                            continue
                         if self.__areDistancesRoughlyEqual(MathUtil.distanceBetweenPoints(secondPoint, thirdPoint), baseDistance):
                             if self.__areDistancesRoughlyEqual(MathUtil.distanceBetweenPoints(thirdPoint, basePoint), baseDistance):
                                 points = (basePoint, firstPoint, secondPoint, thirdPoint)
@@ -108,7 +108,7 @@ class AnswerFrameExtractor:
         projectionSquare = ConvexQuadrilateral([(projectionSize-1, projectionSize-1), (0, projectionSize-1), (0, 0), (projectionSize-1, 0)])
 
         projectedAnswerFramePicture = PerspectiveUtil.projectQuadrilateralToSquarePicture(picture, counterclockwiseQuadrilateral, projectionSquare)
-        
+
         frame = Frame()
         frame.originalQuadrilateral = quadrilateral
         frame.scaledQuadrilateral = scaledQuadrilateral

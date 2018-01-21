@@ -1,4 +1,4 @@
-from AbstractPatternMatcher import *
+from .AbstractPatternMatcher import *
 
 class FrameAlignmentPatternMatcher(AbstractPatternMatcher):
 

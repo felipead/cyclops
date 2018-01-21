@@ -9,7 +9,7 @@ Still a prototype under heavy development. Please don't mind the mess.
 
 # Requirements
 
-- Python 2.7 (not compatible with Python 3 yet)
+- Python 3.6+
 - [OpenCV](http://opencv.org) 3.4+ with Python bindings
 - [numpy](http://www.numpy.org)
 - [zbar](http://zbar.sourceforge.net)

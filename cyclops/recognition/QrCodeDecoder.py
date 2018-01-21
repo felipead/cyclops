@@ -2,7 +2,7 @@ from subprocess import check_output, CalledProcessError
 import os
 from cv2 import imwrite
 
-from QrCodeData import *
+from .QrCodeData import *
 
 class QrCodeDecoder:
 
@@ -31,8 +31,9 @@ class QrCodeDecoder:
         imwrite(self.__QR_CODE_FILENAME, picture)
         return self.__QR_CODE_FILENAME
 
-    def _extractQrCodeString(self, output):
-        lines = output.split('\n')
+    def _extractQrCodeString(self, binary):
+        text = binary.decode('utf-8')
+        lines = text.split()
         return lines[0]
 
     def _extractQrCodeData(self, qrCodeString):

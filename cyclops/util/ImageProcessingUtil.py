@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-from PerspectiveUtil import *
+from .PerspectiveUtil import *
 
 class ImageProcessingUtil:
 
@@ -71,7 +71,7 @@ class ImageProcessingUtil:
         return cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, \
             ImageProcessingUtil.__mapToOddNumber(blockSize), constantSubtractedFromMean)
 
-    
+
     @staticmethod
     def convertToBinary(image, threshold):
         gray = ImageProcessingUtil.convertToGrayscale(image)

@@ -1,17 +1,17 @@
 import unittest
 from unittest import *
 
-from AnswerFrameExtractorTest import *
-from PatternFactoryTest import *
-from PatternMatchTest import *
-from MathUtilTest import *
-from OrientationUtilTest import *
-from PointTest import *
-from VectorTest import *
-from PolygonTest import *
-from ConvexPolygonTest import *
-from ConvexQuadrilateralTest import *
-from GeometryUtilTest import *
+from .AnswerFrameExtractorTest import *
+from .PatternFactoryTest import *
+from .PatternMatchTest import *
+from .MathUtilTest import *
+from .OrientationUtilTest import *
+from .PointTest import *
+from .VectorTest import *
+from .PolygonTest import *
+from .ConvexPolygonTest import *
+from .ConvexQuadrilateralTest import *
+from .GeometryUtilTest import *
 
 ALL_TESTS = (
     makeSuite(MathUtilTest),

@@ -2,8 +2,8 @@ from abc import *
 import cv2
 import numpy as np
 
-from PatternFactory import *
-from PatternMatch import *
+from .PatternFactory import *
+from .PatternMatch import *
 from ..util.ImageProcessingUtil import *
 
 class AbstractPatternMatcher:
@@ -30,9 +30,9 @@ class AbstractPatternMatcher:
         _, result = cv2.threshold(result, 0.5, 1, cv2.THRESH_TOZERO)
 
         patternSize = pattern.shape[:2]
-        
+
         matches = []
-        for i in xrange(numberOfTimesToMatch):
+        for i in range(numberOfTimesToMatch):
             _, _, _, maxLocation = cv2.minMaxLoc(result)
             matches.append(PatternMatch(maxLocation, patternSize))
 

@@ -7,12 +7,12 @@ from ..geometry.Point import *
 """
 A vector is formally defined as an element of a vector space. In the commonly encountered vector
 space R^n (i.e., Euclidean n-space), a vector is given by n coordinates and can be specified as
-(A_1,A_2,...,A_n). Vectors are sometimes referred to by the number of coordinates they have, 
+(A_1,A_2,...,A_n). Vectors are sometimes referred to by the number of coordinates they have,
 so a 2-dimensional vector (x_1,x_2) is often called a two-vector, an n-dimensional vector is often
 called an n-vector, and so on.
 
 A vector from a point A to a point B is denoted AB^→, and a vector v may be denoted  v^→, or more
-commonly, v. The point A is often called the "tail" of the vector, and B is called the vector's 
+commonly, v. The point A is often called the "tail" of the vector, and B is called the vector's
 "head."
 
 http://mathworld.wolfram.com/Vector.html
@@ -38,7 +38,7 @@ class Vector:
             length = len(self._tail)
 
         coordinates = []
-        for i in xrange(length):
+        for i in range(length):
             coordinates.append(self._head[i] - self._tail[i])
         self._coordinates = Point(coordinates)
 
@@ -80,7 +80,7 @@ class Vector:
             for i in self.coordinates:
                 sumOfSquares += i**2
             self._norm = math.sqrt(sumOfSquares)
-        
+
         return self._norm
 
     """
@@ -101,7 +101,7 @@ class Vector:
         return dotProduct
 
     """
-    The "perp dot product" (a^⊥ · b) for a and b vectors in the plane is a modification 
+    The "perp dot product" (a^⊥ · b) for a and b vectors in the plane is a modification
     of the two-dimensional dot product in which a is replaced by the perpendicular vector
     rotated 90 degrees (counterclockwise in standard Euclidean coordinates, clockwise
     in computer graphics coordinates).
@@ -123,7 +123,7 @@ class Vector:
     The cross product is defined by the formula:
 
         a x b = ‖a‖ ‖b‖ sin(θ) n
-    
+
     where θ is the angle between a and b in the plane containing them (hence, it is between 0° and 180°),
     ‖a‖ and ‖b‖ are the magnitudes of vectors a and b, and n is a unit vector perpendicular to the plane
     containing a and b in the direction given by the right-hand rule.
@@ -163,7 +163,7 @@ class Vector:
     """
     def reflection(self):
         return Vector(self.tail, self.head)
-    
+
     """
     Gets a clockwise rotation of this vector, in radians.
     http://en.wikipedia.org/wiki/Rotation_matrix
@@ -220,7 +220,7 @@ class Vector:
     """
     True if this vector has a counterclockwise angular distance from another vector. This
     means that the shortest angular distance that makes this vector parallel to another
-    vector is rotating this vector counterclockwise by an angle between 0˚ and 180˚ 
+    vector is rotating this vector counterclockwise by an angle between 0˚ and 180˚
     (inclusive).
     """
     def isCounterclockwiseDistanceFrom(self, anotherVector):
@@ -229,7 +229,7 @@ class Vector:
 
     def multipliedByScalar(self, scalar):
         newHead = []
-        for i in xrange(len(self)):
+        for i in range(len(self)):
             newHead.append(scalar * self.coordinates[i] + self.tail[i])
         return Vector(newHead, self.tail)
 

@@ -1,4 +1,4 @@
-from AnswerFrameRecognitionResult import *
+from .AnswerFrameRecognitionResult import *
 
 from ..geometry.ConvexQuadrilateral import *
 from ..geometry.ConvexPolygon import *
@@ -101,7 +101,7 @@ class AnswerFrameRecognizer:
             cv2.imshow("answerMark" + str(index), self._preprocessAnswerMarkPicture(answerMarkPicture))
             # END: WORK IN PROGRESS
 
-            for i in xrange(qrCodeData.numberOfQuestionsPerColumn):
+            for i in range(qrCodeData.numberOfQuestionsPerColumn):
                 leftStripeMark = leftStripeMarks[i]
                 rightStripeMark = rightStripeMarks[i]
                 DrawingUtil.drawLine(picture, leftStripeMark.centroid, rightStripeMark.centroid, DrawingUtil.COLOR_GREEN)
@@ -239,9 +239,7 @@ class AnswerFrameRecognizer:
 
     @staticmethod
     def _sortStripeMarksFromTopToBottom(stripeMarks):
-        stripeMarks.sort(lambda stripeMark1, stripeMark2: cmp(stripeMark1.centroid.y, stripeMark2.centroid.y))
-
-
+        stripeMarks.sort(key=lambda i: i.centroid.y)
 
     def _filterNoise(self, picture):
         picture = ImageProcessingUtil.applyBilateralFilter(picture, \

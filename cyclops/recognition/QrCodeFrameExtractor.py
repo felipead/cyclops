@@ -3,7 +3,7 @@ from ..geometry.Vector import *
 from ..util.GeometryUtil import *
 from ..util.PerspectiveUtil import *
 
-from Frame import *
+from .Frame import *
 
 class QrCodeFrameExtractor:
 

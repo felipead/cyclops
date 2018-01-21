@@ -1,1 +1,1 @@
-/usr/bin/env python2.7 -m cyclops.app.CommandLineApp $@
+/usr/bin/env python3 -m cyclops.app.CommandLineApp $@

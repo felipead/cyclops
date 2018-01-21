@@ -27,9 +27,9 @@ class AnswerSheetRecognitionController:
             DrawingUtil.drawQuadrilateralLines(picture, result.answerFrame.originalQuadrilateral, DrawingUtil.COLOR_RED, 1)
             DrawingUtil.drawQuadrilateralLines(picture, result.qrCodeFrame.originalQuadrilateral, DrawingUtil.COLOR_RED, 1)
             if result.qrCodeData != None:
-                print result.qrCodeData
+                print(result.qrCodeData)
             else:
-                print "unable to capture qr code!"
+                print("unable to capture qr code!")
 
         picture = cv2.flip(picture, 1);
 
@@ -37,7 +37,6 @@ class AnswerSheetRecognitionController:
         if result.answerFrame != None:
             cv2.imshow(self._ANSWER_SHEET_PICTURE_WINDOW_NAME, result.answerFrame.projectedPicture)
             cv2.imshow(self._QR_CODE_PICTURE_WINDOW_NAME, result.qrCodeFrame.projectedPicture)
-            cv2.waitKey(0)
         else:
             cv2.imshow(self._ANSWER_SHEET_PICTURE_WINDOW_NAME, self._BLANK_IMAGE)
             cv2.imshow(self._QR_CODE_PICTURE_WINDOW_NAME, self._BLANK_IMAGE)

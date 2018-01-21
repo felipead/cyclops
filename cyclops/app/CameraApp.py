@@ -1,6 +1,6 @@
 from cv2 import waitKey, VideoCapture
 
-from AnswerSheetRecognitionController import *
+from .AnswerSheetRecognitionController import *
 
 def readCamera(camera):
     _, picture = camera.read()

@@ -7,8 +7,8 @@ Points are read-only objects.
 """
 class Point(tuple):
 
-    def __init__(self, coordinates=(0,)):
-        super(Point,self).__init__(coordinates)
+    def __new__(cls, coordinates=(0,)):
+        return super().__new__(cls, coordinates)
 
     @property
     def x(self):
@@ -36,7 +36,7 @@ class Point(tuple):
         Point(1,2) == Point(1,2,0) == Point(1,2,0,0)
     but:
         Point(1,2) != Point(1,2,3) != Point(1,2,3,5)
-    .  
+    .
     """
     def __eq__(self, other):
         try:
@@ -47,11 +47,11 @@ class Point(tuple):
                 biggestDimensionPoint = other
                 smallestDimensionPoint = self
 
-            for i in xrange(len(smallestDimensionPoint)):
+            for i in range(len(smallestDimensionPoint)):
                 if smallestDimensionPoint[i] != biggestDimensionPoint[i]:
                     return False
 
-            for i in xrange(len(biggestDimensionPoint) - len(smallestDimensionPoint)):
+            for i in range(len(biggestDimensionPoint) - len(smallestDimensionPoint)):
                 if biggestDimensionPoint[len(smallestDimensionPoint) + i] != 0:
                     return False
 
@@ -63,7 +63,7 @@ class Point(tuple):
         return tuple((self[0], self[1]))
 
     def as3dTuple(self):
-        return tuple((self[0], self[1], self[2]))   
+        return tuple((self[0], self[1], self[2]))
 
     def __hash__(self):
         hashCode = 0

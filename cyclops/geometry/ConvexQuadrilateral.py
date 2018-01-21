@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from Vector import *
-from ConvexPolygon import *
+from .Vector import *
+from .ConvexPolygon import *
 from ..util.MathUtil import *
 
 import math
 
 """
-A quadrilateral, sometimes also known as a tetragon or quadrangle (Johnson 1929, p. 61) is a 
+A quadrilateral, sometimes also known as a tetragon or quadrangle (Johnson 1929, p. 61) is a
 four-sided polygon. If not explicitly stated, all four polygon vertices are generally taken to lie
 in a plane. (If the points do not lie in a plane, the quadrilateral is called a skew quadrilateral.)
 There are three topological types of quadrilaterals (Wenninger 1983, p. 50): convex quadrilaterals,
@@ -23,7 +23,7 @@ class ConvexQuadrilateral(ConvexPolygon):
         super(ConvexQuadrilateral, self).__init__(vertexes)
         if len(vertexes) != 4:
             raise Exception("Quadrilateral must have 4 vertexes.")
-        
+
         self._largestSideLength = None
         self._shortestSideLength = None
         self._reversedContour = None
@@ -103,7 +103,7 @@ class ConvexQuadrilateral(ConvexPolygon):
             and MathUtil.equalWithinRatio(size1, size4, relaxationRatio)
 
     """
-    Gets a new quadrilateral rotated clockwise by a certain angle (in radians) along 
+    Gets a new quadrilateral rotated clockwise by a certain angle (in radians) along
     this quadrilateral center.
     This method may suffer from floating point precision loss.
     """
@@ -191,9 +191,9 @@ class ConvexQuadrilateral(ConvexPolygon):
     """
     Project this quadrilateral to a square with sides equal to the largest side of this polygon.
     Useful for perspective correction.
-    
+
     If this quadrilateral is a lozenge or trapezoid representing a deformed square (for instance,
-    a square seen from a angular perspective), then the output of this method will be an approximated 
+    a square seen from a angular perspective), then the output of this method will be an approximated
     square that best represents the original square.
 
     If this quadrilateral is a rectangle or another shape not representing a square, then
@@ -261,7 +261,7 @@ class ConvexQuadrilateral(ConvexPolygon):
                 top.append(vertex)
             elif vertex.y < center.y:
                 bottom.append(vertex)
-            else: 
+            else:
                 middle.append(vertex)
 
         # If we have middle points then two vertexes and the centroid are connected by
@@ -275,7 +275,7 @@ class ConvexQuadrilateral(ConvexPolygon):
                 bottom.append(middle[0])
                 top.append(middle[1])
 
-        # If this quadrilateral has a vertex that is too far from the others (for instance, a 
+        # If this quadrilateral has a vertex that is too far from the others (for instance, a
         # unbalaced trapezoid), then its centroid will be near that vertex. When that happens,
         # the remaining 3 vertexes are so distant from the centroid that we might capture
         # more than two bottom or top points. Here we fix this, moving a possible extra bottom
