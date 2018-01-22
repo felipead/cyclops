@@ -1,5 +1,7 @@
 # Cyclops
 
+[![Build Status](https://travis-ci.org/felipead/cyclops.svg?branch=master)](https://travis-ci.org/felipead/cyclops)
+
 Answer sheet optical recognition proof of concept using Python and OpenCV.
 I've written some custom Computer Vision and Linear Algebra algorithms.
 
